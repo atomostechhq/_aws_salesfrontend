@@ -1,0 +1,208 @@
+.infiled_progress_container {
+  /* padding: 2em; */
+  padding-bottom: 2em;
+  background: #eeeeee;
+}
+
+.project_order_nav {
+  padding: 2em 100px;
+  background-color: #fff;
+  border: 1px solid #9b9b9b;
+}
+
+.projOrderLink {
+  color: #666666;
+  text-decoration: none;
+  letter-spacing: 0.16px;
+  margin-right: 1em;
+}
+
+.active {
+  color: #1765dc;
+  margin-right: 1em;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.16px;
+}
+
+.project_container {
+  padding: 2em 100px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.left_project_container {
+  display: flex;
+  align-items: baseline;
+  gap: 1em;
+}
+
+.left_project_container h1 {
+  font-weight: 400;
+  font-size: 32px;
+  margin-bottom: 0.2em;
+}
+
+.left_project_container span {
+  font-weight: 600;
+  font-size: 18px;
+  color: #1765dc;
+}
+
+.edit {
+  font-weight: 700;
+  font-size: 12px;
+  color: #1765dc;
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid #1765dc;
+}
+
+.projNum {
+  font-weight: 400;
+  font-size: 17px;
+  letter-spacing: 0.16px;
+  color: #1765dc;
+}
+
+.in_filed_progress_container {
+  padding: 2em 100px;
+}
+
+.infield_text {
+  font-weight: 400;
+  font-size: 24px;
+  margin-bottom: 2em;
+}
+.flex {
+  display: flex;
+  justify-content: space-between;
+  gap: 2em;
+  width: 100%;
+}
+
+.accordion_box {
+  background: #ffffff;
+  box-shadow: 0px 0px 12px 1px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  width: 100%;
+  padding: 0.5em;
+}
+
+.supplier_table {
+  width: 100%;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 1.5em;
+  padding-left: 10em;
+  padding-right: 1em;
+}
+
+.supplier_table th,
+.supplier_table td {
+  padding: 0.5em;
+}
+
+.flex section span {
+  font-weight: 600;
+  /* font-size: 18px; */
+}
+
+.surveyNo {
+  font-size: 22px;
+  font-weight: 400;
+  font-size: 16px;
+  margin-top: 0.5em;
+}
+
+.flex p {
+  margin-bottom: 0.8em;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.target_audience {
+  display: flex;
+  gap: 1.2em;
+  margin-left: 11.5em;
+  padding: 1em 0;
+}
+
+.target_audience h3 {
+  font-weight: 700;
+  font-size: 18px;
+  padding-bottom: 0.5em;
+}
+
+.target_audience span {
+  font-weight: 300;
+  font-size: 16px;
+}
+
+.tg_country_survey .tg {
+  /* border-right: 1px solid black;
+  padding-right: 1em; */
+  white-space: nowrap;
+  width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.accordionBody {
+  padding: 1.5em 0;
+}
+
+.showTg {
+  /* border: 1px solid red; */
+  position: relative;
+}
+
+.tgModal {
+  position: absolute;
+  background: linear-gradient(
+    104.74deg,
+    rgba(224, 224, 224, 0.5) 2.39%,
+    rgba(224, 224, 224, 0.5) 95.99%
+  );
+  border: 2px solid #333333;
+  backdrop-filter: blur(7.5px);
+  border-radius: 16px;
+  margin-top: 0.2em;
+  width: 424px;
+  padding: 0.8em 1em;
+}
+
+.tgModal span {
+  font-weight: 700;
+  font-size: 16px;
+  color: #333333;
+}
+
+.tgModal p {
+  font-weight: 700;
+  font-size: 12px;
+  color: #333333;
+  margin-top: 1em;
+}
+
+.notes h2 {
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 0.5em;
+}
+
+.notes p {
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.right_project_container select {
+  background: #1765dc;
+  border: 2px solid #1765dc;
+  width: 159px;
+  height: 40px;
+  color: white;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgb(23 101 220 / 25%);
+  margin-right: 1em;
+}

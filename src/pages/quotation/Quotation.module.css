@@ -1,0 +1,174 @@
+.bidding_container {
+  padding: 32px 100px;
+  /* height: 100vh; */
+  background-color: #fafafa;
+}
+
+.project_order_nav {
+  padding: 2em 100px;
+  background-color: #fff;
+  border: 1px solid #9b9b9b;
+}
+
+.project_container {
+  padding: 2em 100px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.projOrderLink {
+  color: #666666;
+  text-decoration: none;
+  letter-spacing: 0.16px;
+  margin-right: 1em;
+}
+
+.active {
+  color: #1765dc;
+  margin-right: 1em;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.16px;
+}
+
+.bidding_intro h1 {
+  font-weight: 700;
+  font-size: 32px;
+  letter-spacing: 0.16px;
+}
+
+.bidding_intro .teamName {
+  font-weight: 600;
+  margin: 24px 0 16px 0;
+}
+
+.countries_table {
+  margin-top: 32px;
+  margin-bottom: 48px;
+  border: 1px solid #1765dc;
+}
+
+.countries_table table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  background-color: #fff;
+}
+
+.countries_table table thead {
+  background: #1765dc;
+  color: white;
+}
+
+.countries_table table th {
+  padding: 0.5em 1em;
+  font-weight: 600;
+}
+
+.countries_table table td {
+  padding: 0.5em 1em;
+  background-color: #fff;
+}
+
+.countries_table table tbody tr {
+  border-bottom: 1px solid #1765dc;
+}
+
+.countries_table table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.overview_stats {
+  display: flex;
+  gap: 86px;
+  margin-top: 32px;
+}
+
+.summary_table {
+  border: 1px solid #1765dc;
+  margin-bottom: 48px;
+  /* width: 776px; */
+  /* width: 404px; */
+  width: 30%;
+  border-bottom: none;
+}
+
+.overview_container {
+  width: 70%;
+  height: 245px;
+  background: #ffffff;
+  border: 1px solid #1765dc;
+}
+
+.overview_container h1 {
+  padding: 8px 16px;
+  color: #fff;
+}
+
+.overview_content {
+  padding: 8px 16px;
+}
+
+.overview_text {
+  background: #1765dc;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.settings_questions {
+  border: 1px solid #1765dc;
+  margin-top: 32px;
+  margin-bottom: 48px;
+  width: 100%;
+  border-bottom: none;
+}
+
+.summary_data {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* .questions {
+  display: grid;
+  grid-template-columns: minmax(100px, 1fr);
+} */
+
+.settings_questions .questions {
+  display: flex;
+}
+
+.summary_data p:first-child,
+.questions p:first-child {
+  background-color: #1765dc;
+  border-bottom: 1px solid #fff;
+  color: #fff;
+  padding: 8px 16px;
+  font-weight: 600;
+}
+
+.questions p:first-child {
+  width: 388px;
+}
+
+.summary_data p:last-child,
+.questions p:last-child {
+  border-bottom: 1px solid #1765dc;
+  padding: 8px 16px;
+  background-color: #fff;
+  width: 100%;
+}
+
+.questions p:last-child {
+  width: 73%;
+}
+
+.points_list {
+  margin-top: 1em;
+  margin-left: 1em;
+  padding-bottom: 32px;
+  font-style: italic;
+}
+
+.points_list li {
+  margin: 0.2em 0;
+}

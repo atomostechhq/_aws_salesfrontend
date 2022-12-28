@@ -1,0 +1,36 @@
+.test {
+  margin: 2em;
+}
+
+.toggle {
+  margin: 2em 0;
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  margin: 2em 0;
+}
+
+.tableTest {
+  margin: 2em 0;
+}
+
+.cKfzFg {
+  background-color: none !important;
+  box-shadow: none !important;
+}
+
+.eOkWuN {
+  /* background-color: red !important; */
+}
+
+.gvOGz {
+  /* color: #666666 !important; */
+}
+
+/* .fSeWHQ {
+  background-color: aliceblue !important;
+} */
+

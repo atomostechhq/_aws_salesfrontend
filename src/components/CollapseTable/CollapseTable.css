@@ -1,0 +1,36 @@
+.collapse_table {
+  background: #ffffff;
+  box-shadow: 0px 2px 4px 1px rgba(23, 101, 220, 0.25);
+}
+
+.collapse_table table {
+  width: 100%;
+  text-align: left;
+  border-collapse: collapse;
+}
+
+.collapse_table table thead {
+  background: #ffffff;
+  box-shadow: 0px 2px 4px 1px rgba(23, 101, 220, 0.25);
+}
+
+.collapse_table table thead th {
+  padding: 0.8em;
+  font-size: 14px;
+}
+
+.collapse_table table tbody td {
+  padding: 0.7em;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 13px;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  gap: 0.2em;
+}
+
+.flex .icon {
+  margin-top: 0.2em;
+}

@@ -1,0 +1,179 @@
+.project_order_container {
+  /* padding: 0 32px 32px 32px; */
+  /* padding: 54px 100px; */
+  padding: 32px;
+}
+
+.project_intro_order {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32px 68px 17px 68px;
+}
+
+.tablistContainer {
+  padding: 0px 68px 12px 68px;
+}
+
+.project_intro_order h1 {
+  font-weight: 400;
+  font-size: 32px;
+}
+
+.table_with_filters {
+  margin: 0em 0 3em 0;
+}
+
+.filters_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 68px;
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+.project_order_table {
+  width: 100%;
+  margin: 32px 0;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(12.5px);
+  border-radius: 8px 8px 0px 0px;
+  white-space: nowrap;
+}
+
+.info {
+  color: #1765dc;
+}
+
+.projName {
+  white-space: nowrap;
+  width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis !important;
+  text-align: left;
+}
+
+.countries {
+  display: flex;
+}
+
+.countries p {
+  white-space: nowrap;
+  width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  text-align: left !important;
+  gap: 0.3em;
+}
+
+.view_all {
+  cursor: pointer;
+  color: #1765dc;
+  border-bottom: 1px solid #1765dc;
+}
+
+.clear_filters {
+  background-color: transparent;
+  border: none;
+  color: #1765dc;
+  border-bottom: 1px solid #1765dc;
+  font-weight: 700;
+  font-size: 16px;
+  margin-top: 0.8em;
+  cursor: pointer;
+}
+
+.project_order_table table {
+  font-size: 13px !important;
+}
+
+.project_details p {
+  font-weight: 500;
+  font-size: 20px;
+  margin-bottom: 0.3em;
+}
+
+.project_details span {
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.countries_modal {
+  width: 653px;
+}
+
+.country_container {
+  margin: 1em 0 0 0;
+}
+
+.country_container h2 {
+  font-weight: 900;
+  font-size: 18px;
+  margin-bottom: 0.8em;
+}
+
+.country_list {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  margin: 0.5em 0;
+  gap: 0.8em;
+  color: #1765dc;
+}
+
+.tableRowDelete {
+  margin-left: 2em;
+  border: 2px solid #ffffff;
+  border-radius: 8px;
+  padding: 4px 8px;
+  background-color: transparent;
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+}
+
+.accName {
+  white-space: nowrap;
+  width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.countryList {
+  margin-right: 0.2em;
+}
+
+.month_filter {
+  font-weight: 500;
+  font-size: 1em;
+  background: #ffffff;
+  height: 40px;
+  cursor: pointer;
+  border: 2px solid #1765dc;
+  color: #1765dc;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 2px 8px;
+}
+
+.noData {
+  margin-left: 0.5em;
+}
+
+@media only screen and (max-width: 1300px) {
+  .project_order_table {
+    overflow-x: scroll;
+  }
+}

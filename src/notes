@@ -1,0 +1,526 @@
+// function handleFileChange(event) {
+//     setFileInput(event.target.files[0].name);
+//     console.log(`Selected file - ${event.target.files[0].name}`);
+//   }
+//   const handleChangeInput = (e) => {
+//     setOpportunityData((prev) => ({
+//       ...prev,
+//       [e.target.name]: e.target.value,
+//     }));
+//   };
+
+//   // console.log(handleChangeInput);
+//   const [value, setValue] = useState("");
+//   const options = useMemo(() => countryList().getData(), []);
+
+//   const changeHandler = (value, i) => {
+//     console.log(i);
+//     setValue(value);
+//     console.log(value);
+//     const table = [...opportunityData?.table];
+//     table[i]["country"] = { ...value };
+//     setOpportunityData({ ...opportunityData, table });
+//   };
+
+//   console.log(value);
+
+//   const [opportunityData, setOpportunityData] = useState({
+//     table: [
+//       {
+//         // Teamname: "",
+//         id: uuid(),
+//       },
+//     ],
+//   });
+
+//   // const [opportunityData, setOpportunityData] = useState({})
+
+//   const handleChange = (e, i) => {
+//     const { name, value } = e.target;
+//     const table = [...opportunityData?.table];
+//     table[i][name] = value;
+//     console.log(table);
+//     setOpportunityData({ ...opportunityData, table });
+//   };
+
+//   console.log(opportunityData);
+
+//   const addOpportunityData = () => {
+//     // setOpportunityData([
+//     //   ...opportunityData,
+//     //   {
+//     //     Teamname: "",
+//     //   },
+//     // ]);
+//     setOpportunityData((prev) => {
+//       return {
+//         ...prev,
+//         table: [...prev?.table, { id: uuid() }],
+//       };
+//     });
+//   };
+
+//   const deleteOpportunityData = (i) => {
+//     setOpportunityData((prev) => {
+//       let table = prev.table.filter((_, index) => index !== i);
+//       return {
+//         ...prev,
+//         table: table,
+//       };
+//     });
+//   };
+
+//  <tbody>
+//                   {opportunityData?.table?.map((data, i) => {
+//                     return (
+//                       <tr
+//                         key={data.id}
+
+//                         // name="Teamname"
+//                         // value={data.Teamname}
+//                         // onChange={(e) => handleChange(e, i)}
+//                       >
+//                         {/* <td>{data.country}</td> */}
+//                         <td className={styles.select_country}>
+//                           <Select
+//                             options={options}
+//                             // value={value}
+//                             name="country"
+//                             onChange={(e) => changeHandler(e, i)}
+//                             isMulti
+//                           />
+//                         </td>
+//                         <td>
+//                           <div className={styles.field_group}>
+//                             <input
+//                               type="number"
+//                               name="loi"
+//                               onChange={(e) => handleChange(e, i)}
+//                               required
+//                             />{" "}
+//                             <span>mins</span>
+//                           </div>
+//                         </td>
+//                         {/* <td>{data.ir}</td> */}
+//                         <td>
+//                           <div className={styles.field_group}>
+//                             <input
+//                               type="number"
+//                               name="ir"
+//                               onChange={(e) => handleChange(e, i)}
+//                               required
+//                             />{" "}
+//                             <span>%</span>
+//                           </div>
+//                         </td>
+//                         <td>
+//                           <div className={styles.field_group}>
+//                             <input
+//                               type="number"
+//                               name="req_samples"
+//                               onChange={(e) => handleChange(e, i)}
+//                               required
+//                             />{" "}
+//                           </div>
+//                         </td>
+//                         <td>
+//                           {" "}
+//                           <div className={styles.field_group}>
+//                             <input
+//                               type="number"
+//                               name="feasibility"
+//                               onChange={(e) => handleChange(e, i)}
+//                               required
+//                             />{" "}
+//                           </div>
+//                         </td>
+//                         <td>
+//                           <div className={styles.field_group}>
+//                             <input
+//                               type="number"
+//                               name="cpi"
+//                               onChange={(e) => handleChange(e, i)}
+//                               required
+//                             />{" "}
+//                           </div>
+//                         </td>
+//                         <td>
+//                           {" "}
+//                           <div className={styles.field_group}>
+//                             <input
+//                               type="number"
+//                               name="timeline"
+//                               onChange={(e) => handleChange(e, i)}
+//                               required
+//                             />{" "}
+//                             <span>days</span>
+//                           </div>
+//                         </td>
+//                         <td>
+//                           <div className={styles.field_group}>
+//                             {/* <input
+//                             type="number"
+//                             name="local budget"
+//                             onChange={(e) => handleChange(e, i)}
+//                             required
+//                           />{" "} */}
+//                             <span onChange={(e) => handleChange(e, i)}>
+//                               {" "}
+//                               $8498
+//                             </span>{" "}
+//                           </div>
+//                         </td>
+//                         <td>
+//                           <button className={styles.add_target}>
+//                             <BsPlus /> Add Target
+//                           </button>
+//                         </td>
+//                         <td>
+//                           <RiDeleteBin5Line
+//                             style={{ cursor: "pointer" }}
+//                             onClick={() => deleteOpportunityData(i)}
+//                           />
+//                         </td>
+//                       </tr>
+//                     );
+//                   })}
+//                 </tbody>
+
+<tbody>
+  {projectData?.map((data) => {
+    if (data?.salesorder_id == id) {
+      let salesId = data?.salesorder_id;
+      return (
+        <>
+          <tr>
+            <td
+              onClick={() => {
+                if (!open.includes(salesId)) {
+                  setOpen((prevArr) => [...prevArr, salesId]);
+                } else {
+                  setOpen((prevArr) => {
+                    return prevArr.filter((id) => id !== salesId);
+                  });
+                }
+              }}
+            >
+              <div className={styles.flex}>
+                <span className={styles.icon}>
+                  <BiCaretDown />
+                </span>
+                <span>
+                  {" "}
+                  {data?.salesOrderCountryGroups?.map((res) => {
+                    return res?.salesorderCountryGroupName;
+                  })}{" "}
+                  (ID #{data?.salesorder_id})
+                </span>
+              </div>
+            </td>
+            <td>{data?.avgIr}</td>
+            <td>{data?.feasibilitySum}</td>
+            <td>{data?.maxTimelinePerCountry}</td>
+            <td>{data?.avgCpi}</td>
+            <td>{data?.totalBudgetSum}</td>
+            <td>
+              <Chip variant="filled" color="success">
+                Approved
+              </Chip>
+            </td>
+          </tr>
+
+          {open.includes(salesId) && (
+            <>
+              {data?.salesOrderCountryGroups?.map((res) => {
+                return res?.salesOrderCountries?.map((resData) => {
+                  let countryId = resData?.Country?.countryId;
+
+                  if (!open.includes(countryId)) {
+                    return (
+                      <tr>
+                        <td
+                          style={{ paddingLeft: "2em" }}
+                          onClick={() =>
+                            setOpen((prevArr) => [...prevArr, countryId])
+                          }
+                        >
+                          <div className={styles.flex}>
+                            <span className={styles.icon}>
+                              <BiCaretDown />
+                            </span>
+                            <span>{resData?.Country?.countryName}</span>
+                          </div>
+                        </td>
+                        <td>{res?.avgIr}</td>
+                        <td>{res?.feasibilitySum}</td>
+                        <td>{res?.maxTimelinePerTg}</td>
+                        <td>{res?.avgCpi}</td>
+                        <td>{res?.totalBudgetSum}</td>
+                        <td>
+                          <Chip variant="filled" color="success">
+                            Approved
+                          </Chip>
+                        </td>
+                      </tr>
+                    );
+                  } else {
+                    return (
+                      <>
+                        <tr>
+                          <td
+                            style={{ paddingLeft: "2em" }}
+                            onClick={() =>
+                              setOpen((prevArr) => {
+                                return prevArr.filter((id) => id != countryId);
+                              })
+                            }
+                          >
+                            <div className={styles.flex}>
+                              <span className={styles.icon}>
+                                <BiCaretDown />
+                              </span>
+                              <span>{resData?.Country?.countryName}</span>
+                            </div>
+                          </td>
+                          <td>{res?.avgIr}</td>
+                          <td>{res?.feasibilitySum}</td>
+                          <td>{res?.maxTimelinePerTg}</td>
+                          <td>{res?.avgCpi}</td>
+                          <td>{res?.totalBudgetSum}</td>
+                          <td>
+                            <Chip variant="filled" color="success">
+                              Approved
+                            </Chip>
+                          </td>
+                        </tr>
+                        {data?.salesOrderCountryGroups?.map((target) => {
+                          return target?.tgs?.map((res) => {
+                            return (
+                              <tr>
+                                <td style={{ paddingLeft: "4em" }}>
+                                  <ul>
+                                    <li>
+                                      {res?.tgTargetAudience} (ID #{res?.id})
+                                    </li>
+                                  </ul>
+                                </td>
+                                <td>{res?.ir}</td>
+                                <td>{res?.feasibility}</td>
+                                <td>{res?.timeline}</td>
+                                <td>{res?.cpi}</td>
+                                <td>{res?.totalBudget}</td>
+                                <td>
+                                  <Chip variant="filled" color="success">
+                                    Approved
+                                  </Chip>
+                                </td>
+                              </tr>
+                            );
+                          });
+                        })}
+                      </>
+                    );
+                  }
+                });
+              })}
+            </>
+          )}
+        </>
+      );
+    }
+  })}
+</tbody>;
+
+// hkdkfhfdfhfjkhfdkjfhdkjfh
+
+<tbody>
+  {projectData?.map((data) => {
+    let salesId = data?.id;
+    return (
+      <>
+        <tr>
+          <td
+            onClick={() => {
+              if (!open.includes(salesId)) {
+                setOpen((prevArr) => [...prevArr, salesId]);
+              } else {
+                setOpen((prevArr) => {
+                  return prevArr.filter((id) => id !== salesId);
+                });
+              }
+            }}
+          >
+            <div className={styles.flex}>
+              <span className={styles.icon}>
+                <BiCaretDown />
+              </span>
+              <span>
+                {" "}
+                {data?.supplierName} (ID{data.supplierNum})
+              </span>
+            </div>
+          </td>
+          <td>1455</td>
+          <td>20</td>
+          <td>900</td>
+          <td>200</td>
+          <td>$3000</td>
+          <td>
+            <span>
+              {" "}
+              <RiCheckboxCircleFill size={20} color="#198038" />
+            </span>
+            <span>
+              {" "}
+              <RiCloseCircleFill size={20} color="#DA1E28" />
+            </span>
+          </td>
+          <td>
+            <Chip variant="filled" color="success">
+              Approved
+            </Chip>
+          </td>
+        </tr>
+
+        {open.includes(salesId) && (
+          <>
+            {data?.countries?.map((country) => {
+              let countryId = country?.id;
+              if (!open.includes(countryId)) {
+                return (
+                  <tr>
+                    <td
+                      style={{ paddingLeft: "2em" }}
+                      onClick={() =>
+                        setOpen((prevArr) => [...prevArr, countryId])
+                      }
+                    >
+                      <div className={styles.flex}>
+                        <span className={styles.icon}>
+                          <BiCaretDown />
+                        </span>
+                        <span>{country?.countryName}</span>
+                        <span>
+                          <Chip variant="filled" color="primary">
+                            Language
+                          </Chip>
+                        </span>
+                      </div>
+                    </td>
+                    <td>1455</td>
+                    <td>20</td>
+                    <td>900</td>
+                    <td>200</td>
+                    <td>$3000</td>
+
+                    <td>
+                      <span>
+                        {" "}
+                        <RiCheckboxCircleFill size={20} color="#198038" />
+                      </span>
+                      <span>
+                        {" "}
+                        <RiCloseCircleFill size={20} color="#DA1E28" />
+                      </span>
+                    </td>
+                    <td>
+                      <Chip variant="filled" color="success">
+                        Approved
+                      </Chip>
+                    </td>
+                  </tr>
+                );
+              } else {
+                return (
+                  <>
+                    <tr>
+                      <td
+                        style={{ paddingLeft: "2em" }}
+                        onClick={() =>
+                          setOpen((prevArr) => {
+                            return prevArr.filter((id) => id != countryId);
+                          })
+                        }
+                      >
+                        <div className={styles.flex}>
+                          <span className={styles.icon}>
+                            <BiCaretDown />
+                          </span>
+                          <span>{country?.countryName}</span>
+                        </div>
+                      </td>
+                      <td>1455</td>
+                      <td>20</td>
+                      <td>900</td>
+                      <td>200</td>
+                      <td>$3000</td>
+
+                      <td>
+                        <span>
+                          {" "}
+                          <RiCheckboxCircleFill size={20} color="#198038" />
+                        </span>
+                        <span>
+                          {" "}
+                          <RiCloseCircleFill size={20} color="#DA1E28" />
+                        </span>
+                      </td>
+                      <td>
+                        <Chip variant="filled" color="success">
+                          Approved
+                        </Chip>
+                      </td>
+                    </tr>
+                    {country?.tg?.map((target) => {
+                      return (
+                        <tr>
+                          <td style={{ paddingLeft: "4em" }}>
+                            <ul>
+                              <li>{target?.targetGroupName}</li>
+                            </ul>
+                          </td>
+                          <td>1455</td>
+                          <td>20</td>
+                          <td>900</td>
+                          <td>200</td>
+                          <td>$2000</td>
+                          <td>
+                            <span>
+                              {" "}
+                              <RiCheckboxCircleFill size={20} color="#198038" />
+                            </span>
+                            <span>
+                              {" "}
+                              <RiCloseCircleFill size={20} color="#DA1E28" />
+                            </span>
+                          </td>
+                          <td>
+                            <Chip variant="filled" color="success">
+                              Approved
+                            </Chip>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </>
+                );
+              }
+            })}
+          </>
+        )}
+      </>
+    );
+  })}
+</tbody>;
+
+
+
+
+
+
+
+salesData?.countries?.map((count) => {
+  let languages = count?.Languages.map((lang) => ({
+    label: lang?.languageName,
+    value: lang?.languageId,
+  }));
