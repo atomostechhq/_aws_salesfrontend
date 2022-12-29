@@ -74,7 +74,6 @@ const HelperDataContextProvider = ({ children }) => {
         );
         targetAudienceRes.data?.forEach((targetAudience) => {
           let secTgs = targetAudience?.secTargetAudiences?.map((secTg) => {
-            console.log(secTg);
             return {
               value: secTg?.sectargetAudienceId,
               label: secTg?.secondaryTargetAudience,
