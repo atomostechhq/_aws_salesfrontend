@@ -8,6 +8,7 @@ export const useHelperDataContext = () => {
 };
 
 const HelperDataContextProvider = ({ children }) => {
+  console.log("here kjflkjdj");
   const [helperData, setHelperData] = useState({});
 
   useEffect(() => {
@@ -118,7 +119,7 @@ const HelperDataContextProvider = ({ children }) => {
         let devicesRes = await axios.get(
           `${SALES_BASE_URL}/sales/devices/getAllDevices`
         );
-        devicesRes.data.devices?.forEach((device) => {
+        devicesRes.data?.forEach((device) => {
           devices.push({
             value: device?.deviceId,
             label: device?.deviceName,
@@ -128,7 +129,7 @@ const HelperDataContextProvider = ({ children }) => {
         let countriesRes = await axios.get(
           `${SALES_BASE_URL}/sales/country/get`
         );
-        countriesRes?.data?.countries?.forEach((country) => {
+        countriesRes?.data?.forEach((country) => {
           console.log(country);
           countries.push({
             value: country?.countryId,
