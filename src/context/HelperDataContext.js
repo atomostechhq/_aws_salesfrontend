@@ -129,6 +129,7 @@ const HelperDataContextProvider = ({ children }) => {
           `${SALES_BASE_URL}/sales/country/get`
         );
         countriesRes?.data?.countries?.forEach((country) => {
+          console.log(country);
           countries.push({
             value: country?.countryId,
             label: country?.countryName,
