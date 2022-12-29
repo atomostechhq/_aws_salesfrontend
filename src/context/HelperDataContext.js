@@ -74,6 +74,7 @@ const HelperDataContextProvider = ({ children }) => {
         );
         targetAudienceRes.data?.forEach((targetAudience) => {
           let secTgs = targetAudience?.secTargetAudiences?.map((secTg) => {
+            console.log(secTg);
             return {
               value: secTg?.sectargetAudienceId,
               label: secTg?.secondaryTargetAudience,
@@ -130,7 +131,6 @@ const HelperDataContextProvider = ({ children }) => {
           `${SALES_BASE_URL}/sales/country/get`
         );
         countriesRes?.data?.forEach((country) => {
-          console.log(country);
           countries.push({
             value: country?.countryId,
             label: country?.countryName,
