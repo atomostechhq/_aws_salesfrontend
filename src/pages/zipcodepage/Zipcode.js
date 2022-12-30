@@ -22,12 +22,6 @@ const Zipcode = () => {
   // let urlType = newUrl[newUrl.length - 1];
   console.log(newUrl);
 
-  const css = {
-    width: "500px",
-    height: "550px",
-    borderRadius: "5px",
-  };
-
   console.log(salesData);
   return (
     <div
@@ -39,11 +33,18 @@ const Zipcode = () => {
       }}
     >
       {!salesData?.screener ? (
-        <h1>Loading...............</h1>
+        <h1 style={{ fontSize: "50px", fontWeight: "700" }}>
+          Loading...............
+        </h1>
       ) : newUrl === "pdf" ? (
         <DocumentViewer url={url}></DocumentViewer>
       ) : (
-        <img src={url} style={css} />
+        <img
+          src={url}
+          width={700}
+          height={700}
+          style={{ borderRadius: "2%" }}
+        />
       )}
     </div>
   );
