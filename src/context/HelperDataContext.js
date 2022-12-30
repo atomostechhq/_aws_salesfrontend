@@ -72,6 +72,7 @@ const HelperDataContextProvider = ({ children }) => {
         let targetAudienceRes = await axios.get(
           `${SALES_BASE_URL}/sales/getall-targetAudience/`
         );
+        console.log(targetAudienceRes);
         targetAudienceRes.data?.forEach((targetAudience) => {
           let secTgs = targetAudience?.secTargetAudiences?.map((secTg) => {
             return {
