@@ -34,6 +34,34 @@ import CheckBox from "../../components/CheckBox/CheckBox";
 import { createPortal } from "react-dom";
 import { BsDownload } from "react-icons/bs";
 import { BsEye } from "react-icons/bs";
+
+// var createHost = require("cross-domain-storage/host");
+// var createGuest = require("cross-domain-storage/guest");
+
+// var storageHost = createHost([
+//   {
+//     origin: "http://sales.miratsoneservices.com/",
+//     allowedMethods: ["get", "set", "remove"],
+//   },
+//   {
+//     origin: "http://supplieradmin.miratsoneservices.com/",
+//     allowedMethods: ["get"],
+//   },
+// ]);
+
+// var bazStorage = createGuest(
+//   window.location.href === "http://sales.miratsoneservices.com/"
+//     ? "http://supplieradmin.miratsoneservices.com/"
+//     : "http://sales.miratsoneservices.com/"
+// );
+// bazStorage.get("zipcodefile", function (error, value) {
+//   if (error) {
+//     console.log(error);
+//   } else {
+//     return value;
+//   }
+// });
+
 const getChipColor = (status) => {
   switch (status) {
     case "pending":
@@ -96,26 +124,6 @@ const handleTransferToBlaze = async (orderData, originalSalesOrderData) => {
 
   console.log(surveys);
 };
-
-// const NewWindow = ({ children }) => {
-//   const div = useRef(document.createElement("div"));
-
-//   useLayoutEffect(() => {
-//     const external = window.open(
-//       "",
-//       "",
-//       "width=600,height=400,left=200,top=200"
-//     );
-
-//     external.document.body.appendChild(div.current);
-
-//     return () => external.close();
-//   }, []);
-
-//   return createPortal(children, div.current);
-// };
-
-// overview
 
 const Overview = () => {
   let navigate = useNavigate();
@@ -474,7 +482,7 @@ const Overview = () => {
                       <div style={{ display: "flex", flexDirection: "column" }}>
                         <div>
                           <p className={styles.uploaded_file}>
-                            zipcode - {localStorage.getItem("file")}
+                            zipcode -{localStorage.getItem("zipcodefile")}
                           </p>
 
                           <Button

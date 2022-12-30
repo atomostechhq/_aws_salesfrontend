@@ -70,7 +70,7 @@ const CreateOrder = () => {
   const handlefileuploadClick = (e) => {
     e.preventDefault();
     zipCodefileInput?.map((data) => {
-      return localStorage.setItem("file", data?.name);
+      return localStorage.setItem("zipcodefile", data?.name);
     });
   };
 
