@@ -8,7 +8,6 @@ export const useHelperDataContext = () => {
 };
 
 const HelperDataContextProvider = ({ children }) => {
-  console.log("here kjflkjdj");
   const [helperData, setHelperData] = useState({});
 
   useEffect(() => {
@@ -31,7 +30,7 @@ const HelperDataContextProvider = ({ children }) => {
           `${PEOPLES_BASE_URL}/employee/get_allEmployees`
         );
         salesManagersRes.data?.forEach((emp) => {
-          // console.log(emp);
+          console.log(emp);
           salesManagers.push({
             label: emp?.basicInfo[0]?.name,
             value: emp?.id,
@@ -53,7 +52,6 @@ const HelperDataContextProvider = ({ children }) => {
           `${PEOPLES_BASE_URL}/employee/get_projectManagers`
         );
         projectManagersRes.data?.forEach((pm) => {
-          // console.log(pm);
           projectManagers.push({
             label: pm?.workDetails?.basicInfo[0]?.name,
             value: pm?.Employee_ID,
@@ -141,7 +139,6 @@ const HelperDataContextProvider = ({ children }) => {
           `${SALES_BASE_URL}/sales/currency/get`
         );
         currenciesRes?.data?.forEach((currency) => {
-          // console.log(currency);
           currencies.push({
             value: currency?.currencyId,
             label:
