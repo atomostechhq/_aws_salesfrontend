@@ -4,4 +4,4 @@ export const CLIENT_BASE_URL =
 export const SALES_BASE_URL = "https://sales.miratsoneservices.com/api/v1";
 export const PEOPLES_BASE_URL =
   "http://peoples.miratsoneservices.com/api/v1/peoples";
-export const FILE_UPLOAD_URL = "https://storage.miratsoneservices.com";
+export const FILE_UPLOAD_URL = "http://storage.miratsoneservices.com";
