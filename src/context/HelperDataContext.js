@@ -58,7 +58,7 @@ const HelperDataContextProvider = ({ children }) => {
           });
         });
 
-        let clientRes = await axios.get(`${CLIENT_BASE_URL}/customer`);
+        let clientRes = await axios.get(`${CLIENT_BASE_URL}/customer/`);
 
         clientRes?.data?.forEach((client) => {
           clients.push({
