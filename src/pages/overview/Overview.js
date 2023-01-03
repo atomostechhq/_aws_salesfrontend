@@ -35,32 +35,32 @@ import { createPortal } from "react-dom";
 import { BsDownload } from "react-icons/bs";
 import { BsEye } from "react-icons/bs";
 
-var createHost = require("cross-domain-storage/host");
-var createGuest = require("cross-domain-storage/guest");
+// var createHost = require("cross-domain-storage/host");
+// var createGuest = require("cross-domain-storage/guest");
 
-var storageHost = createHost([
-  {
-    origin: "http://sales.miratsoneservices.com/",
-    allowedMethods: ["get", "set", "remove"],
-  },
-  {
-    origin: "http://supplieradmin.miratsoneservices.com/",
-    allowedMethods: ["get"],
-  },
-]);
+// var storageHost = createHost([
+//   {
+//     origin: "http://192.168.1.36:3001",
+//     allowedMethods: ["get", "set", "remove"],
+//   },
+//   {
+//     origin: "http://192.168.1.36:3000",
+//     allowedMethods: ["get"],
+//   },
+// ]);
 
-var bazStorage = createGuest(
-  window.location.href === "http://sales.miratsoneservices.com/"
-    ? "http://supplieradmin.miratsoneservices.com/"
-    : "http://sales.miratsoneservices.com/"
-);
-bazStorage.get("zipcodefile", function (error, value) {
-  if (error) {
-    console.log(error);
-  } else {
-    return value;
-  }
-});
+// var bazStorage = createGuest(
+//   window.location.href === "http://192.168.1.36:3001"
+//     ? "http://192.168.1.36:3000"
+//     : "http://192.168.1.36:3001"
+// );
+// bazStorage.get("zipcodefile", function (error, value) {
+//   if (error) {
+//     console.log(error);
+//   } else {
+//     return value;
+//   }
+// });
 
 const getChipColor = (status) => {
   switch (status) {
