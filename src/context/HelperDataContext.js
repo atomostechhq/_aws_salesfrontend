@@ -30,7 +30,6 @@ const HelperDataContextProvider = ({ children }) => {
           `${PEOPLES_BASE_URL}/employee/get_allEmployees`
         );
         salesManagersRes.data?.forEach((emp) => {
-          console.log(emp);
           salesManagers.push({
             label: emp?.basicInfo[0]?.name,
             value: emp?.id,
@@ -70,7 +69,6 @@ const HelperDataContextProvider = ({ children }) => {
         let targetAudienceRes = await axios.get(
           `${SALES_BASE_URL}/sales/getall-targetAudience/`
         );
-        console.log(targetAudienceRes);
         targetAudienceRes.data?.forEach((targetAudience) => {
           let secTgs = targetAudience?.secTargetAudiences?.map((secTg) => {
             return {

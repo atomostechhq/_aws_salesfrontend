@@ -217,6 +217,7 @@ const Overview = () => {
   useEffect(() => {
     getData();
   }, []);
+
   const url = new URLSearchParams(document.location.search);
   const params1 = url.get("imgURl");
   console.log(params1);
@@ -250,7 +251,6 @@ const Overview = () => {
     setArray(array);
   }, [salesData?.zipcode]);
 
-  console.log([array]);
   return (
     <>
       <Header />
@@ -482,7 +482,8 @@ const Overview = () => {
                       <div style={{ display: "flex", flexDirection: "column" }}>
                         <div>
                           <p className={styles.uploaded_file}>
-                            zipcode -{localStorage.getItem("zipcodefile")}
+                            {/* zipcode -{localStorage.getItem("zipcodefile")} */}
+                            zipcode - {salesData?.zipcodeFile}
                           </p>
 
                           <Button

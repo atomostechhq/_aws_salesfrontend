@@ -48,13 +48,15 @@ const CreateOrder = () => {
   const [showTgDesc, setShowTgDesc] = useState(false);
 
   //HANDLE ZIP CODE DATA:
-  const handleZipCode = async (event) => {
+
+  const handleZipcodeFileChange = (event) => {
     event.preventDefault();
     Object?.entries(event.target.files)?.map(([key, value]) => {
       setZipcodeFileInput((prev) => [...prev, value]);
     });
-    // setSalesorder({ zipcodeFile: event.target.files[0] });
+  };
 
+  const handleZipCode = async (event) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const text = e.target.result;
@@ -68,31 +70,13 @@ const CreateOrder = () => {
     reader.readAsText(event.target.files[0]);
   };
 
-  const getData = () => {
-    axios
-      .get(`${SALES_BASE_URL}/sales/get-salesorder/`)
-      .then((res) => {
-        return res?.data;
-      })
-      .catch((err) => console.log(err));
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const [zipcodeFile, setZipcodeFile] = useState();
   const handlefileuploadClick = (e) => {
     e.preventDefault();
     zipCodefileInput?.map((data) => {
-      return setZipcodeFile(data?.name);
-    });
-    console.log(zipcodeFile);
-    // axios.put(`${SALES_BASE_URL}/sales/update/salesorder/`).then((res) => {
-    //   getData();
-    // });
-    setSalesorder({
-      zipcodeFile: zipcodeFile,
+      return setSalesorder((prev) => ({
+        ...prev,
+        zipcodeFile: data?.name,
+      }));
     });
   };
 
@@ -680,7 +664,7 @@ const CreateOrder = () => {
                         multiple
                         className={styles.inputfile}
                         onChange={(e) => {
-                          // handleZipcodeFileChange();
+                          handleZipcodeFileChange(e);
                           handleZipCode(e);
                         }}
                       />
