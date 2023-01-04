@@ -21,7 +21,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import axios from "axios";
 import { supplierStatuses } from "../../../utils/commonData";
 import { MdOutlineDeleteOutline } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSalesOrderContext } from "../SalesOrderContext";
 import {
   CLIENT_BASE_URL,
@@ -39,6 +39,7 @@ import { useHelperDataContext } from "../../../context/HelperDataContext";
 
 const CreateOrder = () => {
   const navigate = useNavigate();
+
   const [zipCodefileInput, setZipcodeFileInput] = useState([]);
   const [screenerFileInput, setScreenerFileInput] = useState([]);
   const [tableData, setTableData] = useState([]);
@@ -67,10 +68,31 @@ const CreateOrder = () => {
     reader.readAsText(event.target.files[0]);
   };
 
+  const getData = () => {
+    axios
+      .get(`${SALES_BASE_URL}/sales/get-salesorder/`)
+      .then((res) => {
+        return res?.data;
+      })
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const [zipcodeFile, setZipcodeFile] = useState();
   const handlefileuploadClick = (e) => {
     e.preventDefault();
     zipCodefileInput?.map((data) => {
-      return localStorage.setItem("zipcodefile", data?.name);
+      return setZipcodeFile(data?.name);
+    });
+    console.log(zipcodeFile);
+    // axios.put(`${SALES_BASE_URL}/sales/update/salesorder/`).then((res) => {
+    //   getData();
+    // });
+    setSalesorder({
+      zipcodeFile: zipcodeFile,
     });
   };
 
@@ -79,42 +101,6 @@ const CreateOrder = () => {
       setScreenerFileInput((prev) => [...prev, value]);
     });
   };
-
-  // const handlefileuploadClick = (e) => {
-  //   e.preventDefault();
-  //   zipCodefileInput?.forEach((files) => {
-  //     // console.log(files);
-  //     axios
-  //       .post(
-  //         `${FILE_UPLOAD_URL}/file/upload`,
-  //         {
-  //           file: files,
-  //           portalName: "Sales",
-  //           userid: "10003",
-  //         },
-  //         {
-  //           headers: {
-  //             "Content-Type": "multipart/form-data",
-  //           },
-  //         }
-  //       )
-  //       .then((res) => {
-  //         console.log(res);
-  //         // setImageData((prev) => [...prev, { zipcode: res?.data }]);
-  //         setSalesorder((prev) => ({
-  //           ...prev,
-  //           zipcode: res?.data,
-  //           // zipcodeFilename: res?.data.substring(
-  //           //   res?.data.lastIndexOf("/") + 1
-  //           // ),
-  //         }));
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //         // console.log(`you are having error in${fileInput?.name}`);
-  //       });
-  //   });
-  // };
 
   const handleScreenerclick = (e) => {
     e.preventDefault();
