@@ -72,7 +72,7 @@ const Overview = () => {
             survey["internalStatus"] = "ongoing";
             survey["countryId"] = country?.countryId;
             survey["clientId"] = originalSalesOrderData?.clientId;
-            survey["studyType"] = originalSalesOrderData?.StudyType;
+            survey["StudyType"] = originalSalesOrderData?.StudyType;
             survey["methodology"] =
               originalSalesOrderData?.Methodology?.methodology;
             survey["businessUnit"] = "mirats_otc";
