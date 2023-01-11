@@ -411,7 +411,6 @@ const CreateOrder = () => {
 
   // handlechange data
   const handlechange = (name, value) => {
-    // console.log(name, value);
     if (name === "targetAudienceId") {
       helperData?.targetAudiences?.forEach((target) => {
         if (target?.value === value) {
@@ -426,6 +425,7 @@ const CreateOrder = () => {
     }));
   };
 
+  // console.log(helperData);
   // handlestatuschange
   const handleStatuschange = (e, name) => {
     setSalesorder((prev) => ({
