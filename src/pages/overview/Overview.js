@@ -35,96 +35,6 @@ import { createPortal } from "react-dom";
 import { BsDownload } from "react-icons/bs";
 import { BsEye } from "react-icons/bs";
 
-// var createHost = require("cross-domain-storage/host");
-// var createGuest = require("cross-domain-storage/guest");
-
-// var storageHost = createHost([
-//   {
-//     origin: "http://192.168.1.36:3001",
-//     allowedMethods: ["get", "set", "remove"],
-//   },
-//   {
-//     origin: "http://192.168.1.36:3000",
-//     allowedMethods: ["get"],
-//   },
-// ]);
-
-// var bazStorage = createGuest(
-//   window.location.href === "http://192.168.1.36:3001"
-//     ? "http://192.168.1.36:3000"
-//     : "http://192.168.1.36:3001"
-// );
-// bazStorage.get("zipcodefile", function (error, value) {
-//   if (error) {
-//     console.log(error);
-//   } else {
-//     return value;
-//   }
-// });
-
-const getChipColor = (status) => {
-  switch (status) {
-    case "pending":
-      return "warning";
-    case "approved":
-      return "success";
-    case "rejected":
-      return "error";
-    case "partial":
-      return "primary";
-    default:
-      return;
-  }
-};
-
-const handleTransferToBlaze = async (orderData, originalSalesOrderData) => {
-  let surveys = [];
-  orderData?.forEach((country) => {
-    if (country?.status === "approved" || country?.status === "partial")
-      country?.tgs?.forEach((tg) => {
-        let survey = {};
-        if (tg?.status === "approved") {
-          survey["surveyName"] = tg?.tgTargetAudience;
-          survey["surveyStatus"] = "bidding";
-          survey["internalStatus"] = "ongoing";
-          survey["countryId"] = country?.countryId;
-          survey["clientId"] = originalSalesOrderData?.clientId;
-          survey["studyType"] = originalSalesOrderData?.StudyType;
-          survey["methodology"] =
-            originalSalesOrderData?.Methodology?.methodology;
-          survey["businessUnit"] = "mirats_otc";
-          survey["industry"] = originalSalesOrderData?.Industry;
-          survey["requiredCompletes"] = tg?.requiredSample;
-          survey["clientCPI"] = tg?.cpi;
-          survey["bidIR"] = tg?.ir;
-          survey["bidLOI"] = tg?.loi;
-          survey["expectedStartDate"] = originalSalesOrderData?.startDate;
-          survey["expectedEndDate"] = originalSalesOrderData?.endDate;
-          survey["piiCollection"] = false;
-          survey["existingProjectChecked"] = false;
-          survey["salesOrderId"] = originalSalesOrderData?.salesorder_id;
-          survey["createdBy"] = 1;
-          survey["speederLoi"] = parseInt(tg?.loi / 3);
-          surveys.push(survey);
-        }
-      });
-  });
-
-  surveys?.forEach(async (survey) => {
-    console.log(survey);
-    axios
-      .post(`${BLAZE_BASE_URL}/survey/create`, survey)
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
-
-  console.log(surveys);
-};
-
 const Overview = () => {
   let navigate = useNavigate();
 
@@ -149,6 +59,70 @@ const Overview = () => {
   };
 
   const [viewModal, setViewModal] = useState(false);
+
+  const handleTransferToBlaze = async (orderData, originalSalesOrderData) => {
+    let surveys = [];
+    orderData?.forEach((country) => {
+      if (country?.status === "approved" || country?.status === "partial")
+        country?.tgs?.forEach((tg) => {
+          let survey = {};
+          if (tg?.status === "approved") {
+            survey["surveyName"] = tg?.tgTargetAudience;
+            survey["surveyStatus"] = "bidding";
+            survey["internalStatus"] = "ongoing";
+            survey["countryId"] = country?.countryId;
+            survey["clientId"] = originalSalesOrderData?.clientId;
+            survey["studyType"] = originalSalesOrderData?.StudyType;
+            survey["methodology"] =
+              originalSalesOrderData?.Methodology?.methodology;
+            survey["businessUnit"] = "mirats_otc";
+            survey["industry"] = originalSalesOrderData?.Industry;
+            survey["requiredCompletes"] = tg?.requiredSample;
+            survey["clientCPI"] = tg?.cpi;
+            survey["bidIR"] = tg?.ir;
+            survey["bidLOI"] = tg?.loi;
+            survey["expectedStartDate"] = originalSalesOrderData?.startDate;
+            survey["expectedEndDate"] = originalSalesOrderData?.endDate;
+            survey["piiCollection"] = false;
+            survey["existingProjectChecked"] = false;
+            survey["salesOrderId"] = originalSalesOrderData?.salesorder_id;
+            survey["createdBy"] = 1;
+            survey["speederLoi"] = parseInt(tg?.loi / 3);
+            surveys.push(survey);
+          }
+        });
+    });
+
+    surveys?.forEach(async (survey) => {
+      console.log(survey);
+      axios
+        .post(`${BLAZE_BASE_URL}/survey/create`, survey)
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+    setShowModal((prev) => !prev);
+
+    console.log(surveys);
+  };
+
+  const getChipColor = (status) => {
+    switch (status) {
+      case "pending":
+        return "warning";
+      case "approved":
+        return "success";
+      case "rejected":
+        return "error";
+      case "partial":
+        return "primary";
+      default:
+        return;
+    }
+  };
 
   const openViewModal = () => {
     setViewModal((prev) => !prev);
@@ -774,6 +748,7 @@ const Overview = () => {
                                 <Dropdown
                                   dropdownText="Select Language"
                                   options={languages}
+                                  // onChange={() => console.log("yes yes ")}
                                   onChange={(e) => {
                                     let x = orderDataForModal;
                                     x[i].language = e?.label;
@@ -881,8 +856,9 @@ const Overview = () => {
                                             variant="filled"
                                             color={getChipColor(x)}
                                           >
-                                            {x.charAt(0).toUpperCase() +
-                                              x.slice(1)}
+                                            {console.log(tg?.status)}
+                                            {x?.charAt(0)?.toUpperCase() +
+                                              x?.slice(1)}
                                           </Chip>
                                         );
                                       })()}
