@@ -34,6 +34,7 @@ import CheckBox from "../../components/CheckBox/CheckBox";
 import { createPortal } from "react-dom";
 import { BsDownload } from "react-icons/bs";
 import { BsEye } from "react-icons/bs";
+import Alert from "../../components/Alert/Alert";
 
 const Overview = () => {
   let navigate = useNavigate();
@@ -53,9 +54,21 @@ const Overview = () => {
   const [bidPersonModalInputData, setBidPersonModalInputData] = useState({});
   const [bidpersonCard, setBidpersonCard] = useState(false);
   const [array, setArray] = useState();
+  const [editModal, setEditModal] = useState(false);
+
+  const handleEditClick = () => {
+    setEditModal((prev) => !prev);
+  };
 
   const openAddBidPerson = () => {
     setAddBidPerson((prev) => !prev);
+  };
+
+  const [alertOpen, setAlertOpen] = useState(false);
+
+  const handleAlertClick = () => {
+    // setAlertOpen((prev) => !prev);
+    setAlertOpen(true);
   };
 
   const [viewModal, setViewModal] = useState(false);
@@ -192,9 +205,9 @@ const Overview = () => {
     getData();
   }, []);
 
-  const url = new URLSearchParams(document.location.search);
-  const params1 = url.get("imgURl");
-  console.log(params1);
+  // const url = new URLSearchParams(document.location.search);
+  // const params1 = url.get("imgURl");
+  // console.log(params1);
   const handleTgActionChange = (i, j, action) => {
     let x = orderDataForModal;
     let isAllTgsHaveSameStatus = true;
@@ -262,7 +275,9 @@ const Overview = () => {
               })}
             </div>
             <div>
-              <button className={styles.edit}>Edit</button>
+              <button className={styles.edit} onClick={() => handleEditClick()}>
+                Edit
+              </button>
             </div>
             <div className={styles.projNum}>
               <p>[#{salesData?.salesorder_id}]</p>
@@ -301,11 +316,35 @@ const Overview = () => {
               <option value="closed">Closed</option>
               <option value="archived">Archived</option>
             </select>
+            <Button variant="filled" onClick={handleAlertClick}>
+              Show Alert Button
+            </Button>
+
+            <Alert
+              alertOpen={alertOpen}
+              setAlertOpen={setAlertOpen}
+              variant="success"
+              message="This is a success alert"
+              position="bottomLeft"
+            />
             <Link to={`/quotation/${id}`}>
               <Button variant="filled">View Quotation</Button>
             </Link>
           </section>
         </div>
+
+        <Modal showModal={editModal} setShowModal={setEditModal}>
+          <ModalContent>
+            <div className={styles.editContainer}>
+              <h2>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione
+                perferendis sint ullam nostrum eum, vero pariatur at in
+                blanditiis ex, adipisci nam veritatis soluta placeat saepe sit
+                obcaecati perspiciatis dicta.
+              </h2>
+            </div>
+          </ModalContent>
+        </Modal>
 
         {/* survey details */}
         <div className={styles.survey_details_container}>

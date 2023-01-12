@@ -1,7 +1,40 @@
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
+
+export const fadeInDown = keyframes`
+  0% {
+      opacity: 0;
+      transform: translateY(-100px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+`;
+
+export const fadeInBottomLeft = keyframes`
+  0% {
+      opacity: 0;
+      transform: translateX(-100px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+`;
+
+export const fadeInBottomCenter = keyframes`
+  0% {
+      opacity: 0;
+      transform: translateY(100px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+`;
 
 export const AlertContainer = styled.div`
-  width: 300px;
+  width: 350px;
   max-width: 100%;
   max-height: fit-content;
   /* max-width: fit-content; */
@@ -12,13 +45,11 @@ export const AlertContainer = styled.div`
   font-size: 16px;
   display: flex;
   align-items: center;
-  /* box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.25); */
-  /* box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba
-  (10, 37, 64, 0.35) 0px -2px 6px 0px inset; */
-  /* box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; */
+  justify-content: space-between;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
   color: #fff;
-  /* color: white; */
+  position: relative;
+  z-index: 50000;
 
   ${(props) => {
     // success
@@ -52,6 +83,41 @@ export const AlertContainer = styled.div`
       `;
     }
   }}
+
+  ${({ position }) => {
+    switch (position) {
+      case "topCenter":
+        return css`
+          position: absolute;
+          top: 15%;
+          left: 40%;
+          animation: ${fadeInDown} 0.3s linear;
+
+          /* transform: translate(-50%, -50%); */
+        `;
+      case "bottomLeft":
+        return css`
+          position: absolute;
+          bottom: 5%;
+          left: 5%;
+          animation: ${fadeInBottomLeft} 0.3s linear;
+        `;
+      case "bottomCenter":
+        return css`
+          position: absolute;
+          bottom: 5%;
+          left: 40%;
+          animation: ${fadeInBottomCenter} 0.3s linear;
+        `;
+      default:
+        return css`
+          position: absolute;
+          bottom: 5%;
+          left: 5%;
+          animation: ${fadeInBottomLeft} 0.3s linear;
+        `;
+    }
+  }}
 `;
 
 export const IconTextWrapper = styled.div`
@@ -66,4 +132,10 @@ export const IconWrapper = styled.div`
 `;
 export const TextWrapper = styled.div`
   display: flex;
+`;
+
+export const CloseButton = styled.span`
+  justify-self: flex-end;
+  align-self: flex-end;
+  cursor: pointer;
 `;
