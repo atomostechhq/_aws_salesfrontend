@@ -36,6 +36,7 @@ import { WorkSheet, WorkBook, utils, writeFile } from "xlsx";
 import * as XLSX from "xlsx";
 import * as FileSaver from "file-saver";
 import { useHelperDataContext } from "../../../context/HelperDataContext";
+import Alert from "../../../components/Alert/Alert";
 
 const CreateOrder = () => {
   const navigate = useNavigate();
@@ -46,7 +47,9 @@ const CreateOrder = () => {
   const [salesorder, setSalesorder] = useState();
   const { helperData, setHelperData } = useHelperDataContext();
   const [showTgDesc, setShowTgDesc] = useState(false);
-
+  const [salesorderAlert, setSalesorderAlert] = useState(false);
+  const [zipcodeAlert, setZipcodeAlert] = useState(false);
+  const [screenerAlert, setscreenerAlert] = useState(false);
   //HANDLE ZIP CODE DATA:
 
   const handleZipcodeFileChange = (event) => {
@@ -72,6 +75,7 @@ const CreateOrder = () => {
 
   const handlefileuploadClick = (e) => {
     e.preventDefault();
+    setZipcodeAlert(true);
     zipCodefileInput?.map((data) => {
       return setSalesorder((prev) => ({
         ...prev,
@@ -88,6 +92,7 @@ const CreateOrder = () => {
 
   const handleScreenerclick = (e) => {
     e.preventDefault();
+    setscreenerAlert(true);
     screenerFileInput?.forEach((files) => {
       // console.log(files);
       axios
@@ -437,6 +442,7 @@ const CreateOrder = () => {
   // submit function
   const handlesubmit = async (e) => {
     e.preventDefault();
+    setSalesorderAlert(true);
     var startDate = new Date();
     var endDate = new Date(new Date().setDate(startDate.getDate() + 7));
     let body = salesorder;
@@ -470,7 +476,11 @@ const CreateOrder = () => {
     body["endDate"] = endDate.toLocaleDateString("en-CA");
     axios
       .post(`${SALES_BASE_URL}/sales/salesorders/create/`, salesorder)
-      .then((res) => console.log(res.data), navigate("/sales-order"))
+      .then(
+        (res) => console.log(res.data),
+
+        navigate("/sales-order")
+      )
       .catch((err) => console.log(err));
   };
 
@@ -678,6 +688,13 @@ const CreateOrder = () => {
                     <Button variant="filled" onClick={handlefileuploadClick}>
                       Upload
                     </Button>
+                    <Alert
+                      alertOpen={zipcodeAlert}
+                      setAlertOpen={setZipcodeAlert}
+                      variant="alternative"
+                      message="zipcode uploaded successfully"
+                      position="bottomLeft"
+                    />
                   </div>
                   <div className={styles.fileContainer}>
                     {zipCodefileInput?.map((data, index) => (
@@ -719,6 +736,13 @@ const CreateOrder = () => {
                     <Button variant="filled" onClick={handleScreenerclick}>
                       Upload
                     </Button>
+                    <Alert
+                      alertOpen={screenerAlert}
+                      setAlertOpen={setscreenerAlert}
+                      variant="alternative"
+                      message="screener uploaded successfully"
+                      position="bottomLeft"
+                    />
                   </div>
                   <div className={styles.fileContainer}>
                     {screenerFileInput?.map((data, index) => (
@@ -1316,6 +1340,13 @@ const CreateOrder = () => {
             <Button variant="filled" onClick={handlesubmit}>
               Create Order
             </Button>
+            <Alert
+              alertOpen={salesorderAlert}
+              setAlertOpen={setSalesorderAlert}
+              variant="success"
+              message="salesorder created successfully"
+              position="bottomLeft"
+            />
           </section>
         </form>
       </div>

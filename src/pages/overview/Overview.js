@@ -66,11 +66,6 @@ const Overview = () => {
 
   const [alertOpen, setAlertOpen] = useState(false);
 
-  const handleAlertClick = () => {
-    // setAlertOpen((prev) => !prev);
-    setAlertOpen(true);
-  };
-
   const [viewModal, setViewModal] = useState(false);
 
   const handleTransferToBlaze = async (orderData, originalSalesOrderData) => {
@@ -118,6 +113,7 @@ const Overview = () => {
         });
     });
     setShowModal((prev) => !prev);
+    setAlertOpen(true);
 
     console.log(surveys);
   };
@@ -316,17 +312,7 @@ const Overview = () => {
               <option value="closed">Closed</option>
               <option value="archived">Archived</option>
             </select>
-            <Button variant="filled" onClick={handleAlertClick}>
-              Show Alert Button
-            </Button>
 
-            <Alert
-              alertOpen={alertOpen}
-              setAlertOpen={setAlertOpen}
-              variant="success"
-              message="This is a success alert"
-              position="bottomLeft"
-            />
             <Link to={`/quotation/${id}`}>
               <Button variant="filled">View Quotation</Button>
             </Link>
@@ -1094,6 +1080,13 @@ const Overview = () => {
                 >
                   Transfer
                 </Button>
+                <Alert
+                  alertOpen={alertOpen}
+                  setAlertOpen={setAlertOpen}
+                  variant="success"
+                  message="Transfer to Blaze"
+                  position="bottomLeft"
+                />
               </section>
             </div>
           </ModalContent>
