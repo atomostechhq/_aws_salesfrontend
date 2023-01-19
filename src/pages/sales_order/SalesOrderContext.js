@@ -19,10 +19,16 @@ export const useSalesOrderContext = () => {
 const SalesOrderContextProvider = ({ children }) => {
   const [salesOrderData, setSalesorderData] = useState({});
   const urlSearchParams = new URLSearchParams(window.location.search);
+  const [alertSettings, setAlertSettings] = useState({
+    open: false,
+    color: "",
+    msg: "",
+    posi: "",
+  });
   let params = Object.fromEntries(urlSearchParams.entries());
   const [localstorageData, setLocalstorageData] = useState();
   const [searchParams, setSearchParams] = useSearchParams(params);
-
+  const [alertOpen, setAlertOpen] = useState(false);
   const fetchSalesOrders = () => {
     console.log("we are fetching");
     axios
@@ -57,11 +63,20 @@ const SalesOrderContextProvider = ({ children }) => {
     handleFilterChange,
     params,
     fetchSalesOrders,
+    alertSettings,
+    setAlertSettings,
   };
 
   return (
     <SalesOrderContext.Provider value={value}>
       {children}
+      <Alert
+        alertOpen={alertSettings?.open}
+        setAlertOpen={alertSettings?.open}
+        variant={alertSettings?.color}
+        message={alertSettings?.msg}
+        position={alertSettings?.posi}
+      />
     </SalesOrderContext.Provider>
   );
 };

@@ -7,6 +7,7 @@ import device from "../../assets/device.png";
 import description from "../../assets/description.png";
 
 import React, {
+  useContext,
   useEffect,
   useLayoutEffect,
   useReducer,
@@ -35,8 +36,10 @@ import { createPortal } from "react-dom";
 import { BsDownload } from "react-icons/bs";
 import { BsEye } from "react-icons/bs";
 import Alert from "../../components/Alert/Alert";
+import { useSalesOrderContext } from "../sales_order/SalesOrderContext";
 
 const Overview = () => {
+  const { alertSettings, setAlertSettings } = useSalesOrderContext();
   let navigate = useNavigate();
 
   const { id } = useParams();
@@ -64,7 +67,7 @@ const Overview = () => {
     setAddBidPerson((prev) => !prev);
   };
 
-  const [alertOpen, setAlertOpen] = useState(false);
+  // const [alertOpen, setAlertOpen] = useState(false);
 
   const [viewModal, setViewModal] = useState(false);
 
@@ -113,7 +116,6 @@ const Overview = () => {
         });
     });
     setShowModal((prev) => !prev);
-    setAlertOpen(true);
 
     console.log(surveys);
   };
@@ -1073,20 +1075,19 @@ const Overview = () => {
                   Back
                 </Button>
                 <Button
-                  onClick={() =>
-                    handleTransferToBlaze(orderDataForModal, salesData)
-                  }
+                  onClick={() => {
+                    handleTransferToBlaze(orderDataForModal, salesData);
+                    setAlertSettings({
+                      open: true,
+                      color: "success",
+                      msg: "Tesing",
+                      posi: "bottomLeft",
+                    });
+                  }}
                   variant="filled"
                 >
                   Transfer
                 </Button>
-                <Alert
-                  alertOpen={alertOpen}
-                  setAlertOpen={setAlertOpen}
-                  variant="success"
-                  message="Transfer to Blaze"
-                  position="bottomLeft"
-                />
               </section>
             </div>
           </ModalContent>
