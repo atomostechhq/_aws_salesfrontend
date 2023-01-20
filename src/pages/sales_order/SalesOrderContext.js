@@ -21,6 +21,7 @@ const SalesOrderContextProvider = ({ children }) => {
   const urlSearchParams = new URLSearchParams(window.location.search);
   const [alertSettings, setAlertSettings] = useState({
     open: false,
+    setalert: "",
     color: "",
     msg: "",
     posi: "",
@@ -40,6 +41,10 @@ const SalesOrderContextProvider = ({ children }) => {
         // filterSalesOrder(res.data.salesOrders);
       })
       .then((err) => console.log(err));
+  };
+
+  const handlealert = () => {
+    setAlertSettings(true);
   };
 
   useMemo(() => {
@@ -65,6 +70,7 @@ const SalesOrderContextProvider = ({ children }) => {
     fetchSalesOrders,
     alertSettings,
     setAlertSettings,
+    handlealert,
   };
 
   return (
@@ -72,7 +78,7 @@ const SalesOrderContextProvider = ({ children }) => {
       {children}
       <Alert
         alertOpen={alertSettings?.open}
-        setAlertOpen={alertSettings?.open}
+        setAlertOpen={handlealert}
         variant={alertSettings?.color}
         message={alertSettings?.msg}
         position={alertSettings?.posi}

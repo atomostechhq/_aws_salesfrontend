@@ -34,7 +34,9 @@ function App() {
             path="/create-order"
             element={
               <HelperDataContextProvider>
-                <CreateOrder />
+                <SalesOrderContextProvider>
+                  <CreateOrder />
+                </SalesOrderContextProvider>
               </HelperDataContextProvider>
             }
           />

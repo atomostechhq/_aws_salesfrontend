@@ -39,7 +39,8 @@ import Alert from "../../components/Alert/Alert";
 import { useSalesOrderContext } from "../sales_order/SalesOrderContext";
 
 const Overview = () => {
-  const { alertSettings, setAlertSettings } = useSalesOrderContext();
+  const { alertSettings, setAlertSettings, handlealert } =
+    useSalesOrderContext();
   let navigate = useNavigate();
 
   const { id } = useParams();
@@ -1079,8 +1080,9 @@ const Overview = () => {
                     handleTransferToBlaze(orderDataForModal, salesData);
                     setAlertSettings({
                       open: true,
+                      setalert: handlealert,
                       color: "success",
-                      msg: "Tesing",
+                      msg: "Transfer to Blaze",
                       posi: "bottomLeft",
                     });
                   }}
