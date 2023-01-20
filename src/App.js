@@ -40,6 +40,19 @@ function App() {
               </HelperDataContextProvider>
             }
           />
+
+          {/* edit */}
+          <Route
+            path="/edit/:id/create-order"
+            element={
+              <HelperDataContextProvider>
+                <SalesOrderContextProvider>
+                  <CreateOrder />
+                </SalesOrderContextProvider>
+              </HelperDataContextProvider>
+            }
+          />
+
           <Route
             path="/sales-order/overview/:id"
             element={

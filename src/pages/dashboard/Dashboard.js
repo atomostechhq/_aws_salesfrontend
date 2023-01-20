@@ -8,24 +8,15 @@ import styles from "./Dashboard.module.css";
 const Dashboard = () => {
   console.log(" dashboard");
 
-  useEffect(() => {
-    // languageData?.forEach((lan) => {
-    //   axios
-    //     .get(`${SALES_BASE_URL}/country/getByCountryName/${lan?.country}`)
-    //     .then((res) => {
-    //       let body = [];
-    //       lan?.languages?.forEach((lang) => {
-    //         body.push({
-    //           languageName: lang,
-    //           countryId: res.data.countryId,
-    //         });
-    //       });
-    //       axios.post(`${SALES_BASE_URL}/create/language`, body).then((res) => {
-    //         console.log("languages added for country ", lan?.country);
-    //       });
-    //     });
-    // });
-  }, []);
+  // useEffect(() => {
+  //   languageData?.forEach((lan) => {
+  //     axios
+  //       .post(`${SALES_BASE_URL}/country/bulkCreateCountry/`)
+  //       .then((res) => {
+
+  //       });
+  //   });
+  // }, []);
 
   return (
     <>

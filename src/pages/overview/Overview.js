@@ -60,9 +60,9 @@ const Overview = () => {
   const [array, setArray] = useState();
   const [editModal, setEditModal] = useState(false);
 
-  const handleEditClick = () => {
-    setEditModal((prev) => !prev);
-  };
+  // const handleEditClick = () => {
+  //   setEditModal((prev) => !prev);
+  // };
 
   const openAddBidPerson = () => {
     setAddBidPerson((prev) => !prev);
@@ -274,7 +274,10 @@ const Overview = () => {
               })}
             </div>
             <div>
-              <button className={styles.edit} onClick={() => handleEditClick()}>
+              <button
+                className={styles.edit}
+                onClick={() => navigate(`/edit/${id}/create-order`)}
+              >
                 Edit
               </button>
             </div>
@@ -322,7 +325,7 @@ const Overview = () => {
           </section>
         </div>
 
-        <Modal showModal={editModal} setShowModal={setEditModal}>
+        {/* <Modal showModal={editModal} setShowModal={setEditModal}>
           <ModalContent>
             <div className={styles.editContainer}>
               <h2>
@@ -333,7 +336,7 @@ const Overview = () => {
               </h2>
             </div>
           </ModalContent>
-        </Modal>
+        </Modal> */}
 
         {/* survey details */}
         <div className={styles.survey_details_container}>

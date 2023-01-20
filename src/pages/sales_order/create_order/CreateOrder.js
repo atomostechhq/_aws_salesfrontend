@@ -40,6 +40,7 @@ import Alert from "../../../components/Alert/Alert";
 
 const CreateOrder = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
   const { alertSettings, setAlertSettings, handlealert } =
     useSalesOrderContext();
   const [zipCodefileInput, setZipcodeFileInput] = useState([]);
@@ -48,6 +49,19 @@ const CreateOrder = () => {
   const [salesorder, setSalesorder] = useState();
   const { helperData, setHelperData } = useHelperDataContext();
   const [showTgDesc, setShowTgDesc] = useState(false);
+  const [editOrder, setEditOrder] = useState({});
+  console.log(id);
+
+  useEffect(() => {
+    axios
+      .get(
+        `https://sales.miratsoneservices.com/api/v1/sales/get-salesorders/${id}`
+      )
+      .then((res) => {
+        let data = res?.data;
+        console.log(data);
+      });
+  }, []);
 
   //HANDLE ZIP CODE DATA:
   const handleZipcodeFileChange = (event) => {
@@ -136,9 +150,6 @@ const CreateOrder = () => {
         });
     });
   };
-
-  console.log(zipCodefileInput);
-  console.log(screenerFileInput);
 
   // handleFileDeletes
   const handleZipcodedelete = (e, data, index) => {
@@ -440,7 +451,6 @@ const CreateOrder = () => {
     }));
   };
 
-  // console.log(helperData);
   // handlestatuschange
   const handleStatuschange = (e, name) => {
     setSalesorder((prev) => ({
@@ -514,6 +524,8 @@ const CreateOrder = () => {
   };
   console.log(salesorder);
   console.log(tableData);
+  console.log(zipCodefileInput);
+  console.log(screenerFileInput);
 
   return (
     <>
@@ -547,6 +559,7 @@ const CreateOrder = () => {
                     placeholder="Project Name"
                     style={{ width: "100%" }}
                     name="projectName"
+                    value=""
                     onChange={(e) =>
                       handlechange(e.target.name, e.target.value)
                     }
