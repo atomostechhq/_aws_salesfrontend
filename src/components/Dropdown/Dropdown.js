@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import {
   DropdownContainer,
@@ -16,6 +16,7 @@ const Dropdown = ({
   options: options,
   dropdownText,
   label,
+  defaultValue,
   onChange,
   ...restProps
 }) => {
@@ -29,7 +30,10 @@ const Dropdown = ({
     setIsOpen(false);
   };
 
-  const [dvalue, setDValue] = useState("");
+  useEffect(() => {
+    if (typeof defaultValue === "function") setSelectedOption(defaultValue());
+    // setValue(defaultValue);
+  }, [defaultValue]);
 
   return (
     <DropdownContainer {...restProps}>
@@ -44,7 +48,11 @@ const Dropdown = ({
           <DropdownList>
             {options.map((option) => (
               <ListItem
-                value={option?.value}
+                value={
+                  options?.filter(
+                    (option) => option?.value === selectedOption
+                  )[0]?.label
+                }
                 onClick={() => {
                   onChange(option);
                   onOptionClicked(option?.label);

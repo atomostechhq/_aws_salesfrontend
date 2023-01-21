@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { useEffect } from "react";
 import TextField from "../TextField/TextField";
 import { Box } from "./AutoComplete.style";
@@ -9,13 +9,17 @@ const AutoComplete = ({
   onChange: handleOptionsChange,
   disabled,
   placeholder,
+  defaultValue,
 }) => {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(defaultValue);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState(options);
-  // const suggestions = options.filter((option) =>
-  //   option.value.toLowerCase().includes(value.toLowerCase())
-  // );
+
+  // console.log(defaultValue);
+  useEffect(() => {
+    if (typeof defaultValue === "function") setValue(defaultValue());
+    // setValue(defaultValue);
+  }, [defaultValue]);
 
   const autocompleteRef = useRef();
 

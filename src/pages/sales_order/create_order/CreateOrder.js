@@ -50,6 +50,8 @@ const CreateOrder = () => {
   const { helperData, setHelperData } = useHelperDataContext();
   const [showTgDesc, setShowTgDesc] = useState(false);
   const [editOrder, setEditOrder] = useState({});
+  const [salesorderdata, setSalesorderData] = useState({});
+  let topUpArray = [];
   console.log(id);
 
   useEffect(() => {
@@ -58,8 +60,8 @@ const CreateOrder = () => {
         `https://sales.miratsoneservices.com/api/v1/sales/get-salesorders/${id}`
       )
       .then((res) => {
-        let data = res?.data;
-        console.log(data);
+        setSalesorderData(res?.data);
+        console.log(res?.data);
       });
   }, []);
 
@@ -545,6 +547,7 @@ const CreateOrder = () => {
                     placeholder="Email Subject Line"
                     style={{ width: "100%" }}
                     name="emailSubjectLine"
+                    value={salesorderdata?.emailSubjectLine}
                     onChange={(e) => {
                       handlechange(e.target.name, e.target.value);
                     }}
@@ -559,7 +562,7 @@ const CreateOrder = () => {
                     placeholder="Project Name"
                     style={{ width: "100%" }}
                     name="projectName"
-                    value=""
+                    value={salesorderdata?.projectName}
                     onChange={(e) =>
                       handlechange(e.target.name, e.target.value)
                     }
@@ -574,8 +577,18 @@ const CreateOrder = () => {
                     options={helperData?.clients ? helperData?.clients : []}
                     onChange={(value) => handlechange("clientId", value)}
                     style={{ width: "100%" }}
+                    defaultValue={() => {
+                      let x;
+                      helperData?.clients?.forEach((res) => {
+                        if (res?.value === salesorderdata?.clientId) {
+                          x = res?.value;
+                        }
+                      });
+                      return x;
+                    }}
                   />
                 </section>
+                {console.log(helperData)}
               </div>
               <div className={styles.inputField}>
                 <Label className={styles.formLabel}>Target Audience</Label>
@@ -588,6 +601,18 @@ const CreateOrder = () => {
                     }
                     onChange={(val) => handlechange("targetAudienceId", val)}
                     style={{ width: "100%" }}
+                    defaultValue={() => {
+                      let x;
+                      helperData?.targetAudiences?.map((res) => {
+                        if (
+                          res?.value ===
+                          salesorderdata?.TargetAudience?.targetAudienceId
+                        ) {
+                          x = res?.value;
+                        }
+                      });
+                      return x;
+                    }}
                   />
                 </section>
               </div>
@@ -596,10 +621,31 @@ const CreateOrder = () => {
 
                 <section className={styles.inputText} onChange={handlechange}>
                   <AutoComplete
-                    disabled={!salesorder?.targetAudienceId ? true : false}
+                    disabled={
+                      !salesorder?.targetAudienceId &&
+                      !salesorderdata?.targetAudienceId
+                        ? true
+                        : false
+                    }
                     options={helperData?.secTgs ? helperData?.secTgs : []}
                     onChange={(val) => handlechange("secTargetAudienceId", val)}
                     style={{ width: "100%" }}
+                    defaultValue={() => {
+                      let x;
+                      helperData?.targetAudiences?.map((res) => {
+                        if (res?.value === salesorderdata?.targetAudienceId) {
+                          return res?.secTgs?.map((sectg) => {
+                            if (
+                              sectg?.value ===
+                              salesorderdata?.secTargetAudienceId
+                            ) {
+                              x = sectg?.value;
+                            }
+                          });
+                        }
+                      });
+                      return x;
+                    }}
                   />
                 </section>
               </div>
@@ -613,6 +659,7 @@ const CreateOrder = () => {
                     onChange={(e) =>
                       handlechange(e.target.name, e.target.value)
                     }
+                    value={salesorderdata?.Overview}
                   />
                 </section>
               </div>
@@ -627,6 +674,15 @@ const CreateOrder = () => {
                     }
                     onChange={(val) => handlechange("salesManagerId", val)}
                     style={{ width: "100%" }}
+                    defaultValue={() => {
+                      let x;
+                      helperData?.salesManagers?.map((res) => {
+                        if (res?.value === salesorderdata?.salesManagerId) {
+                          x = res?.value;
+                        }
+                      });
+                      return x;
+                    }}
                   />
                 </section>
               </div>
@@ -639,6 +695,18 @@ const CreateOrder = () => {
                     }
                     onChange={(val) => handlechange("methodologyId", val)}
                     style={{ width: "100%" }}
+                    defaultValue={() => {
+                      let x;
+                      helperData?.methodologies?.map((res) => {
+                        if (
+                          res?.value ===
+                          salesorderdata?.Methodology?.methodology_id
+                        ) {
+                          x = res?.value;
+                        }
+                      });
+                      return x;
+                    }}
                   />
                 </section>
               </div>
@@ -651,6 +719,15 @@ const CreateOrder = () => {
                     }
                     style={{ width: "100%" }}
                     onChange={(val) => handlechange("studyTypeId", val)}
+                    defaultValue={() => {
+                      let x;
+                      helperData?.studyTypes?.map((res) => {
+                        if (res?.value === salesorderdata?.studyTypeId) {
+                          x = res?.value;
+                        }
+                      });
+                      return x;
+                    }}
                   />
                 </section>
               </div>
@@ -663,6 +740,15 @@ const CreateOrder = () => {
                     }
                     style={{ width: "100%" }}
                     onChange={(val) => handlechange("industryId", val)}
+                    defaultValue={() => {
+                      let x;
+                      helperData?.industries?.map((res) => {
+                        if (res?.value === salesorderdata?.industryId) {
+                          x = res?.value;
+                        }
+                      });
+                      return x;
+                    }}
                   />
                 </section>
               </div>
@@ -675,6 +761,10 @@ const CreateOrder = () => {
                     dropdownText="In-Progress"
                     options={supplierStatuses}
                     onChange={(e) => handleStatuschange(e, "status")}
+                    defaultValue={() => {
+                      let x = salesorderdata?.status;
+                      return x;
+                    }}
                   />
                 </section>
               </div>
@@ -704,7 +794,11 @@ const CreateOrder = () => {
                         }}
                       />
                       <label for="zipcodefile">
-                        <span id="file-name" className={styles.file_box}>
+                        <span
+                          id="file-name"
+                          className={styles.file_box}
+                          value={salesorderdata?.zipcodeFile}
+                        >
                           {/* {fileInput} */}
                         </span>
                         <span className={styles.file_button}>Browse</span>
@@ -779,20 +873,10 @@ const CreateOrder = () => {
                     onChange={(e) => {
                       handlechange("topUp", e);
                     }}
+                    checked={salesorderdata?.topUp}
                     // label="Mark As Top-Up"
                   />
-                  {/* <input
-                    type="checkbox" 
-                    value={salesorder?.topUp}
-                    name="topUp"
-                    id="topUp"
-                    onChange={(e) =>
-                      handlechange(
-                        e.target.name,
-                        e.target.checked ? true : false
-                      )
-                    }
-                  /> */}
+
                   <label for="topUp">Mark As Top-Up</label>
                 </section>
 
@@ -802,26 +886,15 @@ const CreateOrder = () => {
                     <span>Device Compatibility</span>
                   </div>
                   {helperData?.devices?.map((res) => {
+                    let array = [];
+                    salesorderdata?.SalesOrderDevices?.map((device) => {
+                      if (device?.deviceId === res?.value) {
+                        array.push(device?.deviceId);
+                      }
+                    });
+
                     return (
                       <section className={styles.devices} key={res.id}>
-                        {/* <input
-                          type="checkbox"
-                          name="desktop"
-                          id={res?.value}
-                          onChange={(e) =>
-                            setSalesorder((prev) => {
-                              return {
-                                ...prev,
-                                SalesOrderDevices: [
-                                  ...(prev?.SalesOrderDevices
-                                    ? prev?.SalesOrderDevices
-                                    : []),
-                                  { deviceId: res.value },
-                                ],
-                              };
-                            })
-                          }
-                        /> */}
                         <CheckBox
                           onChange={(e) =>
                             setSalesorder((prev) => {
@@ -836,6 +909,7 @@ const CreateOrder = () => {
                               };
                             })
                           }
+                          checked={array.includes(res?.value)}
                         />
                         <label for={res.value}>{res.label}</label>
                       </section>
@@ -853,6 +927,7 @@ const CreateOrder = () => {
               <div className={styles.suneditor}>
                 <SunEditor
                   onChange={(val) => handlechange("description", val)}
+                  setContents={salesorderdata?.description}
                   setOptions={{
                     buttonList: [
                       [
@@ -1329,6 +1404,7 @@ const CreateOrder = () => {
               </table>
             </div>
           </div>
+
           <section className={styles.add_countries_btn}>
             <ButtonWithIcon
               variant="alternateIcon"
