@@ -31,7 +31,6 @@ const SalesOrderContextProvider = ({ children }) => {
   const [searchParams, setSearchParams] = useSearchParams(params);
   const [alertOpen, setAlertOpen] = useState(false);
   const fetchSalesOrders = () => {
-    console.log("we are fetching");
     axios
       .get(`${SALES_BASE_URL}/sales/get-salesorder${window.location.search}`)
       .then((res) => {
@@ -48,7 +47,6 @@ const SalesOrderContextProvider = ({ children }) => {
   };
 
   useMemo(() => {
-    console.log("#1");
     fetchSalesOrders();
   }, [searchParams]);
 

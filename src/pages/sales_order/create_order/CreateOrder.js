@@ -37,12 +37,12 @@ import * as XLSX from "xlsx";
 import * as FileSaver from "file-saver";
 import { useHelperDataContext } from "../../../context/HelperDataContext";
 import Alert from "../../../components/Alert/Alert";
+import { useSearchParams } from "react-router-dom";
 
 const CreateOrder = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { alertSettings, setAlertSettings, handlealert } =
-    useSalesOrderContext();
+  const { setAlertSettings, handlealert } = useSalesOrderContext();
   const [zipCodefileInput, setZipcodeFileInput] = useState([]);
   const [screenerFileInput, setScreenerFileInput] = useState([]);
   const [tableData, setTableData] = useState([]);
@@ -50,20 +50,23 @@ const CreateOrder = () => {
   const { helperData, setHelperData } = useHelperDataContext();
   const [showTgDesc, setShowTgDesc] = useState(false);
   const [editOrder, setEditOrder] = useState({});
-  const [salesorderdata, setSalesorderData] = useState({});
-  let topUpArray = [];
-  console.log(id);
+
+  console.log(window.location.pathname);
 
   useEffect(() => {
-    axios
-      .get(
-        `https://sales.miratsoneservices.com/api/v1/sales/get-salesorders/${id}`
-      )
-      .then((res) => {
-        setSalesorderData(res?.data);
-        console.log(res?.data);
-      });
-  }, []);
+    if (window.location.pathname === `/edit/${id}/create-order`) {
+      axios
+        .get(
+          `https://sales.miratsoneservices.com/api/v1/sales/get-salesorders/${id}`
+        )
+        .then((res) => {
+          setSalesorder(res?.data);
+          console.log(res?.data);
+        });
+    }
+  }, [id]);
+
+  // console.log(Object.keys(salesorder?.countries)[0]?.split("-")[1]);
 
   //HANDLE ZIP CODE DATA:
   const handleZipcodeFileChange = (event) => {
@@ -508,8 +511,15 @@ const CreateOrder = () => {
       .catch((err) => console.log(err));
   };
 
+  // handle update
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    await axios.put(
+      `https://sales.miratsoneservices.com/api/v1/update/salesorders/${id}`
+    );
+  };
+
   let result = [];
-  console.table(result);
   const handleExportToExcel = (e) => {
     e.preventDefault();
     // const workSheet: WorkSheet = utils.json_to_sheet(tableData);
@@ -528,6 +538,7 @@ const CreateOrder = () => {
   console.log(tableData);
   console.log(zipCodefileInput);
   console.log(screenerFileInput);
+  console.log(helperData);
 
   return (
     <>
@@ -547,7 +558,7 @@ const CreateOrder = () => {
                     placeholder="Email Subject Line"
                     style={{ width: "100%" }}
                     name="emailSubjectLine"
-                    value={salesorderdata?.emailSubjectLine}
+                    value={salesorder?.emailSubjectLine}
                     onChange={(e) => {
                       handlechange(e.target.name, e.target.value);
                     }}
@@ -562,7 +573,7 @@ const CreateOrder = () => {
                     placeholder="Project Name"
                     style={{ width: "100%" }}
                     name="projectName"
-                    value={salesorderdata?.projectName}
+                    value={salesorder?.projectName}
                     onChange={(e) =>
                       handlechange(e.target.name, e.target.value)
                     }
@@ -580,7 +591,7 @@ const CreateOrder = () => {
                     defaultValue={() => {
                       let x;
                       helperData?.clients?.forEach((res) => {
-                        if (res?.value === salesorderdata?.clientId) {
+                        if (res?.value === salesorder?.clientId) {
                           x = res?.value;
                         }
                       });
@@ -588,7 +599,6 @@ const CreateOrder = () => {
                     }}
                   />
                 </section>
-                {console.log(helperData)}
               </div>
               <div className={styles.inputField}>
                 <Label className={styles.formLabel}>Target Audience</Label>
@@ -604,10 +614,7 @@ const CreateOrder = () => {
                     defaultValue={() => {
                       let x;
                       helperData?.targetAudiences?.map((res) => {
-                        if (
-                          res?.value ===
-                          salesorderdata?.TargetAudience?.targetAudienceId
-                        ) {
+                        if (res?.value === salesorder?.targetAudienceId) {
                           x = res?.value;
                         }
                       });
@@ -621,25 +628,19 @@ const CreateOrder = () => {
 
                 <section className={styles.inputText} onChange={handlechange}>
                   <AutoComplete
-                    disabled={
-                      !salesorder?.targetAudienceId &&
-                      !salesorderdata?.targetAudienceId
-                        ? true
-                        : false
-                    }
+                    disabled={!salesorder?.targetAudienceId ? true : false}
                     options={helperData?.secTgs ? helperData?.secTgs : []}
                     onChange={(val) => handlechange("secTargetAudienceId", val)}
                     style={{ width: "100%" }}
                     defaultValue={() => {
                       let x;
                       helperData?.targetAudiences?.map((res) => {
-                        if (res?.value === salesorderdata?.targetAudienceId) {
-                          return res?.secTgs?.map((sectg) => {
+                        if (res?.value === salesorder?.targetAudienceId) {
+                          return res?.secTgs?.map((sec) => {
                             if (
-                              sectg?.value ===
-                              salesorderdata?.secTargetAudienceId
+                              sec?.value === salesorder?.secTargetAudienceId
                             ) {
-                              x = sectg?.value;
+                              x = sec?.value;
                             }
                           });
                         }
@@ -659,7 +660,7 @@ const CreateOrder = () => {
                     onChange={(e) =>
                       handlechange(e.target.name, e.target.value)
                     }
-                    value={salesorderdata?.Overview}
+                    value={salesorder?.Overview}
                   />
                 </section>
               </div>
@@ -677,7 +678,7 @@ const CreateOrder = () => {
                     defaultValue={() => {
                       let x;
                       helperData?.salesManagers?.map((res) => {
-                        if (res?.value === salesorderdata?.salesManagerId) {
+                        if (res?.value === salesorder?.salesManagerId) {
                           x = res?.value;
                         }
                       });
@@ -698,10 +699,7 @@ const CreateOrder = () => {
                     defaultValue={() => {
                       let x;
                       helperData?.methodologies?.map((res) => {
-                        if (
-                          res?.value ===
-                          salesorderdata?.Methodology?.methodology_id
-                        ) {
+                        if (res?.value === salesorder?.methodologyId) {
                           x = res?.value;
                         }
                       });
@@ -722,7 +720,7 @@ const CreateOrder = () => {
                     defaultValue={() => {
                       let x;
                       helperData?.studyTypes?.map((res) => {
-                        if (res?.value === salesorderdata?.studyTypeId) {
+                        if (res?.value === salesorder?.studyTypeId) {
                           x = res?.value;
                         }
                       });
@@ -743,7 +741,7 @@ const CreateOrder = () => {
                     defaultValue={() => {
                       let x;
                       helperData?.industries?.map((res) => {
-                        if (res?.value === salesorderdata?.industryId) {
+                        if (res?.value === salesorder?.industryId) {
                           x = res?.value;
                         }
                       });
@@ -762,7 +760,7 @@ const CreateOrder = () => {
                     options={supplierStatuses}
                     onChange={(e) => handleStatuschange(e, "status")}
                     defaultValue={() => {
-                      let x = salesorderdata?.status;
+                      let x = salesorder?.status;
                       return x;
                     }}
                   />
@@ -797,7 +795,7 @@ const CreateOrder = () => {
                         <span
                           id="file-name"
                           className={styles.file_box}
-                          value={salesorderdata?.zipcodeFile}
+                          // value={salesorder?.zipcodeFile}
                         >
                           {/* {fileInput} */}
                         </span>
@@ -861,6 +859,7 @@ const CreateOrder = () => {
                         </button>
                       </span>
                     ))}
+                    {}
                   </div>
                 </div>
               </section>
@@ -873,8 +872,7 @@ const CreateOrder = () => {
                     onChange={(e) => {
                       handlechange("topUp", e);
                     }}
-                    checked={salesorderdata?.topUp}
-                    // label="Mark As Top-Up"
+                    // checked={topArray ? true : false}
                   />
 
                   <label for="topUp">Mark As Top-Up</label>
@@ -887,7 +885,7 @@ const CreateOrder = () => {
                   </div>
                   {helperData?.devices?.map((res) => {
                     let array = [];
-                    salesorderdata?.SalesOrderDevices?.map((device) => {
+                    salesorder?.SalesOrderDevices?.map((device) => {
                       if (device?.deviceId === res?.value) {
                         array.push(device?.deviceId);
                       }
@@ -927,7 +925,7 @@ const CreateOrder = () => {
               <div className={styles.suneditor}>
                 <SunEditor
                   onChange={(val) => handlechange("description", val)}
-                  setContents={salesorderdata?.description}
+                  setContents={salesorder?.description}
                   setOptions={{
                     buttonList: [
                       [
@@ -952,457 +950,935 @@ const CreateOrder = () => {
           </div>
 
           {/* table */}
-          <div>
-            <section className={styles.action_btns}>
-              <section className={styles.importExcel}>
-                <Button variant="filled" onClick={handleExportToExcel}>
-                  Import From Excel
-                </Button>
-              </section>
+
+          <section className={styles.action_btns}>
+            <section className={styles.importExcel}>
+              <Button variant="filled" onClick={handleExportToExcel}>
+                Import From Excel
+              </Button>
             </section>
-            <div className={styles.opportunity_table}>
-              <table id="table-to-xls-DATA">
-                <thead>
-                  <tr>
-                    <th>Country</th>
-                    <th>Currency</th>
-                    <th>Avg. LOI</th>
-                    <th>IR(assumed)</th>
-                    <th>Req Sample</th>
-                    <th>Feasibility</th>
-                    <th>CPI</th>
-                    <th>Timeline</th>
-                    <th>Total Budget</th>
-                    <th></th>
-                    <th style={{ width: "2%" }}></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {tableData?.map((data, i) => {
-                    return (
-                      <React.Fragment key={data?.countryUid}>
-                        <tr>
-                          <td>
-                            <Select
-                              options={helperData?.countries}
-                              name="country"
-                              isMulti
+          </section>
+          <div className={styles.opportunity_table}>
+            <table id="table-to-xls-DATA">
+              <thead>
+                <tr>
+                  <th>Country</th>
+                  <th>Currency</th>
+                  <th>Avg. LOI</th>
+                  <th>IR(assumed)</th>
+                  <th>Req Sample</th>
+                  <th>Feasibility</th>
+                  <th>CPI</th>
+                  <th>Timeline</th>
+                  <th>Total Budget</th>
+                  <th></th>
+                  <th style={{ width: "2%" }}></th>
+                </tr>
+              </thead>
+              <tbody>
+                {tableData?.map((data, i) => {
+                  return (
+                    <React.Fragment key={data?.countryUid}>
+                      <tr>
+                        <td>
+                          <Select
+                            options={helperData?.countries}
+                            name="country"
+                            isMulti
+                            onChange={(e) => {
+                              let body = e?.map((country) => ({
+                                countryId: country?.value,
+                              }));
+                              handleCountryRowChange(
+                                "salesOrderCountries",
+                                body,
+                                data?.countryUid
+                              );
+                            }}
+                          />
+                        </td>
+                        <td className={styles.currency}>
+                          <select
+                            name=""
+                            id=""
+                            onChange={(e) =>
+                              handleCountryRowChange(
+                                "currencyId",
+                                parseInt(e.target.value),
+                                data?.countryUid
+                              )
+                            }
+                          >
+                            <option value="" disabled selected>
+                              select currency
+                            </option>
+                            {helperData?.currencies?.map((currency) => {
+                              return (
+                                <option value={currency?.value}>
+                                  {currency?.label}
+                                </option>
+                              );
+                            })}
+                          </select>
+                        </td>
+                        <td>
+                          {" "}
+                          <div className={styles.field_group}>
+                            <input
+                              type="number"
+                              name="avgLoi"
+                              required
+                              value={data?.avgLoi}
+                              disabled={data?.disabledCountry}
                               onChange={(e) => {
-                                let body = e?.map((country) => ({
-                                  countryId: country?.value,
-                                }));
                                 handleCountryRowChange(
-                                  "salesOrderCountries",
-                                  body,
+                                  "avgLoi",
+                                  parseFloat(e.target.value),
                                   data?.countryUid
                                 );
                               }}
-                            />
-                          </td>
-                          <td className={styles.currency}>
-                            <select
-                              name=""
-                              id=""
-                              onChange={(e) =>
+                            />{" "}
+                            <span>mins</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div className={styles.field_group}>
+                            <input
+                              type="number"
+                              name="avgIr"
+                              required
+                              value={data?.avgIr}
+                              disabled={data?.disabledCountry}
+                              onChange={(e) => {
                                 handleCountryRowChange(
-                                  "currencyId",
-                                  parseInt(e.target.value),
+                                  "avgIr",
+                                  parseFloat(e.target.value),
                                   data?.countryUid
-                                )
-                              }
-                            >
-                              <option value="" disabled selected>
-                                select currency
-                              </option>
-                              {helperData?.currencies?.map((currency) => {
-                                return (
-                                  <option value={currency?.value}>
-                                    {currency?.label}
-                                  </option>
                                 );
-                              })}
-                            </select>
-                          </td>
-                          <td>
-                            {" "}
-                            <div className={styles.field_group}>
-                              <input
-                                type="number"
-                                name="avgLoi"
-                                required
-                                value={data?.avgLoi}
-                                disabled={data?.disabledCountry}
-                                onChange={(e) => {
-                                  handleCountryRowChange(
-                                    "avgLoi",
-                                    parseFloat(e.target.value),
-                                    data?.countryUid
-                                  );
-                                }}
-                              />{" "}
-                              <span>mins</span>
-                            </div>
-                          </td>
-                          <td>
-                            <div className={styles.field_group}>
-                              <input
-                                type="number"
-                                name="avgIr"
-                                required
-                                value={data?.avgIr}
-                                disabled={data?.disabledCountry}
-                                onChange={(e) => {
-                                  handleCountryRowChange(
-                                    "avgIr",
-                                    parseFloat(e.target.value),
-                                    data?.countryUid
-                                  );
-                                }}
-                              />{" "}
-                              <span>%</span>
-                            </div>
-                          </td>
-                          <td>
-                            {" "}
-                            <div className={styles.field_group}>
-                              <input
-                                type="number"
-                                name="sampleRequiredSum"
-                                required
-                                value={data?.sampleRequiredSum}
-                                disabled={data?.disabledCountry}
-                                onChange={(e) => {
-                                  handleCountryRowChange(
-                                    "sampleRequiredSum",
-                                    parseFloat(e.target.value),
-                                    data?.countryUid
-                                  );
-                                }}
-                              />{" "}
-                            </div>
-                          </td>
-                          <td>
-                            {" "}
-                            <div className={styles.field_group}>
-                              <input
-                                type="number"
-                                name="feasibilitySum"
-                                required
-                                value={data?.feasibilitySum}
-                                disabled={data?.disabledCountry}
-                                onChange={(e) => {
-                                  handleCountryRowChange(
-                                    "feasibilitySum",
-                                    parseFloat(e.target.value),
-                                    data?.countryUid
-                                  );
-                                }}
-                              />{" "}
-                            </div>
-                          </td>
-                          <td>
-                            {" "}
-                            <div className={styles.field_group}>
-                              <input
-                                type="number"
-                                name="avgCpi"
-                                required
-                                value={data?.avgCpi}
-                                disabled={data?.disabledCountry}
-                                onChange={(e) => {
-                                  handleCountryRowChange(
-                                    "avgCpi",
-                                    parseFloat(e.target.value),
-                                    data?.countryUid
-                                  );
-                                }}
-                              />{" "}
-                            </div>
-                          </td>
-                          <td>
-                            <div className={styles.field_group}>
-                              <input
-                                type="number"
-                                name="maxTimelinePerTg"
-                                required
-                                value={data?.maxTimelinePerTg}
-                                disabled={data?.disabledCountry}
-                                onChange={(e) => {
-                                  handleCountryRowChange(
-                                    "maxTimelinePerTg",
-                                    parseFloat(e.target.value),
-                                    data?.countryUid
-                                  );
-                                }}
-                              />{" "}
-                              <span>days</span>
-                            </div>
-                          </td>
-                          <td>
-                            {" "}
-                            <span>
-                              {data?.totalBudgetSum}
-                              {helperData?.currencies?.map((currency) => {
-                                if (currency?.value === data?.currencyId) {
-                                  return <span>({currency?.symbol})</span>;
-                                }
-                                return null;
-                              })}
-                            </span>{" "}
-                          </td>
-                          <td>
-                            <button
-                              className={styles.add_target}
-                              onClick={(e) => addTg(data?.countryUid)}
-                            >
-                              <BsPlus /> Add Target
-                            </button>
-                          </td>
-                          <td>
-                            <button className={styles.delete}>
-                              <MdOutlineDeleteOutline
-                                color="#1765dc"
-                                size={18}
-                                style={{ cursor: "pointer" }}
-                                onClick={() =>
-                                  handleDeleteCountry(data?.countryUid)
-                                }
-                              />
-                            </button>
-                          </td>
-                        </tr>
-                        <>
-                          {data?.tgs?.map((target) => {
-                            return (
-                              <tr className={styles.tgrow} key={target?.tgId}>
-                                <td></td>
+                              }}
+                            />{" "}
+                            <span>%</span>
+                          </div>
+                        </td>
+                        <td>
+                          {" "}
+                          <div className={styles.field_group}>
+                            <input
+                              type="number"
+                              name="sampleRequiredSum"
+                              required
+                              value={data?.sampleRequiredSum}
+                              disabled={data?.disabledCountry}
+                              onChange={(e) => {
+                                handleCountryRowChange(
+                                  "sampleRequiredSum",
+                                  parseFloat(e.target.value),
+                                  data?.countryUid
+                                );
+                              }}
+                            />{" "}
+                          </div>
+                        </td>
+                        <td>
+                          {" "}
+                          <div className={styles.field_group}>
+                            <input
+                              type="number"
+                              name="feasibilitySum"
+                              required
+                              value={data?.feasibilitySum}
+                              disabled={data?.disabledCountry}
+                              onChange={(e) => {
+                                handleCountryRowChange(
+                                  "feasibilitySum",
+                                  parseFloat(e.target.value),
+                                  data?.countryUid
+                                );
+                              }}
+                            />{" "}
+                          </div>
+                        </td>
+                        <td>
+                          {" "}
+                          <div className={styles.field_group}>
+                            <input
+                              type="number"
+                              name="avgCpi"
+                              required
+                              value={data?.avgCpi}
+                              disabled={data?.disabledCountry}
+                              onChange={(e) => {
+                                handleCountryRowChange(
+                                  "avgCpi",
+                                  parseFloat(e.target.value),
+                                  data?.countryUid
+                                );
+                              }}
+                            />{" "}
+                          </div>
+                        </td>
+                        <td>
+                          <div className={styles.field_group}>
+                            <input
+                              type="number"
+                              name="maxTimelinePerTg"
+                              required
+                              value={data?.maxTimelinePerTg}
+                              disabled={data?.disabledCountry}
+                              onChange={(e) => {
+                                handleCountryRowChange(
+                                  "maxTimelinePerTg",
+                                  parseFloat(e.target.value),
+                                  data?.countryUid
+                                );
+                              }}
+                            />{" "}
+                            <span>days</span>
+                          </div>
+                        </td>
+                        <td>
+                          {" "}
+                          <span>
+                            {data?.totalBudgetSum}
+                            {helperData?.currencies?.map((currency) => {
+                              if (currency?.value === data?.currencyId) {
+                                return <span>({currency?.symbol})</span>;
+                              }
+                              return null;
+                            })}
+                          </span>{" "}
+                        </td>
+                        <td>
+                          <button
+                            className={styles.add_target}
+                            onClick={(e) => addTg(data?.countryUid)}
+                          >
+                            <BsPlus /> Add Target
+                          </button>
+                        </td>
+                        <td>
+                          <button className={styles.delete}>
+                            <MdOutlineDeleteOutline
+                              color="#1765dc"
+                              size={18}
+                              style={{ cursor: "pointer" }}
+                              onClick={() =>
+                                handleDeleteCountry(data?.countryUid)
+                              }
+                            />
+                          </button>
+                        </td>
+                      </tr>
+                      <>
+                        {data?.tgs?.map((target) => {
+                          return (
+                            <tr className={styles.tgrow} key={target?.tgId}>
+                              <td></td>
 
-                                <td>
-                                  <div className={styles.targetaudience_input}>
-                                    <input
-                                      type="text"
-                                      name="tgTargetAudience"
-                                      required
-                                      value={target?.tgTargetAudience}
-                                      onChange={(e) => {
-                                        handleTgRowChange(
-                                          "tgTargetAudience",
-                                          e.target.value,
-                                          data?.countryUid,
-                                          target?.tgId
-                                        );
-                                      }}
-                                    />{" "}
-                                    {/* target description */}
-                                    <button
-                                      onClick={(e) =>
-                                        openTgDescModal(e, target?.tgId)
-                                      }
-                                      className={styles.decBtn}
-                                    >
-                                      <MdOutlineAdd size={20} />
-                                    </button>
-                                    {showTgDesc == target?.tgId ? (
-                                      <>
-                                        <div className={styles.tgDescContainer}>
-                                          <section>
-                                            <button
-                                              onClick={() =>
-                                                setShowTgDesc((prev) => !prev)
-                                              }
-                                              className={styles.closeBtn}
-                                            >
-                                              <RiCloseLine />
-                                            </button>
-                                          </section>
-                                          <textarea
-                                            type="text"
-                                            name="tgDescription"
-                                            required
-                                            value={target?.tgDescription}
-                                            onChange={(e) => {
-                                              handleTgRowChange(
-                                                "tgDescription",
-                                                e.target.value,
-                                                data?.countryUid,
-                                                target?.tgId
-                                              );
-                                            }}
-                                            cols="30"
-                                            rows="10"
-                                          ></textarea>
-                                          <section
-                                            className={styles.save_container}
-                                          >
-                                            <button
-                                              onClick={() =>
-                                                setShowTgDesc((prev) => !prev)
-                                              }
-                                              className={styles.save}
-                                            >
-                                              Save
-                                            </button>
-                                          </section>
-                                        </div>
-                                      </>
-                                    ) : null}
-                                  </div>
-                                </td>
-                                <td>
-                                  {" "}
-                                  <div className={styles.field_group}>
-                                    <input
-                                      type="number"
-                                      name="loi"
-                                      required
-                                      value={target?.loi}
-                                      onChange={(e) => {
-                                        handleTgRowChange(
-                                          "loi",
-                                          parseFloat(e.target.value),
-                                          data?.countryUid,
-                                          target?.tgId
-                                        );
-                                      }}
-                                    />{" "}
-                                    <span>mins</span>
-                                  </div>
-                                </td>
-                                <td>
-                                  <div className={styles.field_group}>
-                                    <input
-                                      type="number"
-                                      name="ir"
-                                      required
-                                      value={target?.ir}
-                                      onChange={(e) => {
-                                        handleTgRowChange(
-                                          "ir",
-                                          parseFloat(e.target.value),
-                                          data?.countryUid,
-                                          target?.tgId
-                                        );
-                                      }}
-                                    />{" "}
-                                    <span>%</span>
-                                  </div>
-                                </td>
-                                <td>
-                                  {" "}
-                                  <div className={styles.field_group}>
-                                    <input
-                                      type="number"
-                                      name="requiredSample"
-                                      required
-                                      value={target?.requiredSample}
-                                      onChange={(e) => {
-                                        handleTgRowChange(
-                                          "requiredSample",
-                                          parseFloat(e.target.value),
-                                          data?.countryUid,
-                                          target?.tgId
-                                        );
-                                      }}
-                                    />{" "}
-                                  </div>
-                                </td>
-                                <td>
-                                  {" "}
-                                  <div className={styles.field_group}>
-                                    <input
-                                      type="number"
-                                      name="feasibility"
-                                      required
-                                      value={target?.feasibility}
-                                      onChange={(e) => {
-                                        handleTgRowChange(
-                                          "feasibility",
-                                          parseFloat(e.target.value),
-                                          data?.countryUid,
-                                          target?.tgId
-                                        );
-                                      }}
-                                    />{" "}
-                                  </div>
-                                </td>
-                                <td>
-                                  {" "}
-                                  <div className={styles.field_group}>
-                                    <input
-                                      type="number"
-                                      name="cpi"
-                                      required
-                                      value={target?.cpi}
-                                      onChange={(e) => {
-                                        handleTgRowChange(
-                                          "cpi",
-                                          parseFloat(e.target.value),
-                                          data?.countryUid,
-                                          target?.tgId
-                                        );
-                                      }}
-                                    />{" "}
-                                  </div>
-                                </td>
-                                <td>
-                                  <div className={styles.field_group}>
-                                    <input
-                                      type="number"
-                                      name="timeline"
-                                      required
-                                      value={target?.timeline}
-                                      onChange={(e) => {
-                                        handleTgRowChange(
-                                          "timeline",
-                                          parseFloat(e.target.value),
-                                          data?.countryUid,
-                                          target?.tgId
-                                        );
-                                      }}
-                                    />{" "}
-                                    <span>days</span>
-                                  </div>
-                                </td>
-                                <td>
-                                  {" "}
-                                  <span>{target?.totalBudget}</span>{" "}
-                                </td>
-                                <td>
-                                  <button
-                                    className={styles.duplicate}
-                                    onClick={() =>
-                                      handleDuplicateTg(
+                              <td>
+                                <div className={styles.targetaudience_input}>
+                                  <input
+                                    type="text"
+                                    name="tgTargetAudience"
+                                    required
+                                    value={target?.tgTargetAudience}
+                                    onChange={(e) => {
+                                      handleTgRowChange(
+                                        "tgTargetAudience",
+                                        e.target.value,
                                         data?.countryUid,
-                                        target
-                                      )
+                                        target?.tgId
+                                      );
+                                    }}
+                                  />{" "}
+                                  {/* target description */}
+                                  <button
+                                    onClick={(e) =>
+                                      openTgDescModal(e, target?.tgId)
                                     }
+                                    className={styles.decBtn}
                                   >
-                                    <BsPlus /> Duplicate
+                                    <MdOutlineAdd size={20} />
                                   </button>
-                                </td>
+                                  {showTgDesc == target?.tgId ? (
+                                    <>
+                                      <div className={styles.tgDescContainer}>
+                                        <section>
+                                          <button
+                                            onClick={() =>
+                                              setShowTgDesc((prev) => !prev)
+                                            }
+                                            className={styles.closeBtn}
+                                          >
+                                            <RiCloseLine />
+                                          </button>
+                                        </section>
+                                        <textarea
+                                          type="text"
+                                          name="tgDescription"
+                                          required
+                                          value={target?.tgDescription}
+                                          onChange={(e) => {
+                                            handleTgRowChange(
+                                              "tgDescription",
+                                              e.target.value,
+                                              data?.countryUid,
+                                              target?.tgId
+                                            );
+                                          }}
+                                          cols="30"
+                                          rows="10"
+                                        ></textarea>
+                                        <section
+                                          className={styles.save_container}
+                                        >
+                                          <button
+                                            onClick={() =>
+                                              setShowTgDesc((prev) => !prev)
+                                            }
+                                            className={styles.save}
+                                          >
+                                            Save
+                                          </button>
+                                        </section>
+                                      </div>
+                                    </>
+                                  ) : null}
+                                </div>
+                              </td>
+                              <td>
+                                {" "}
+                                <div className={styles.field_group}>
+                                  <input
+                                    type="number"
+                                    name="loi"
+                                    required
+                                    value={target?.loi}
+                                    onChange={(e) => {
+                                      handleTgRowChange(
+                                        "loi",
+                                        parseFloat(e.target.value),
+                                        data?.countryUid,
+                                        target?.tgId
+                                      );
+                                    }}
+                                  />{" "}
+                                  <span>mins</span>
+                                </div>
+                              </td>
+                              <td>
+                                <div className={styles.field_group}>
+                                  <input
+                                    type="number"
+                                    name="ir"
+                                    required
+                                    value={target?.ir}
+                                    onChange={(e) => {
+                                      handleTgRowChange(
+                                        "ir",
+                                        parseFloat(e.target.value),
+                                        data?.countryUid,
+                                        target?.tgId
+                                      );
+                                    }}
+                                  />{" "}
+                                  <span>%</span>
+                                </div>
+                              </td>
+                              <td>
+                                {" "}
+                                <div className={styles.field_group}>
+                                  <input
+                                    type="number"
+                                    name="requiredSample"
+                                    required
+                                    value={target?.requiredSample}
+                                    onChange={(e) => {
+                                      handleTgRowChange(
+                                        "requiredSample",
+                                        parseFloat(e.target.value),
+                                        data?.countryUid,
+                                        target?.tgId
+                                      );
+                                    }}
+                                  />{" "}
+                                </div>
+                              </td>
+                              <td>
+                                {" "}
+                                <div className={styles.field_group}>
+                                  <input
+                                    type="number"
+                                    name="feasibility"
+                                    required
+                                    value={target?.feasibility}
+                                    onChange={(e) => {
+                                      handleTgRowChange(
+                                        "feasibility",
+                                        parseFloat(e.target.value),
+                                        data?.countryUid,
+                                        target?.tgId
+                                      );
+                                    }}
+                                  />{" "}
+                                </div>
+                              </td>
+                              <td>
+                                {" "}
+                                <div className={styles.field_group}>
+                                  <input
+                                    type="number"
+                                    name="cpi"
+                                    required
+                                    value={target?.cpi}
+                                    onChange={(e) => {
+                                      handleTgRowChange(
+                                        "cpi",
+                                        parseFloat(e.target.value),
+                                        data?.countryUid,
+                                        target?.tgId
+                                      );
+                                    }}
+                                  />{" "}
+                                </div>
+                              </td>
+                              <td>
+                                <div className={styles.field_group}>
+                                  <input
+                                    type="number"
+                                    name="timeline"
+                                    required
+                                    value={target?.timeline}
+                                    onChange={(e) => {
+                                      handleTgRowChange(
+                                        "timeline",
+                                        parseFloat(e.target.value),
+                                        data?.countryUid,
+                                        target?.tgId
+                                      );
+                                    }}
+                                  />{" "}
+                                  <span>days</span>
+                                </div>
+                              </td>
+                              <td>
+                                {" "}
+                                <span>{target?.totalBudget}</span>{" "}
+                              </td>
+                              <td>
+                                <button
+                                  className={styles.duplicate}
+                                  onClick={() =>
+                                    handleDuplicateTg(data?.countryUid, target)
+                                  }
+                                >
+                                  <BsPlus /> Duplicate
+                                </button>
+                              </td>
 
-                                <td>
-                                  <button className={styles.delete}>
-                                    <MdOutlineDeleteOutline
-                                      color="#1765dc"
-                                      size={18}
-                                      style={{ cursor: "pointer" }}
-                                      onClick={() =>
-                                        handleDeleteTg(data?.countryUid, target)
-                                      }
+                              <td>
+                                <button className={styles.delete}>
+                                  <MdOutlineDeleteOutline
+                                    color="#1765dc"
+                                    size={18}
+                                    style={{ cursor: "pointer" }}
+                                    onClick={() =>
+                                      handleDeleteTg(data?.countryUid, target)
+                                    }
+                                  />
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </>
+                    </React.Fragment>
+                  );
+                })}
+
+                {salesorder?.countries && (
+                  <>
+                    {console.log(salesorder?.countries)}
+                    {Object?.keys(salesorder?.countries)?.forEach(
+                      (key, value) => {
+                        if (key === "UNGRP") {
+                          salesorder?.countries[key]?.map((res) => {
+                            let data = res;
+                            console.log(data);
+                            return (
+                              <React.Fragment key={data?.countryId}>
+                                <tr>
+                                  <td>
+                                    <Select
+                                      options={helperData?.countries}
+                                      name="country"
+                                      isMulti
+                                      onChange={(e) => {
+                                        let body = e?.map((country) => ({
+                                          countryId: country?.value,
+                                        }));
+                                        handleCountryRowChange(
+                                          "salesOrderCountries",
+                                          body,
+                                          data?.countryId
+                                        );
+                                      }}
+                                      value={data?.countryName}
                                     />
-                                  </button>
-                                </td>
-                              </tr>
+                                  </td>
+
+                                  <td className={styles.currency}>
+                                    <select
+                                      name=""
+                                      id=""
+                                      onChange={(e) =>
+                                        handleCountryRowChange(
+                                          "currencyId",
+                                          parseInt(e.target.value),
+                                          data?.countryId
+                                        )
+                                      }
+                                      value={helperData?.currencies?.map(
+                                        (currency) => {
+                                          if (
+                                            data?.currency?.currencyName ===
+                                            currency?.label
+                                          )
+                                            return currency?.label;
+                                        }
+                                      )}
+                                    >
+                                      <option value="" disabled selected>
+                                        select currency
+                                      </option>
+                                      {helperData?.currencies?.map(
+                                        (currency) => {
+                                          return (
+                                            <option value={currency?.value}>
+                                              {currency?.label}
+                                            </option>
+                                          );
+                                        }
+                                      )}
+                                    </select>
+                                  </td>
+                                  <td>
+                                    {" "}
+                                    <div className={styles.field_group}>
+                                      <input
+                                        type="number"
+                                        name="avgLoi"
+                                        required
+                                        value={data?.avgLoi}
+                                        disabled={data?.disabledCountry}
+                                        onChange={(e) => {
+                                          handleCountryRowChange(
+                                            "avgLoi",
+                                            parseFloat(e.target.value),
+                                            data?.countryId
+                                          );
+                                        }}
+                                      />{" "}
+                                      <span>mins</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div className={styles.field_group}>
+                                      <input
+                                        type="number"
+                                        name="avgIr"
+                                        required
+                                        value={data?.avgIr}
+                                        disabled={data?.disabledCountry}
+                                        onChange={(e) => {
+                                          handleCountryRowChange(
+                                            "avgIr",
+                                            parseFloat(e.target.value),
+                                            data?.countryId
+                                          );
+                                        }}
+                                      />{" "}
+                                      <span>%</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    {" "}
+                                    <div className={styles.field_group}>
+                                      <input
+                                        type="number"
+                                        name="sampleRequiredSum"
+                                        required
+                                        value={data?.sampleRequiredSum}
+                                        disabled={data?.disabledCountry}
+                                        onChange={(e) => {
+                                          handleCountryRowChange(
+                                            "sampleRequiredSum",
+                                            parseFloat(e.target.value),
+                                            data?.countryId
+                                          );
+                                        }}
+                                      />{" "}
+                                    </div>
+                                  </td>
+                                  <td>
+                                    {" "}
+                                    <div className={styles.field_group}>
+                                      <input
+                                        type="number"
+                                        name="feasibilitySum"
+                                        required
+                                        value={data?.feasibilitySum}
+                                        disabled={data?.disabledCountry}
+                                        onChange={(e) => {
+                                          handleCountryRowChange(
+                                            "feasibilitySum",
+                                            parseFloat(e.target.value),
+                                            data?.countryId
+                                          );
+                                        }}
+                                      />{" "}
+                                    </div>
+                                  </td>
+                                  <td>
+                                    {" "}
+                                    <div className={styles.field_group}>
+                                      <input
+                                        type="number"
+                                        name="avgCpi"
+                                        required
+                                        value={data?.avgCpi}
+                                        disabled={data?.disabledCountry}
+                                        onChange={(e) => {
+                                          handleCountryRowChange(
+                                            "avgCpi",
+                                            parseFloat(e.target.value),
+                                            data?.countryId
+                                          );
+                                        }}
+                                      />{" "}
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div className={styles.field_group}>
+                                      <input
+                                        type="number"
+                                        name="maxTimelinePerTg"
+                                        required
+                                        value={data?.maxTimelinePerTg}
+                                        disabled={data?.disabledCountry}
+                                        onChange={(e) => {
+                                          handleCountryRowChange(
+                                            "maxTimelinePerTg",
+                                            parseFloat(e.target.value),
+                                            data?.countryId
+                                          );
+                                        }}
+                                      />{" "}
+                                      <span>days</span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    {" "}
+                                    <span>
+                                      {data?.totalBudgetSum}
+                                      {helperData?.currencies?.map(
+                                        (currency) => {
+                                          if (
+                                            currency?.value === data?.currencyId
+                                          ) {
+                                            return (
+                                              <span>({currency?.symbol})</span>
+                                            );
+                                          }
+                                          return null;
+                                        }
+                                      )}
+                                    </span>{" "}
+                                  </td>
+                                  <td>
+                                    <button
+                                      className={styles.add_target}
+                                      onClick={(e) => addTg(data?.countryUid)}
+                                    >
+                                      <BsPlus /> Add Target
+                                    </button>
+                                  </td>
+                                  <td>
+                                    <button className={styles.delete}>
+                                      <MdOutlineDeleteOutline
+                                        color="#1765dc"
+                                        size={18}
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() =>
+                                          handleDeleteCountry(data?.countryUid)
+                                        }
+                                      />
+                                    </button>
+                                  </td>
+                                </tr>
+                                <>
+                                  {data?.tgs?.map((target) => {
+                                    return (
+                                      <tr
+                                        className={styles.tgrow}
+                                        key={target?.tgId}
+                                      >
+                                        <td></td>
+
+                                        <td>
+                                          <div
+                                            className={
+                                              styles.targetaudience_input
+                                            }
+                                          >
+                                            <input
+                                              type="text"
+                                              name="tgTargetAudience"
+                                              required
+                                              value={target?.tgTargetAudience}
+                                              onChange={(e) => {
+                                                handleTgRowChange(
+                                                  "tgTargetAudience",
+                                                  e.target.value,
+                                                  data?.countryUid,
+                                                  target?.tgId
+                                                );
+                                              }}
+                                            />{" "}
+                                            {/* target description */}
+                                            <button
+                                              onClick={(e) =>
+                                                openTgDescModal(e, target?.tgId)
+                                              }
+                                              className={styles.decBtn}
+                                            >
+                                              <MdOutlineAdd size={20} />
+                                            </button>
+                                            {showTgDesc == target?.tgId ? (
+                                              <>
+                                                <div
+                                                  className={
+                                                    styles.tgDescContainer
+                                                  }
+                                                >
+                                                  <section>
+                                                    <button
+                                                      onClick={() =>
+                                                        setShowTgDesc(
+                                                          (prev) => !prev
+                                                        )
+                                                      }
+                                                      className={
+                                                        styles.closeBtn
+                                                      }
+                                                    >
+                                                      <RiCloseLine />
+                                                    </button>
+                                                  </section>
+                                                  <textarea
+                                                    type="text"
+                                                    name="tgDescription"
+                                                    required
+                                                    value={
+                                                      target?.tgDescription
+                                                    }
+                                                    onChange={(e) => {
+                                                      handleTgRowChange(
+                                                        "tgDescription",
+                                                        e.target.value,
+                                                        data?.countryUid,
+                                                        target?.tgId
+                                                      );
+                                                    }}
+                                                    cols="30"
+                                                    rows="10"
+                                                  ></textarea>
+                                                  <section
+                                                    className={
+                                                      styles.save_container
+                                                    }
+                                                  >
+                                                    <button
+                                                      onClick={() =>
+                                                        setShowTgDesc(
+                                                          (prev) => !prev
+                                                        )
+                                                      }
+                                                      className={styles.save}
+                                                    >
+                                                      Save
+                                                    </button>
+                                                  </section>
+                                                </div>
+                                              </>
+                                            ) : null}
+                                          </div>
+                                        </td>
+                                        <td>
+                                          {" "}
+                                          <div className={styles.field_group}>
+                                            <input
+                                              type="number"
+                                              name="loi"
+                                              required
+                                              value={target?.loi}
+                                              onChange={(e) => {
+                                                handleTgRowChange(
+                                                  "loi",
+                                                  parseFloat(e.target.value),
+                                                  data?.countryUid,
+                                                  target?.tgId
+                                                );
+                                              }}
+                                            />{" "}
+                                            <span>mins</span>
+                                          </div>
+                                        </td>
+                                        <td>
+                                          <div className={styles.field_group}>
+                                            <input
+                                              type="number"
+                                              name="ir"
+                                              required
+                                              value={target?.ir}
+                                              onChange={(e) => {
+                                                handleTgRowChange(
+                                                  "ir",
+                                                  parseFloat(e.target.value),
+                                                  data?.countryUid,
+                                                  target?.tgId
+                                                );
+                                              }}
+                                            />{" "}
+                                            <span>%</span>
+                                          </div>
+                                        </td>
+                                        <td>
+                                          {" "}
+                                          <div className={styles.field_group}>
+                                            <input
+                                              type="number"
+                                              name="requiredSample"
+                                              required
+                                              value={target?.requiredSample}
+                                              onChange={(e) => {
+                                                handleTgRowChange(
+                                                  "requiredSample",
+                                                  parseFloat(e.target.value),
+                                                  data?.countryUid,
+                                                  target?.tgId
+                                                );
+                                              }}
+                                            />{" "}
+                                          </div>
+                                        </td>
+                                        <td>
+                                          {" "}
+                                          <div className={styles.field_group}>
+                                            <input
+                                              type="number"
+                                              name="feasibility"
+                                              required
+                                              value={target?.feasibility}
+                                              onChange={(e) => {
+                                                handleTgRowChange(
+                                                  "feasibility",
+                                                  parseFloat(e.target.value),
+                                                  data?.countryUid,
+                                                  target?.tgId
+                                                );
+                                              }}
+                                            />{" "}
+                                          </div>
+                                        </td>
+                                        <td>
+                                          {" "}
+                                          <div className={styles.field_group}>
+                                            <input
+                                              type="number"
+                                              name="cpi"
+                                              required
+                                              value={target?.cpi}
+                                              onChange={(e) => {
+                                                handleTgRowChange(
+                                                  "cpi",
+                                                  parseFloat(e.target.value),
+                                                  data?.countryUid,
+                                                  target?.tgId
+                                                );
+                                              }}
+                                            />{" "}
+                                          </div>
+                                        </td>
+                                        <td>
+                                          <div className={styles.field_group}>
+                                            <input
+                                              type="number"
+                                              name="timeline"
+                                              required
+                                              value={target?.timeline}
+                                              onChange={(e) => {
+                                                handleTgRowChange(
+                                                  "timeline",
+                                                  parseFloat(e.target.value),
+                                                  data?.countryUid,
+                                                  target?.tgId
+                                                );
+                                              }}
+                                            />{" "}
+                                            <span>days</span>
+                                          </div>
+                                        </td>
+                                        <td>
+                                          {" "}
+                                          <span>
+                                            {target?.totalBudget}
+                                          </span>{" "}
+                                        </td>
+                                        <td>
+                                          <button
+                                            className={styles.duplicate}
+                                            onClick={() =>
+                                              handleDuplicateTg(
+                                                data?.countryUid,
+                                                target
+                                              )
+                                            }
+                                          >
+                                            <BsPlus /> Duplicate
+                                          </button>
+                                        </td>
+
+                                        <td>
+                                          <button className={styles.delete}>
+                                            <MdOutlineDeleteOutline
+                                              color="#1765dc"
+                                              size={18}
+                                              style={{ cursor: "pointer" }}
+                                              onClick={() =>
+                                                handleDeleteTg(
+                                                  data?.countryUid,
+                                                  target
+                                                )
+                                              }
+                                            />
+                                          </button>
+                                        </td>
+                                      </tr>
+                                    );
+                                  })}
+                                </>
+                              </React.Fragment>
                             );
-                          })}
-                        </>
-                      </React.Fragment>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+                          });
+                        } else if (key === ``) {
+                        }
+                      }
+                    )}
+                  </>
+                )}
+              </tbody>
+            </table>
           </div>
 
           <section className={styles.add_countries_btn}>
@@ -1430,10 +1906,6 @@ const CreateOrder = () => {
           </section>
         </form>
       </div>
-
-      {/* ) : (
-        <p>Loding Form...</p>
-      )} */}
     </>
   );
 };
