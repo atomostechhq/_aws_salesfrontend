@@ -8,7 +8,7 @@ export const useHelperDataContext = () => {
 };
 
 const HelperDataContextProvider = ({ children }) => {
-  const [helperData, setHelperData] = useState({});
+  const [helperData, setHelperData] = useState({ loading: true });
 
   useEffect(() => {
     const func = async () => {
@@ -160,6 +160,7 @@ const HelperDataContextProvider = ({ children }) => {
             salesManagers,
             projectManagers,
             accountManagers,
+            loading: false,
           };
         });
       } catch (error) {

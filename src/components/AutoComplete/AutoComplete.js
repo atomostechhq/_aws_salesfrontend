@@ -15,8 +15,14 @@ const AutoComplete = ({
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState(options);
 
+  const optionsX = useMemo(() => {
+    if (typeof options === "function") return options();
+    else return options;
+  }, [options]);
+
   // console.log(defaultValue);
   useEffect(() => {
+    console.log(defaultValue());
     if (typeof defaultValue === "function") setValue(defaultValue());
     // setValue(defaultValue);
   }, [defaultValue]);
@@ -49,30 +55,35 @@ const AutoComplete = ({
     };
   }, []);
 
+  useEffect(() => {
+    if (typeof options === "function") setSuggestions(options());
+    else setSuggestions(options);
+  }, [options]);
+
   return (
     <Box ref={autocompleteRef}>
       <TextField
         type="text"
         placeholder={placeholder}
         disabled={disabled}
-        value={options?.filter((option) => option?.value === value)[0]?.label}
+        value={optionsX?.filter((option) => option?.value === value)[0]?.label}
         // onChange={(e)=>console.log(e)}
         onChange={(e) => {
           setValue(e.target.value);
           handleOptionsChange && handleOptionsChange(e.target.value);
           if (e.target.value) {
             setSuggestions((prev) => {
-              return options.filter((option) =>
+              return optionsX.filter((option) =>
                 option?.label.toLowerCase().includes(e.target.value)
               );
             });
           } else {
-            setSuggestions(options);
+            setSuggestions(optionsX);
           }
         }}
         onFocus={() => {
           setSuggestions((prev) => {
-            return options.filter((option) => option?.value !== value);
+            return optionsX.filter((option) => option?.value !== value);
           });
           setShowSuggestions(true);
         }}
@@ -89,7 +100,7 @@ const AutoComplete = ({
               </li>
             ))
           ) : (
-            <p>fetching options...</p>
+            <p>fetching optionsX...</p>
           )}
         </ul>
       )}
