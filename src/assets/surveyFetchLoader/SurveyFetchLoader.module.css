@@ -1,0 +1,23 @@
+.page_container {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.img_container {
+  text-align: center;
+  margin: 35px 0;
+}
+
+.loader_container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  height: 90%;
+}
+
+.loader_container section p {
+  font-weight: 200;
+  font-size: 32px;
+  text-align: center;
+}

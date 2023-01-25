@@ -22,7 +22,7 @@ const AutoComplete = ({
 
   // console.log(defaultValue);
   useEffect(() => {
-    console.log(defaultValue());
+    // console.log(defaultValue());
     if (typeof defaultValue === "function") setValue(defaultValue());
     // setValue(defaultValue);
   }, [defaultValue]);
@@ -60,6 +60,7 @@ const AutoComplete = ({
     else setSuggestions(options);
   }, [options]);
 
+  // console.log(suggestions);
   return (
     <Box ref={autocompleteRef}>
       <TextField
@@ -73,8 +74,8 @@ const AutoComplete = ({
           handleOptionsChange && handleOptionsChange(e.target.value);
           if (e.target.value) {
             setSuggestions((prev) => {
-              return optionsX.filter((option) =>
-                option?.label.toLowerCase().includes(e.target.value)
+              return optionsX?.filter((option) =>
+                option?.label?.toLowerCase().includes(e.target.value)
               );
             });
           } else {
@@ -83,7 +84,7 @@ const AutoComplete = ({
         }}
         onFocus={() => {
           setSuggestions((prev) => {
-            return optionsX.filter((option) => option?.value !== value);
+            return optionsX?.filter((option) => option?.value !== value);
           });
           setShowSuggestions(true);
         }}

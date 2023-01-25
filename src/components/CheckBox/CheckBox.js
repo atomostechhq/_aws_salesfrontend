@@ -20,10 +20,19 @@ const CheckBox = ({
           checked={isChecked}
           bg={isChecked ? "#1765DC" : "#fff"}
           onClick={(e) => {
-            onChange(!isChecked);
+            e.target.value = !isChecked;
+            e.target.name = restProps?.name;
+            onChange(e);
           }}
         ></Box>
-        <span>{label}</span>
+        <span
+          onClick={(e) => {
+            e.target.value = !isChecked;
+            onChange(e);
+          }}
+        >
+          {label}
+        </span>
       </CheckLabel>
     </CheckBoxContainer>
   );

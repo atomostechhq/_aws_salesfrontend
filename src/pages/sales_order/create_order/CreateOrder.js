@@ -38,6 +38,9 @@ import * as FileSaver from "file-saver";
 import { useHelperDataContext } from "../../../context/HelperDataContext";
 import Alert from "../../../components/Alert/Alert";
 import { useSearchParams } from "react-router-dom";
+// import Loading from "../../Loading";
+import Loader from "../../../assets/loader/Loader";
+import SurveyFetchLoader from "../../../assets/surveyFetchLoader/SurveyFetchLoader";
 
 const CreateOrder = () => {
   const navigate = useNavigate();
@@ -49,7 +52,6 @@ const CreateOrder = () => {
   const [salesorder, setSalesorder] = useState();
   const { helperData, setHelperData } = useHelperDataContext();
   const [showTgDesc, setShowTgDesc] = useState(false);
-  const [editOrder, setEditOrder] = useState({});
 
   useEffect(() => {
     if (window.location.pathname === `/edit/${id}/create-order`) {
@@ -67,6 +69,7 @@ const CreateOrder = () => {
   //HANDLE ZIP CODE DATA:
   const handleZipcodeFileChange = (event) => {
     event.preventDefault();
+
     Object?.entries(event.target.files)?.map(([key, value]) => {
       setZipcodeFileInput((prev) => [...prev, value]);
     });
@@ -88,7 +91,7 @@ const CreateOrder = () => {
 
   const handlefileuploadClick = (e) => {
     e.preventDefault();
-    if (salesorder?.zipcode) {
+    if (window.location.pathname === `/edit/${id}/create-order`) {
       setAlertSettings({
         open: true,
         setalert: handlealert,
@@ -121,7 +124,7 @@ const CreateOrder = () => {
 
   const handleScreenerclick = (e) => {
     e.preventDefault();
-    if (salesorder?.screener) {
+    if (window.location.pathname === `/edit/${id}/create-order`) {
       setAlertSettings({
         open: true,
         setalert: handlealert,
@@ -138,6 +141,7 @@ const CreateOrder = () => {
         posi: "bottomLeft",
       });
     }
+
     screenerFileInput?.forEach((files) => {
       // console.log(files);
       axios
@@ -160,6 +164,7 @@ const CreateOrder = () => {
           setSalesorder((prev) => ({
             ...prev,
             screener: res?.data,
+
             // screenerFileName: res?.data.substring(
             //   res?.data.lastIndexOf("/") + 1
             // ),
@@ -480,9 +485,10 @@ const CreateOrder = () => {
     }));
   };
 
-  // submit function
+  // create order
   const handlesubmit = async (e) => {
     e.preventDefault();
+
     setAlertSettings({
       open: true,
       setalert: handlealert,
@@ -527,25 +533,27 @@ const CreateOrder = () => {
       .catch((err) => console.log(err));
   };
 
-  const updateOrder = async (e) => {
+  // update order
+  const handleUpdateOrder = (e) => {
     e.preventDefault();
-    setAlertSettings({
-      open: true,
-      setalert: handlealert,
-      color: "success",
-      msg: `Salesorder id ${id} Updated Successfully`,
-      posi: "bottomLeft",
-    });
-    axios
-      .put(
-        `https://sales.miratsoneservices.com/api/v1/sales/update/salesorders/${id}`,
-        salesorder
-      )
-      .then(
-        (res) => console.log(`salesorder id ${id} is updated`),
-        navigate(`/sales-order/overview/${id}`)
-      )
-      .catch((err) => console.log(err));
+    if (window.location.pathname === `/edit/${id}/create-order`) {
+      axios
+        .put(
+          `https://sales.miratsoneservices.com/api/v1/sales/update/salesorders/${id}`,
+          salesorder
+        )
+        .then(
+          (res) => navigate(`/sales-order/overview/${id}`),
+          setAlertSettings({
+            open: true,
+            setalert: handlealert,
+            color: "success",
+            msg: `Salesorder id ${id} Updated Successfully`,
+            posi: "bottomLeft",
+          })
+        )
+        .catch((err) => console.log(err));
+    }
   };
 
   let result = [];
@@ -574,7 +582,9 @@ const CreateOrder = () => {
       <Header />
 
       {helperData?.loading ? (
-        <p>Loading...</p>
+        <>
+          <Loader />
+        </>
       ) : (
         <div className={styles.sales_order_container}>
           <h1 className={styles.intro_text}>New Sales Order</h1>
@@ -665,7 +675,8 @@ const CreateOrder = () => {
                         return helperData?.targetAudiences?.filter((tg) => {
                           return (
                             tg?.value ===
-                            salesorder?.TargetAudience?.targetAudienceId
+                              salesorder?.TargetAudience?.targetAudienceId ||
+                            tg?.value === salesorder?.targetAudienceId
                           );
                         })[0]?.secTgs;
                       }}
@@ -850,23 +861,22 @@ const CreateOrder = () => {
                         </label>
                       </div>
                       <Button variant="filled" onClick={handlefileuploadClick}>
-                        Upload
+                        {window.location.pathname === `/edit/${id}/create-order`
+                          ? "Update "
+                          : "Upload"}
                       </Button>
                     </div>
                     <div className={styles.fileContainer}>
-                      {salesorder?.zipcode ? (
+                      {window.location.pathname ===
+                      `/edit/${id}/create-order` ? (
                         <>
                           {
                             <span id="file-name" className={styles.file_box}>
-                              <p> {salesorder?.zipcodeFile}</p>
+                              <p>{salesorder?.zipcodeFile}</p>
                               <button
                                 className={styles.delete_file}
                                 onClick={(e) => {
-                                  console.log("clicked");
                                   e.preventDefault();
-                                  [...salesorder?.zipcodeFile]?.filter(
-                                    (d, i) => i !== salesorder?.zipcodeFile
-                                  );
                                 }}
                               >
                                 <GrClose size={18} />
@@ -918,11 +928,14 @@ const CreateOrder = () => {
                         </label>
                       </div>
                       <Button variant="filled" onClick={handleScreenerclick}>
-                        Upload
+                        {window.location.pathname === `/edit/${id}/create-order`
+                          ? "Update "
+                          : "Upload "}
                       </Button>
                     </div>
                     <div className={styles.fileContainer}>
-                      {salesorder?.screener ? (
+                      {window.location.pathname ===
+                      `/edit/${id}/create-order` ? (
                         <>
                           <span id="file-name" className={styles.file_box}>
                             <p>
@@ -971,12 +984,13 @@ const CreateOrder = () => {
                     <Checkbox
                       id="topUp"
                       onChange={(e) => {
-                        handlechange("topUp", e);
+                        handlechange("topUp", e.target.value);
                       }}
                       checked={salesorder?.topUp}
+                      label="Mark As Top-Up"
                     />
 
-                    <label for="topUp">Mark As Top-Up</label>
+                    {/* <label for="topUp">Mark As Top-Up</label> */}
                   </section>
 
                   <section className={styles.device_compatibility}>
@@ -985,34 +999,50 @@ const CreateOrder = () => {
                       <span>Device Compatibility</span>
                     </div>
                     {helperData?.devices?.map((res) => {
-                      {
-                        /* let array = [];
-                    salesorder?.SalesOrderDevices?.map((device) => {
-                      if (device?.deviceId === res?.value) {
-                        array.push(device?.deviceId);
-                      }
-                    }); */
-                      }
+                      let array = [];
+
+                      salesorder?.SalesOrderDevices?.map((device) => {
+                        if (device?.deviceId === res?.value) {
+                          array.push(device?.deviceId);
+                        }
+                      });
+
+                      console.log(array);
 
                       return (
-                        <section className={styles.devices} key={res.id}>
+                        <section className={styles.devices}>
                           <CheckBox
-                            onChange={(e) =>
-                              setSalesorder((prev) => {
-                                return {
-                                  ...prev,
-                                  SalesOrderDevices: [
-                                    ...(prev?.SalesOrderDevices
-                                      ? prev?.SalesOrderDevices
-                                      : []),
-                                    { deviceId: res.value },
-                                  ],
-                                };
-                              })
-                            }
-                            // checked={array.includes(res?.value)}
+                            label={res?.label}
+                            onChange={(e) => {
+                              console.log(e.target.value);
+                              if (e.target.value) {
+                                console.log("chked");
+                                setSalesorder((prev) => {
+                                  return {
+                                    ...prev,
+                                    SalesOrderDevices: [
+                                      ...(prev?.SalesOrderDevices
+                                        ? prev?.SalesOrderDevices
+                                        : []),
+                                      { deviceId: res?.value },
+                                    ],
+                                  };
+                                });
+                              } else {
+                                setSalesorder((prev) => {
+                                  let newData = prev;
+                                  newData.SalesOrderDevices =
+                                    newData.SalesOrderDevices?.filter(
+                                      (d) => d?.deviceId !== array[0]
+                                    );
+                                  console.log(newData);
+                                  return { ...newData };
+                                });
+                              }
+                            }}
+                            checked={array.includes(res?.value)}
                           />
-                          <label for={res.value}>{res.label}</label>
+                          {/* <label for={res.value}>{res.label}</label> */}
                         </section>
                       );
                     })}
@@ -1080,7 +1110,7 @@ const CreateOrder = () => {
                 </thead>
                 <tbody>
                   <>
-                    {salesorder?.countries ? (
+                    {window.location.pathname === `/edit/${id}/create-order` ? (
                       <>
                         {Object?.keys(salesorder?.countries)?.forEach(
                           (key, value) => {
@@ -1088,507 +1118,7 @@ const CreateOrder = () => {
                               salesorder?.countries[key]?.map((res) => {
                                 let data = res;
                                 console.log(data);
-                                return (
-                                  <React.Fragment key={data?.countryId}>
-                                    <tr>
-                                      <td>
-                                        <Select
-                                          options={helperData?.countries}
-                                          name="country"
-                                          isMulti
-                                          onChange={(e) => {
-                                            let body = e?.map((country) => ({
-                                              countryId: country?.value,
-                                            }));
-                                            handleCountryRowChange(
-                                              "salesOrderCountries",
-                                              body,
-                                              data?.countryId
-                                            );
-                                          }}
-                                        />
-                                      </td>
-
-                                      <td className={styles.currency}>
-                                        <select
-                                          onChange={(e) =>
-                                            handleCountryRowChange(
-                                              "currencyId",
-                                              parseInt(e.target.value),
-                                              data?.countryId
-                                            )
-                                          }
-                                          value={helperData?.currencies?.map(
-                                            (curr) => {
-                                              if (
-                                                curr?.value ===
-                                                data?.currency?.currencyId
-                                              ) {
-                                                return curr?.value;
-                                              }
-                                            }
-                                          )}
-                                        >
-                                          <option value="" disabled selected>
-                                            select currency
-                                          </option>
-                                          {helperData?.currencies?.map(
-                                            (currency) => {
-                                              return (
-                                                <option value={currency?.value}>
-                                                  {currency?.label}
-                                                </option>
-                                              );
-                                            }
-                                          )}
-                                        </select>
-                                      </td>
-                                      <td>
-                                        {" "}
-                                        <div className={styles.field_group}>
-                                          <input
-                                            type="number"
-                                            name="avgLoi"
-                                            required
-                                            value={data?.avgLoi}
-                                            disabled={data?.disabledCountry}
-                                            onChange={(e) => {
-                                              handleCountryRowChange(
-                                                "avgLoi",
-                                                parseFloat(e.target.value),
-                                                data?.countryId
-                                              );
-                                            }}
-                                          />{" "}
-                                          <span>mins</span>
-                                        </div>
-                                      </td>
-                                      <td>
-                                        <div className={styles.field_group}>
-                                          <input
-                                            type="number"
-                                            name="avgIr"
-                                            required
-                                            value={data?.avgIr}
-                                            disabled={data?.disabledCountry}
-                                            onChange={(e) => {
-                                              handleCountryRowChange(
-                                                "avgIr",
-                                                parseFloat(e.target.value),
-                                                data?.countryId
-                                              );
-                                            }}
-                                          />{" "}
-                                          <span>%</span>
-                                        </div>
-                                      </td>
-                                      <td>
-                                        {" "}
-                                        <div className={styles.field_group}>
-                                          <input
-                                            type="number"
-                                            name="sampleRequiredSum"
-                                            required
-                                            value={data?.sampleRequiredSum}
-                                            disabled={data?.disabledCountry}
-                                            onChange={(e) => {
-                                              handleCountryRowChange(
-                                                "sampleRequiredSum",
-                                                parseFloat(e.target.value),
-                                                data?.countryId
-                                              );
-                                            }}
-                                          />{" "}
-                                        </div>
-                                      </td>
-                                      <td>
-                                        {" "}
-                                        <div className={styles.field_group}>
-                                          <input
-                                            type="number"
-                                            name="feasibilitySum"
-                                            required
-                                            value={data?.feasibilitySum}
-                                            disabled={data?.disabledCountry}
-                                            onChange={(e) => {
-                                              handleCountryRowChange(
-                                                "feasibilitySum",
-                                                parseFloat(e.target.value),
-                                                data?.countryId
-                                              );
-                                            }}
-                                          />{" "}
-                                        </div>
-                                      </td>
-                                      <td>
-                                        {" "}
-                                        <div className={styles.field_group}>
-                                          <input
-                                            type="number"
-                                            name="avgCpi"
-                                            required
-                                            value={data?.avgCpi}
-                                            disabled={data?.disabledCountry}
-                                            onChange={(e) => {
-                                              handleCountryRowChange(
-                                                "avgCpi",
-                                                parseFloat(e.target.value),
-                                                data?.countryId
-                                              );
-                                            }}
-                                          />{" "}
-                                        </div>
-                                      </td>
-                                      <td>
-                                        <div className={styles.field_group}>
-                                          <input
-                                            type="number"
-                                            name="maxTimelinePerTg"
-                                            required
-                                            value={data?.maxTimelinePerTg}
-                                            disabled={data?.disabledCountry}
-                                            onChange={(e) => {
-                                              handleCountryRowChange(
-                                                "maxTimelinePerTg",
-                                                parseFloat(e.target.value),
-                                                data?.countryId
-                                              );
-                                            }}
-                                          />{" "}
-                                          <span>days</span>
-                                        </div>
-                                      </td>
-                                      <td>
-                                        {" "}
-                                        <span>
-                                          {data?.totalBudgetSum}
-                                          {helperData?.currencies?.map(
-                                            (currency) => {
-                                              if (
-                                                currency?.value ===
-                                                data?.currencyId
-                                              ) {
-                                                return (
-                                                  <span>
-                                                    ({currency?.symbol})
-                                                  </span>
-                                                );
-                                              }
-                                              return null;
-                                            }
-                                          )}
-                                        </span>{" "}
-                                      </td>
-                                      <td>
-                                        <button
-                                          className={styles.add_target}
-                                          onClick={(e) =>
-                                            addTg(data?.countryUid)
-                                          }
-                                        >
-                                          <BsPlus /> Add Target
-                                        </button>
-                                      </td>
-                                      <td>
-                                        <button className={styles.delete}>
-                                          <MdOutlineDeleteOutline
-                                            color="#1765dc"
-                                            size={18}
-                                            style={{ cursor: "pointer" }}
-                                            onClick={() =>
-                                              handleDeleteCountry(
-                                                data?.countryUid
-                                              )
-                                            }
-                                          />
-                                        </button>
-                                      </td>
-                                    </tr>
-                                    <>
-                                      {data?.tgs?.map((target) => {
-                                        return (
-                                          <tr
-                                            className={styles.tgrow}
-                                            key={target?.tgId}
-                                          >
-                                            <td></td>
-
-                                            <td>
-                                              <div
-                                                className={
-                                                  styles.targetaudience_input
-                                                }
-                                              >
-                                                <input
-                                                  type="text"
-                                                  name="tgTargetAudience"
-                                                  required
-                                                  value={
-                                                    target?.tgTargetAudience
-                                                  }
-                                                  onChange={(e) => {
-                                                    handleTgRowChange(
-                                                      "tgTargetAudience",
-                                                      e.target.value,
-                                                      data?.countryUid,
-                                                      target?.tgId
-                                                    );
-                                                  }}
-                                                />{" "}
-                                                {/* target description */}
-                                                <button
-                                                  onClick={(e) =>
-                                                    openTgDescModal(
-                                                      e,
-                                                      target?.tgId
-                                                    )
-                                                  }
-                                                  className={styles.decBtn}
-                                                >
-                                                  <MdOutlineAdd size={20} />
-                                                </button>
-                                                {showTgDesc == target?.tgId ? (
-                                                  <>
-                                                    <div
-                                                      className={
-                                                        styles.tgDescContainer
-                                                      }
-                                                    >
-                                                      <section>
-                                                        <button
-                                                          onClick={() =>
-                                                            setShowTgDesc(
-                                                              (prev) => !prev
-                                                            )
-                                                          }
-                                                          className={
-                                                            styles.closeBtn
-                                                          }
-                                                        >
-                                                          <RiCloseLine />
-                                                        </button>
-                                                      </section>
-                                                      <textarea
-                                                        type="text"
-                                                        name="tgDescription"
-                                                        required
-                                                        value={
-                                                          target?.tgDescription
-                                                        }
-                                                        onChange={(e) => {
-                                                          handleTgRowChange(
-                                                            "tgDescription",
-                                                            e.target.value,
-                                                            data?.countryUid,
-                                                            target?.tgId
-                                                          );
-                                                        }}
-                                                        cols="30"
-                                                        rows="10"
-                                                      ></textarea>
-                                                      <section
-                                                        className={
-                                                          styles.save_container
-                                                        }
-                                                      >
-                                                        <button
-                                                          onClick={() =>
-                                                            setShowTgDesc(
-                                                              (prev) => !prev
-                                                            )
-                                                          }
-                                                          className={
-                                                            styles.save
-                                                          }
-                                                        >
-                                                          Save
-                                                        </button>
-                                                      </section>
-                                                    </div>
-                                                  </>
-                                                ) : null}
-                                              </div>
-                                            </td>
-                                            <td>
-                                              {" "}
-                                              <div
-                                                className={styles.field_group}
-                                              >
-                                                <input
-                                                  type="number"
-                                                  name="loi"
-                                                  required
-                                                  value={target?.loi}
-                                                  onChange={(e) => {
-                                                    handleTgRowChange(
-                                                      "loi",
-                                                      parseFloat(
-                                                        e.target.value
-                                                      ),
-                                                      data?.countryUid,
-                                                      target?.tgId
-                                                    );
-                                                  }}
-                                                />{" "}
-                                                <span>mins</span>
-                                              </div>
-                                            </td>
-                                            <td>
-                                              <div
-                                                className={styles.field_group}
-                                              >
-                                                <input
-                                                  type="number"
-                                                  name="ir"
-                                                  required
-                                                  value={target?.ir}
-                                                  onChange={(e) => {
-                                                    handleTgRowChange(
-                                                      "ir",
-                                                      parseFloat(
-                                                        e.target.value
-                                                      ),
-                                                      data?.countryUid,
-                                                      target?.tgId
-                                                    );
-                                                  }}
-                                                />{" "}
-                                                <span>%</span>
-                                              </div>
-                                            </td>
-                                            <td>
-                                              {" "}
-                                              <div
-                                                className={styles.field_group}
-                                              >
-                                                <input
-                                                  type="number"
-                                                  name="requiredSample"
-                                                  required
-                                                  value={target?.requiredSample}
-                                                  onChange={(e) => {
-                                                    handleTgRowChange(
-                                                      "requiredSample",
-                                                      parseFloat(
-                                                        e.target.value
-                                                      ),
-                                                      data?.countryUid,
-                                                      target?.tgId
-                                                    );
-                                                  }}
-                                                />{" "}
-                                              </div>
-                                            </td>
-                                            <td>
-                                              {" "}
-                                              <div
-                                                className={styles.field_group}
-                                              >
-                                                <input
-                                                  type="number"
-                                                  name="feasibility"
-                                                  required
-                                                  value={target?.feasibility}
-                                                  onChange={(e) => {
-                                                    handleTgRowChange(
-                                                      "feasibility",
-                                                      parseFloat(
-                                                        e.target.value
-                                                      ),
-                                                      data?.countryUid,
-                                                      target?.tgId
-                                                    );
-                                                  }}
-                                                />{" "}
-                                              </div>
-                                            </td>
-                                            <td>
-                                              {" "}
-                                              <div
-                                                className={styles.field_group}
-                                              >
-                                                <input
-                                                  type="number"
-                                                  name="cpi"
-                                                  required
-                                                  value={target?.cpi}
-                                                  onChange={(e) => {
-                                                    handleTgRowChange(
-                                                      "cpi",
-                                                      parseFloat(
-                                                        e.target.value
-                                                      ),
-                                                      data?.countryUid,
-                                                      target?.tgId
-                                                    );
-                                                  }}
-                                                />{" "}
-                                              </div>
-                                            </td>
-                                            <td>
-                                              <div
-                                                className={styles.field_group}
-                                              >
-                                                <input
-                                                  type="number"
-                                                  name="timeline"
-                                                  required
-                                                  value={target?.timeline}
-                                                  onChange={(e) => {
-                                                    handleTgRowChange(
-                                                      "timeline",
-                                                      parseFloat(
-                                                        e.target.value
-                                                      ),
-                                                      data?.countryUid,
-                                                      target?.tgId
-                                                    );
-                                                  }}
-                                                />{" "}
-                                                <span>days</span>
-                                              </div>
-                                            </td>
-                                            <td>
-                                              {" "}
-                                              <span>
-                                                {target?.totalBudget}
-                                              </span>{" "}
-                                            </td>
-                                            <td>
-                                              <button
-                                                className={styles.duplicate}
-                                                onClick={() =>
-                                                  handleDuplicateTg(
-                                                    data?.countryUid,
-                                                    target
-                                                  )
-                                                }
-                                              >
-                                                <BsPlus /> Duplicate
-                                              </button>
-                                            </td>
-
-                                            <td>
-                                              <button className={styles.delete}>
-                                                <MdOutlineDeleteOutline
-                                                  color="#1765dc"
-                                                  size={18}
-                                                  style={{ cursor: "pointer" }}
-                                                  onClick={() =>
-                                                    handleDeleteTg(
-                                                      data?.countryUid,
-                                                      target
-                                                    )
-                                                  }
-                                                />
-                                              </button>
-                                            </td>
-                                          </tr>
-                                        );
-                                      })}
-                                    </>
-                                  </React.Fragment>
-                                );
+                                <h1>djssjdhsjdh</h1>;
                               });
                             } else if (key === ``) {
                             }
@@ -2070,8 +1600,8 @@ const CreateOrder = () => {
 
             <section className={styles.create_order}>
               {window.location.pathname === `/edit/${id}/create-order` ? (
-                <Button variant="filled" onClick={updateOrder}>
-                  Update Order
+                <Button variant="filled" onClick={handleUpdateOrder}>
+                  Update Salesorder
                 </Button>
               ) : (
                 <Button variant="filled" onClick={handlesubmit}>

@@ -325,19 +325,6 @@ const Overview = () => {
           </section>
         </div>
 
-        {/* <Modal showModal={editModal} setShowModal={setEditModal}>
-          <ModalContent>
-            <div className={styles.editContainer}>
-              <h2>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione
-                perferendis sint ullam nostrum eum, vero pariatur at in
-                blanditiis ex, adipisci nam veritatis soluta placeat saepe sit
-                obcaecati perspiciatis dicta.
-              </h2>
-            </div>
-          </ModalContent>
-        </Modal> */}
-
         {/* survey details */}
         <div className={styles.survey_details_container}>
           <section className={styles.left_survey_details}>
@@ -543,18 +530,22 @@ const Overview = () => {
               })}
               <section className={styles.checkbox_wrapper}>
                 <p className={styles.checkbox_container}>
+                  {/* <CheckBox checked={devicesChecked.includes(2)} /> */}
                   <input type="checkbox" checked={devicesChecked.includes(2)} />
                   <label>Desktop/Laptop</label>
                 </p>
                 <p className={styles.checkbox_container}>
+                  {/* <CheckBox checked={devicesChecked.includes(2)} /> */}
                   <input type="checkbox" checked={devicesChecked.includes(3)} />
                   <label>Tablet</label>
                 </p>
                 <p className={styles.checkbox_container}>
+                  {/* <CheckBox checked={devicesChecked.includes(2)} /> */}
                   <input type="checkbox" checked={devicesChecked.includes(1)} />
                   <label>Smart Phone</label>
                 </p>
                 <p className={styles.checkbox_container}>
+                  {/* <CheckBox checked={devicesChecked.includes(2)} /> */}
                   <input type="checkbox" checked={devicesChecked.includes(4)} />
                   <label>Smart Tv</label>
                 </p>
