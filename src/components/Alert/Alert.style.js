@@ -41,7 +41,7 @@ export const AlertContainer = styled.div`
   padding: 16px 16px;
   border-radius: 8px;
   color: #000;
-  font-weight: 700;
+  font-weight: 500;
   font-size: 16px;
   display: flex;
   align-items: center;
@@ -101,6 +101,7 @@ export const AlertContainer = styled.div`
           bottom: 5%;
           left: 5%;
           animation: ${fadeInBottomLeft} 0.3s linear;
+          z-index: 100000;
         `;
       case "bottomCenter":
         return css`

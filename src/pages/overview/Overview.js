@@ -224,7 +224,7 @@ const Overview = () => {
   let countrieskey = salesData?.countries
     ? Object.keys(salesData?.countries)[0]?.split("-")[1]
     : ["GRP-default"];
-
+  console.log(countrieskey);
   console.log(orderDataForModal);
   console.log(bidPersonModalInputData);
 
@@ -527,30 +527,32 @@ const Overview = () => {
               </section>
               {salesData?.SalesOrderDevices?.map((data) => {
                 devicesChecked.push(data?.deviceId);
+                console.log(devicesChecked);
               })}
               <section className={styles.checkbox_wrapper}>
                 <p className={styles.checkbox_container}>
-                  {/* <CheckBox checked={devicesChecked.includes(2)} /> */}
-                  <input type="checkbox" checked={devicesChecked.includes(2)} />
+                  <CheckBox checked={devicesChecked.includes(2)} />
+                  {/* <input type="checkbox" checked={devicesChecked.includes(2)} /> */}
                   <label>Desktop/Laptop</label>
                 </p>
                 <p className={styles.checkbox_container}>
-                  {/* <CheckBox checked={devicesChecked.includes(2)} /> */}
-                  <input type="checkbox" checked={devicesChecked.includes(3)} />
+                  <CheckBox checked={devicesChecked.includes(3)} />
+                  {/* <input type="checkbox" checked={devicesChecked.includes(3)} /> */}
                   <label>Tablet</label>
                 </p>
                 <p className={styles.checkbox_container}>
-                  {/* <CheckBox checked={devicesChecked.includes(2)} /> */}
-                  <input type="checkbox" checked={devicesChecked.includes(1)} />
+                  <CheckBox checked={devicesChecked.includes(1)} />
+                  {/* <input type="checkbox" checked={devicesChecked.includes(1)} /> */}
                   <label>Smart Phone</label>
                 </p>
                 <p className={styles.checkbox_container}>
-                  {/* <CheckBox checked={devicesChecked.includes(2)} /> */}
-                  <input type="checkbox" checked={devicesChecked.includes(4)} />
+                  <CheckBox checked={devicesChecked.includes(4)} />
+                  {/* <input type="checkbox" checked={devicesChecked.includes(4)} /> */}
                   <label>Smart Tv</label>
                 </p>
                 <p className={styles.checkbox_container}>
-                  <input type="checkbox" disabled />
+                  <CheckBox disabled />
+                  {/* <input type="checkbox" disabled /> */}
                   <label>Requires Webcam</label>
                 </p>
               </section>
@@ -603,6 +605,7 @@ const Overview = () => {
               )?.map((key) => {
                 let countries = salesData?.countries[key];
                 let countryGrpId = key;
+                console.log(key);
 
                 return (
                   <React.Fragment key={uuid()}>
