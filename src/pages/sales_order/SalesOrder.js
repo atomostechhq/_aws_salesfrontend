@@ -221,34 +221,39 @@ const SalesOrder = () => {
                                 <Td>
                                   <div className={styles.flex}>
                                     {" "}
-                                    {d?.projectName ? (
-                                      <ToolTip
-                                        content={d.projectName}
-                                        position="top"
-                                      >
-                                        <section className={styles.projName}>
-                                          <TooltipTarget>
-                                            {d.projectName}
-                                          </TooltipTarget>
-                                        </section>
-                                      </ToolTip>
-                                    ) : (
-                                      <span className={styles.noData}>
-                                        -------
-                                      </span>
-                                    )}
-                                    {d?.topUp ? (
-                                      <ToolTip
-                                        content="top-up order"
-                                        position="top"
-                                      >
-                                        <span className={styles.info}>
-                                          <TooltipTarget>
-                                            <AiFillInfoCircle size={20} />
-                                          </TooltipTarget>
+                                    <Link
+                                      color="black"
+                                      to={`/sales-order/overview/${d.salesorder_id}`}
+                                    >
+                                      {d?.projectName ? (
+                                        <ToolTip
+                                          content={d.projectName}
+                                          position="top"
+                                        >
+                                          <section className={styles.projName}>
+                                            <TooltipTarget>
+                                              {d.projectName}
+                                            </TooltipTarget>
+                                          </section>
+                                        </ToolTip>
+                                      ) : (
+                                        <span className={styles.noData}>
+                                          -------
                                         </span>
-                                      </ToolTip>
-                                    ) : null}
+                                      )}
+                                      {d?.topUp ? (
+                                        <ToolTip
+                                          content="top-up order"
+                                          position="top"
+                                        >
+                                          <span className={styles.info}>
+                                            <TooltipTarget>
+                                              <AiFillInfoCircle size={20} />
+                                            </TooltipTarget>
+                                          </span>
+                                        </ToolTip>
+                                      ) : null}
+                                    </Link>
                                   </div>
                                 </Td>
                                 <Td>

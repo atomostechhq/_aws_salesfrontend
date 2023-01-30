@@ -52,6 +52,7 @@ const CreateOrder = () => {
   const [salesorder, setSalesorder] = useState();
   const { helperData, setHelperData } = useHelperDataContext();
   const [showTgDesc, setShowTgDesc] = useState(false);
+  const [deviceData, setDeviceData] = useState([]);
 
   useEffect(() => {
     if (window.location.pathname === `/edit/${id}/create-order`) {
@@ -66,6 +67,19 @@ const CreateOrder = () => {
         });
     }
   }, [id]);
+
+  useEffect(() => {
+    axios
+      .get(
+        `https://sales.miratsoneservices.com/api/v1/sales/salesorderdevices/getSalesOrderDevices/${id}`
+      )
+      .then((res) => {
+        setDeviceData(res?.data);
+      })
+      .catch((err) => console.log(err));
+  }, [id]);
+
+  console.log(deviceData);
 
   //HANDLE ZIP CODE DATA:
   const handleZipcodeFileChange = (event) => {
@@ -1016,30 +1030,58 @@ const CreateOrder = () => {
                           <CheckBox
                             label={res?.label}
                             onChange={(e) => {
-                              console.log(e.target.value);
-                              if (e.target.value) {
-                                // console.log("chked");
-                                setSalesorder((prev) => {
-                                  return {
-                                    ...prev,
-                                    SalesOrderDevices: [
-                                      ...(prev?.SalesOrderDevices
-                                        ? prev?.SalesOrderDevices
-                                        : []),
-                                      { deviceId: res?.value },
-                                    ],
-                                  };
-                                });
-                              } else {
-                                setSalesorder((prev) => {
-                                  let newData = prev;
-                                  newData.SalesOrderDevices =
-                                    newData.SalesOrderDevices?.filter(
-                                      (d) => d?.deviceId !== array[0]
-                                    );
+                              if (`/edit/${id}/create-order`) {
+                                console.log("here");
+                                if (e.target.value) {
+                                  setSalesorder((prev) => {
+                                    return {
+                                      ...prev,
+                                      SalesOrderDevices: [
+                                        ...(prev?.SalesOrderDevices
+                                          ? prev?.SalesOrderDevices
+                                          : []),
+                                        {
+                                          deviceId: res?.value,
+                                        },
+                                      ],
+                                    };
+                                  });
+                                } else {
+                                  setSalesorder((prev) => {
+                                    let newData = prev;
+                                    newData.SalesOrderDevices =
+                                      newData.SalesOrderDevices?.filter(
+                                        (d) => d?.deviceId !== array[0]
+                                      );
 
-                                  return { ...newData };
-                                });
+                                    return { ...newData };
+                                  });
+                                }
+                              } else {
+                                if (e.target.value) {
+                                  // console.log("chked");
+                                  setSalesorder((prev) => {
+                                    return {
+                                      ...prev,
+                                      SalesOrderDevices: [
+                                        ...(prev?.SalesOrderDevices
+                                          ? prev?.SalesOrderDevices
+                                          : []),
+                                        { deviceId: res?.value },
+                                      ],
+                                    };
+                                  });
+                                } else {
+                                  setSalesorder((prev) => {
+                                    let newData = prev;
+                                    newData.SalesOrderDevices =
+                                      newData.SalesOrderDevices?.filter(
+                                        (d) => d?.deviceId !== array[0]
+                                      );
+
+                                    return { ...newData };
+                                  });
+                                }
                               }
                             }}
                             checked={array.includes(res?.value)}
