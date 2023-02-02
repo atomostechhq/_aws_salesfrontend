@@ -79,8 +79,6 @@ const CreateOrder = () => {
       .catch((err) => console.log(err));
   }, [id]);
 
-  console.log(deviceData);
-
   //HANDLE ZIP CODE DATA:
   const handleZipcodeFileChange = (event) => {
     event.preventDefault();
@@ -1032,6 +1030,7 @@ const CreateOrder = () => {
                             onChange={(e) => {
                               if (`/edit/${id}/create-order`) {
                                 console.log("here");
+
                                 if (e.target.value) {
                                   setSalesorder((prev) => {
                                     return {
