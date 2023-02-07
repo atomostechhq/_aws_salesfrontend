@@ -557,9 +557,10 @@ const CreateOrder = () => {
     }
     axios
       .put(
-        `${SALES_BASE_URL}/sales/update/getSalesOrderDevices/${id}`,
-        salesorder?.SalesOrderDevices?.map((res) => res)
+        `${SALES_BASE_URL}/sales/salesorderdevices/update/getSalesOrderDevices/${id}`,
+        salesorder
       )
+
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
     axios
@@ -1044,7 +1045,7 @@ const CreateOrder = () => {
                                           ? prev?.SalesOrderDevices
                                           : []),
                                         {
-                                          id: deviceid,
+                                          // id: deviceid,
                                           salesOrderId: Number(id),
                                           deviceId: res?.value,
                                         },

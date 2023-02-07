@@ -531,6 +531,11 @@ const Overview = () => {
               })}
               <section className={styles.checkbox_wrapper}>
                 <p className={styles.checkbox_container}>
+                  <CheckBox checked={devicesChecked.includes(1)} />
+                  {/* <input type="checkbox" checked={devicesChecked.includes(1)} /> */}
+                  <label>Smart Phone</label>
+                </p>
+                <p className={styles.checkbox_container}>
                   <CheckBox checked={devicesChecked.includes(2)} />
                   {/* <input type="checkbox" checked={devicesChecked.includes(2)} /> */}
                   <label>Desktop/Laptop</label>
@@ -540,11 +545,7 @@ const Overview = () => {
                   {/* <input type="checkbox" checked={devicesChecked.includes(3)} /> */}
                   <label>Tablet</label>
                 </p>
-                <p className={styles.checkbox_container}>
-                  <CheckBox checked={devicesChecked.includes(1)} />
-                  {/* <input type="checkbox" checked={devicesChecked.includes(1)} /> */}
-                  <label>Smart Phone</label>
-                </p>
+
                 <p className={styles.checkbox_container}>
                   <CheckBox checked={devicesChecked.includes(4)} />
                   {/* <input type="checkbox" checked={devicesChecked.includes(4)} /> */}
