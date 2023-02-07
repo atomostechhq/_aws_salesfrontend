@@ -64,16 +64,16 @@ const CreateOrder = () => {
     }
   }, [id]);
 
-  useEffect(() => {
-    axios
-      .get(
-        `${SALES_BASE_URL}/sales/salesorderdevices/getSalesOrderDevices/${id}`
-      )
-      .then((res) => {
-        setDeviceData(res?.data);
-      })
-      .catch((err) => console.log(err));
-  }, [id]);
+  // useEffect(() => {
+  //   axios
+  //     .get(
+  //       `${SALES_BASE_URL}/sales/salesorderdevices/getSalesOrderDevices/${id}`
+  //     )
+  //     .then((res) => {
+  //       setDeviceData(res?.data);
+  //     })
+  //     .catch((err) => console.log(err));
+  // }, [id]);
 
   //HANDLE ZIP CODE DATA:
   const handleZipcodeFileChange = (event) => {
@@ -558,9 +558,8 @@ const CreateOrder = () => {
     axios
       .put(
         `${SALES_BASE_URL}/sales/salesorderdevices/update/getSalesOrderDevices/${id}`,
-        salesorder?.SalesOrderDevices?.map((res) => res)
+        salesorder
       )
-
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
     axios
@@ -1036,10 +1035,10 @@ const CreateOrder = () => {
 
                                 if (e.target.value) {
                                   setSalesorder((prev) => {
-                                    let deviceid;
-                                    deviceData?.map((res) => {
-                                      return (deviceid = res?.id);
-                                    });
+                                    // let deviceid;
+                                    // deviceData?.map((res) => {
+                                    //   return (deviceid = res?.id);
+                                    // });
                                     return {
                                       ...prev,
                                       SalesOrderDevices: [
