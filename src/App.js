@@ -43,7 +43,7 @@ function App() {
 
           {/* edit */}
           <Route
-            path="/edit/:id/create-order"
+            path="/edit/:id/update-salesorder"
             element={
               <HelperDataContextProvider>
                 <SalesOrderContextProvider>

@@ -55,7 +55,7 @@ const CreateOrder = () => {
   const [deviceData, setDeviceData] = useState([]);
 
   useEffect(() => {
-    if (window.location.pathname === `/edit/${id}/create-order`) {
+    if (window.location.pathname === `/edit/${id}/update-salesorder`) {
       axios.get(`${SALES_BASE_URL}/sales/get-salesorders/${id}`).then((res) => {
         setSalesorder(res?.data);
 
@@ -133,7 +133,7 @@ const CreateOrder = () => {
 
   const handleScreenerclick = (e) => {
     e.preventDefault();
-    if (window.location.pathname === `/edit/${id}/create-order`) {
+    if (window.location.pathname === `/edit/${id}/update-salesorder`) {
       setAlertSettings({
         open: true,
         setalert: handlealert,
@@ -546,7 +546,7 @@ const CreateOrder = () => {
   // update order
   const handleUpdateOrder = (e) => {
     e.preventDefault();
-    if (window.location.pathname === `/edit/${id}/create-order`) {
+    if (window.location.pathname === `/edit/${id}/update-salesorder`) {
       setAlertSettings({
         open: true,
         setalert: handlealert,
@@ -558,7 +558,7 @@ const CreateOrder = () => {
     axios
       .put(
         `${SALES_BASE_URL}/sales/salesorderdevices/update/getSalesOrderDevices/${id}`,
-        salesorder
+        salesorder?.SalesOrderDevices?.map((res) => res)
       )
 
       .then((res) => console.log(res))
@@ -878,14 +878,15 @@ const CreateOrder = () => {
                         </label>
                       </div>
                       <Button variant="filled" onClick={handlefileuploadClick}>
-                        {window.location.pathname === `/edit/${id}/create-order`
+                        {window.location.pathname ===
+                        `/edit/${id}/update-salesorder`
                           ? "Update "
                           : "Upload"}
                       </Button>
                     </div>
                     <div className={styles.fileContainer}>
                       {window.location.pathname ===
-                      `/edit/${id}/create-order` ? (
+                      `/edit/${id}/update-salesorder` ? (
                         <>
                           {
                             <span id="file-name" className={styles.file_box}>
@@ -945,14 +946,15 @@ const CreateOrder = () => {
                         </label>
                       </div>
                       <Button variant="filled" onClick={handleScreenerclick}>
-                        {window.location.pathname === `/edit/${id}/create-order`
+                        {window.location.pathname ===
+                        `/edit/${id}/update-salesorder`
                           ? "Update "
                           : "Upload "}
                       </Button>
                     </div>
                     <div className={styles.fileContainer}>
                       {window.location.pathname ===
-                      `/edit/${id}/create-order` ? (
+                      `/edit/${id}/update-salesorder` ? (
                         <>
                           <span id="file-name" className={styles.file_box}>
                             <p>
@@ -1029,7 +1031,7 @@ const CreateOrder = () => {
                           <CheckBox
                             label={res?.label}
                             onChange={(e) => {
-                              if (`/edit/${id}/create-order`) {
+                              if (`/edit/${id}/update-salesorder`) {
                                 console.log("here");
 
                                 if (e.target.value) {
@@ -1159,7 +1161,8 @@ const CreateOrder = () => {
                 </thead>
                 <tbody>
                   <>
-                    {window.location.pathname === `/edit/${id}/create-order` ? (
+                    {window.location.pathname ===
+                    `/edit/${id}/update-salesorder` ? (
                       <>
                         {Object.keys(
                           salesorder?.countries ? salesorder?.countries : {}
@@ -2591,7 +2594,7 @@ const CreateOrder = () => {
             </section>
 
             <section className={styles.create_order}>
-              {window.location.pathname === `/edit/${id}/create-order` ? (
+              {window.location.pathname === `/edit/${id}/update-salesorder` ? (
                 <Button variant="filled" onClick={handleUpdateOrder}>
                   Update Salesorder
                 </Button>

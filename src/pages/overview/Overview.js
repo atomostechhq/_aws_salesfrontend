@@ -276,7 +276,7 @@ const Overview = () => {
             <div>
               <button
                 className={styles.edit}
-                onClick={() => navigate(`/edit/${id}/create-order`)}
+                onClick={() => navigate(`/edit/${id}/update-salesorder`)}
               >
                 Edit
               </button>
