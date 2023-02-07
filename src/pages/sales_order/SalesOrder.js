@@ -241,19 +241,19 @@ const SalesOrder = () => {
                                           -------
                                         </span>
                                       )}
-                                      {d?.topUp ? (
-                                        <ToolTip
-                                          content="top-up order"
-                                          position="top"
-                                        >
-                                          <span className={styles.info}>
-                                            <TooltipTarget>
-                                              <AiFillInfoCircle size={20} />
-                                            </TooltipTarget>
-                                          </span>
-                                        </ToolTip>
-                                      ) : null}
                                     </Link>
+                                    {d?.topUp ? (
+                                      <ToolTip
+                                        content="top-up order"
+                                        position="top"
+                                      >
+                                        <span className={styles.info}>
+                                          <TooltipTarget>
+                                            <AiFillInfoCircle size={20} />
+                                          </TooltipTarget>
+                                        </span>
+                                      </ToolTip>
+                                    ) : null}
                                   </div>
                                 </Td>
                                 <Td>

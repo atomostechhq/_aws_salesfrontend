@@ -56,22 +56,18 @@ const CreateOrder = () => {
 
   useEffect(() => {
     if (window.location.pathname === `/edit/${id}/create-order`) {
-      axios
-        .get(
-          `https://sales.miratsoneservices.com/api/v1/sales/get-salesorders/${id}`
-        )
-        .then((res) => {
-          setSalesorder(res?.data);
+      axios.get(`${SALES_BASE_URL}/sales/get-salesorders/${id}`).then((res) => {
+        setSalesorder(res?.data);
 
-          console.log(res?.data);
-        });
+        console.log(res?.data);
+      });
     }
   }, [id]);
 
   useEffect(() => {
     axios
       .get(
-        `https://sales.miratsoneservices.com/api/v1/sales/salesorderdevices/getSalesOrderDevices/${id}`
+        `${SALES_BASE_URL}/sales/salesorderdevices/getSalesOrderDevices/${id}`
       )
       .then((res) => {
         setDeviceData(res?.data);
@@ -561,12 +557,15 @@ const CreateOrder = () => {
     }
     axios
       .put(
-        `https://sales.miratsoneservices.com/api/v1/sales/update/salesorders/${id}`,
-        salesorder
+        `${SALES_BASE_URL}/sales/update/getSalesOrderDevices/${id}`,
+        salesorder?.SalesOrderDevices?.map((res) => res)
       )
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+    axios
+      .put(`${SALES_BASE_URL}/sales/update/salesorders/${id}`, salesorder)
       .then((res) => {
         navigate(`/sales-order/overview/${id}`);
-
         console.log(res);
       })
       .catch((err) => console.log(err));
@@ -592,6 +591,7 @@ const CreateOrder = () => {
   console.log(zipCodefileInput);
   console.log(screenerFileInput);
   console.log(helperData);
+  console.log(deviceData);
 
   return (
     <>
@@ -1033,6 +1033,10 @@ const CreateOrder = () => {
 
                                 if (e.target.value) {
                                   setSalesorder((prev) => {
+                                    let deviceid;
+                                    deviceData?.map((res) => {
+                                      return (deviceid = res?.id);
+                                    });
                                     return {
                                       ...prev,
                                       SalesOrderDevices: [
@@ -1040,6 +1044,8 @@ const CreateOrder = () => {
                                           ? prev?.SalesOrderDevices
                                           : []),
                                         {
+                                          id: deviceid,
+                                          salesOrderId: Number(id),
                                           deviceId: res?.value,
                                         },
                                       ],
