@@ -555,13 +555,13 @@ const CreateOrder = () => {
         posi: "bottomLeft",
       });
     }
-    axios
-      .put(
-        `${SALES_BASE_URL}/sales/salesorderdevices/update/getSalesOrderDevices/${id}`,
-        salesorder
-      )
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    // axios
+    //   .put(
+    //     `${SALES_BASE_URL}/sales/salesorderdevices/update/getSalesOrderDevices/${id}`,
+    //     salesorder
+    //   )
+    //   .then((res) => console.log(res))
+    //   .catch((err) => console.log(err));
     axios
       .put(`${SALES_BASE_URL}/sales/update/salesorders/${id}`, salesorder)
       .then((res) => {
@@ -1210,7 +1210,7 @@ const CreateOrder = () => {
                                         }
                                         value={data?.currency?.currencyId}
                                       >
-                                        <option value="" disabled selected>
+                                        <option disabled selected>
                                           select currency
                                         </option>
                                         {helperData?.currencies?.map(
