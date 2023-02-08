@@ -72,38 +72,49 @@ const Overview = () => {
 
   const [viewModal, setViewModal] = useState(false);
 
+  const createSurveyData = (basicInfo, originalSalesOrderData) => {
+    let survey = {};
+    survey["surveyName"] =
+      basicInfo?.tgTargetAudience ||
+      `${basicInfo?.countryName}-${basicInfo?.salesorder_id}`;
+    survey["surveyStatus"] = "bidding";
+    survey["internalStatus"] = "ongoing";
+    survey["countryId"] = basicInfo?.countryId;
+    survey["clientId"] = originalSalesOrderData?.clientId;
+    survey["StudyType"] = originalSalesOrderData?.StudyType;
+    survey["methodology"] = originalSalesOrderData?.Methodology?.methodology;
+    survey["businessUnit"] = "mirats_otc";
+    survey["industry"] = originalSalesOrderData?.Industry;
+    survey["requiredCompletes"] =
+      basicInfo?.requiredSample || basicInfo?.sampleRequiredSum;
+    survey["clientCPI"] = basicInfo?.cpi || basicInfo?.avgCpi;
+    survey["bidIR"] = basicInfo?.ir || basicInfo?.avgIr;
+    survey["bidLOI"] = basicInfo?.loi || basicInfo?.avgLoi;
+    survey["expectedStartDate"] = originalSalesOrderData?.startDate;
+    survey["expectedEndDate"] = originalSalesOrderData?.endDate;
+    survey["piiCollection"] = false;
+    survey["existingProjectChecked"] = false;
+    survey["salesOrderId"] = originalSalesOrderData?.salesorder_id;
+    survey["createdBy"] = 1;
+    survey["speederLoi"] = parseInt((basicInfo?.loi || basicInfo?.avgLoi) / 3);
+    return survey;
+  };
+
   const handleTransferToBlaze = async (orderData, originalSalesOrderData) => {
     let surveys = [];
     orderData?.forEach((country) => {
       if (country?.status === "approved" || country?.status === "partial")
-        country?.tgs?.forEach((tg) => {
-          let survey = {};
-          if (tg?.status === "approved") {
-            survey["surveyName"] = tg?.tgTargetAudience;
-            survey["surveyStatus"] = "bidding";
-            survey["internalStatus"] = "ongoing";
-            survey["countryId"] = country?.countryId;
-            survey["clientId"] = originalSalesOrderData?.clientId;
-            survey["StudyType"] = originalSalesOrderData?.StudyType;
-            survey["methodology"] =
-              originalSalesOrderData?.Methodology?.methodology;
-            survey["businessUnit"] = "mirats_otc";
-            survey["industry"] = originalSalesOrderData?.Industry;
-            survey["requiredCompletes"] = tg?.requiredSample;
-            survey["clientCPI"] = tg?.cpi;
-            survey["bidIR"] = tg?.ir;
-            survey["bidLOI"] = tg?.loi;
-            survey["expectedStartDate"] = originalSalesOrderData?.startDate;
-            survey["expectedEndDate"] = originalSalesOrderData?.endDate;
-            survey["piiCollection"] = false;
-            survey["existingProjectChecked"] = false;
-            survey["salesOrderId"] = originalSalesOrderData?.salesorder_id;
-            survey["createdBy"] = 1;
-            survey["speederLoi"] = parseInt(tg?.loi / 3);
-            surveys.push(survey);
-          }
-        });
+        if (country.tgs?.length) {
+          country?.tgs?.forEach((tg) => {
+            if (tg?.status === "approved")
+              surveys.push(createSurveyData(tg, originalSalesOrderData));
+          });
+        } else {
+          surveys.push(createSurveyData(country, originalSalesOrderData));
+        }
     });
+
+    console.log(orderData);
 
     surveys?.forEach(async (survey) => {
       console.log(survey);
@@ -111,6 +122,13 @@ const Overview = () => {
         .post(`${BLAZE_BASE_URL}/survey/create`, survey)
         .then((res) => {
           console.log(res.data);
+          setAlertSettings({
+            open: true,
+            setalert: handlealert,
+            color: "success",
+            msg: "Transfer to Blaze",
+            posi: "bottomLeft",
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -1076,13 +1094,6 @@ const Overview = () => {
                 <Button
                   onClick={() => {
                     handleTransferToBlaze(orderDataForModal, salesData);
-                    setAlertSettings({
-                      open: true,
-                      setalert: handlealert,
-                      color: "success",
-                      msg: "Transfer to Blaze",
-                      posi: "bottomLeft",
-                    });
                   }}
                   variant="filled"
                 >

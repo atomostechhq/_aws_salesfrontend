@@ -1170,9 +1170,9 @@ const CreateOrder = () => {
                             let data = res;
 
                             if (key === "UNGRP") {
-                              console.log(data);
+                              console.log("ungrp", data);
                               return (
-                                <React.Fragment key={data?.countryUid}>
+                                <React.Fragment key={data?.countryId}>
                                   <tr>
                                     <td>
                                       <Select
@@ -1185,7 +1185,7 @@ const CreateOrder = () => {
                                           handleCountryRowChange(
                                             "salesOrderCountries",
                                             body,
-                                            data?.countryUid
+                                            data?.countryId
                                           );
                                         }}
                                         value={helperData?.countries?.map(
