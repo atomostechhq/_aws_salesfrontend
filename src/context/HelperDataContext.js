@@ -27,23 +27,23 @@ const HelperDataContextProvider = ({ children }) => {
           secTargetAudience = [];
 
         let salesManagersRes = await axios.get(
-          `${PEOPLES_BASE_URL}/employee/get_allEmployees`
+          `${PEOPLES_BASE_URL}/employee/get_salesManagers`
         );
         salesManagersRes.data?.forEach((emp) => {
           salesManagers.push({
-            label: emp?.basicInfo[0]?.name,
-            value: emp?.id,
+            label: emp?.workDetails?.basicInfo[0]?.name,
+            value: emp?.employeeId,
             email: emp?.email,
           });
         });
 
         let accountManagersRes = await axios.get(
-          `${PEOPLES_BASE_URL}/employee/get_salesManagers`
+          `${PEOPLES_BASE_URL}/employee/get_accountManagers`
         );
         accountManagersRes.data?.forEach((emp) => {
           accountManagers.push({
             label: emp?.workDetails?.basicInfo[0]?.name,
-            value: emp?.Employee_ID,
+            value: emp?.employeeId,
           });
         });
 
@@ -53,7 +53,7 @@ const HelperDataContextProvider = ({ children }) => {
         projectManagersRes.data?.forEach((pm) => {
           projectManagers.push({
             label: pm?.workDetails?.basicInfo[0]?.name,
-            value: pm?.Employee_ID,
+            value: pm?.employeeId,
           });
         });
 

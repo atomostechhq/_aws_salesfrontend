@@ -34,8 +34,9 @@ const AutoComplete = ({
   };
 
   const handleSuggestions = (suggestion) => {
-    setValue(suggestion);
-    handleOptionsChange && handleOptionsChange(suggestion);
+    setValue(suggestion?.value);
+    handleOptionsChange &&
+      handleOptionsChange(suggestion?.value, suggestion?.label);
     setShowSuggestions(false);
   };
 
@@ -94,7 +95,7 @@ const AutoComplete = ({
           {suggestions?.length ? (
             suggestions.map((suggestion) => (
               <li
-                onClick={() => handleSuggestions(suggestion.value)}
+                onClick={() => handleSuggestions(suggestion)}
                 key={suggestion.value}
               >
                 {suggestion.label}

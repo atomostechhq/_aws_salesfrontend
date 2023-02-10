@@ -72,19 +72,45 @@ const Overview = () => {
 
   const [viewModal, setViewModal] = useState(false);
 
-  const createSurveyData = (basicInfo, originalSalesOrderData) => {
+  const createSurveyData = (country, tg, isTg, originalSalesOrderData) => {
+    let basicInfo = isTg ? tg : country;
     let survey = {};
     survey["surveyName"] =
       basicInfo?.tgTargetAudience ||
       `${basicInfo?.countryName}-${basicInfo?.salesorder_id}`;
     survey["surveyStatus"] = "bidding";
     survey["internalStatus"] = "ongoing";
-    survey["countryId"] = basicInfo?.countryId;
+    survey["countryId"] = country?.countryId;
+    survey["currencyId"] = country?.currency?.currencyId;
+    survey["accountManagers"] = [
+      {
+        employeeId: country?.accountManagerId,
+        employeeName: country?.accountManagerName,
+      },
+    ];
+    survey["projectManagers"] = [
+      {
+        employeeId: country?.projectManagerId,
+        employeeName: country?.projectManagerName,
+      },
+    ];
+
+    survey["salesManagers"] = [
+      {
+        employeeId: originalSalesOrderData?.salesManagerId,
+        employeeName: helperData?.salesManagers?.reduce((acc, curr) =>
+          curr?.value === originalSalesOrderData?.salesManagerId
+            ? curr?.workDetails?.basicInfo[0]?.name
+            : null
+        ),
+      },
+    ];
+
     survey["clientId"] = originalSalesOrderData?.clientId;
-    survey["StudyType"] = originalSalesOrderData?.StudyType;
+    survey["studyType"] = originalSalesOrderData?.StudyType?.studyTypeName;
     survey["methodology"] = originalSalesOrderData?.Methodology?.methodology;
     survey["businessUnit"] = "mirats_otc";
-    survey["industry"] = originalSalesOrderData?.Industry;
+    survey["industry"] = originalSalesOrderData?.industryId;
     survey["requiredCompletes"] =
       basicInfo?.requiredSample || basicInfo?.sampleRequiredSum;
     survey["clientCPI"] = basicInfo?.cpi || basicInfo?.avgCpi;
@@ -97,6 +123,7 @@ const Overview = () => {
     survey["salesOrderId"] = originalSalesOrderData?.salesorder_id;
     survey["createdBy"] = 1;
     survey["speederLoi"] = parseInt((basicInfo?.loi || basicInfo?.avgLoi) / 3);
+
     return survey;
   };
 
@@ -107,10 +134,14 @@ const Overview = () => {
         if (country.tgs?.length) {
           country?.tgs?.forEach((tg) => {
             if (tg?.status === "approved")
-              surveys.push(createSurveyData(tg, originalSalesOrderData));
+              surveys.push(
+                createSurveyData(country, tg, true, originalSalesOrderData)
+              );
           });
         } else {
-          surveys.push(createSurveyData(country, originalSalesOrderData));
+          surveys.push(
+            createSurveyData(country, null, false, originalSalesOrderData)
+          );
         }
     });
 
@@ -1052,12 +1083,16 @@ const Overview = () => {
                   <div className={styles.managerInput}>
                     <AutoComplete
                       options={helperData?.accountManagers}
-                      onChange={(val) => {
+                      onChange={(val, label) => {
                         setOrderForModal((prev) => {
                           return prev?.map((country) => {
                             return country?.status === "approved" ||
                               country?.status === "parital"
-                              ? { ...country, accountManager: val }
+                              ? {
+                                  ...country,
+                                  accountManagerId: val,
+                                  accountManagerName: label,
+                                }
                               : country;
                           });
                         });
@@ -1071,12 +1106,16 @@ const Overview = () => {
                   <div className={styles.managerInput}>
                     <AutoComplete
                       options={helperData?.projectManagers}
-                      onChange={(val) => {
+                      onChange={(val, label) => {
                         setOrderForModal((prev) => {
                           return prev?.map((country) => {
                             return country?.status === "approved" ||
                               country?.status === "parital"
-                              ? { ...country, projectManager: val }
+                              ? {
+                                  ...country,
+                                  projectManagerId: val,
+                                  projectManagerName: label,
+                                }
                               : country;
                           });
                         });
