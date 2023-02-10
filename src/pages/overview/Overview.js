@@ -122,6 +122,7 @@ const Overview = () => {
         .post(`${BLAZE_BASE_URL}/survey/create`, survey)
         .then((res) => {
           console.log(res.data);
+
           setAlertSettings({
             open: true,
             setalert: handlealert,
@@ -312,6 +313,7 @@ const Overview = () => {
                 </Chip>
               </div>
             ) : null}
+            {}
             <select
               onChange={(e) => {
                 if (e.target.value === "won") {
