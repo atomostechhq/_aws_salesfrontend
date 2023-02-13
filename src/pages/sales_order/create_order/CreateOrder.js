@@ -140,6 +140,7 @@ const CreateOrder = () => {
         color: "alternative",
         msg: "Screener File Updated",
         posi: "bottomLeft",
+        hide: 3000,
       });
     } else {
       setAlertSettings({
@@ -148,6 +149,7 @@ const CreateOrder = () => {
         color: "alternative",
         msg: "Screener Upload Successfully",
         posi: "bottomLeft",
+        hide: 3000,
       });
     }
 

@@ -138,6 +138,20 @@ const Overview = () => {
         }
     });
 
+    orderData?.forEach((country) => {
+      if (country?.status === "approved") {
+        axios
+          .put(
+            `${SALES_BASE_URL}/sales/transfertoblaze-approved-country/${id}`,
+            country?.status,
+            country?.countryId,
+            country?.salesOrderCountryGroupId
+          )
+          .then((res) => console.log(res?.data))
+          .catch((err) => console.log(err));
+      }
+    });
+
     // console.log(orderData);
 
     // surveys?.forEach(async (survey) => {
@@ -562,7 +576,9 @@ const Overview = () => {
               </section>
               {salesData?.SalesOrderDevices?.map((data) => {
                 devicesChecked.push(data?.deviceId);
-                console.log(devicesChecked);
+                {
+                  /* console.log(devicesChecked); */
+                }
               })}
               <section className={styles.checkbox_wrapper}>
                 <p className={styles.checkbox_container}>

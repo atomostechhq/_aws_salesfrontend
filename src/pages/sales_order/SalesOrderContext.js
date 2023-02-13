@@ -25,6 +25,7 @@ const SalesOrderContextProvider = ({ children }) => {
     color: "",
     msg: "",
     posi: "",
+    hide: "",
   });
   let params = Object.fromEntries(urlSearchParams.entries());
   const [localstorageData, setLocalstorageData] = useState();
@@ -80,6 +81,7 @@ const SalesOrderContextProvider = ({ children }) => {
         variant={alertSettings?.color}
         message={alertSettings?.msg}
         position={alertSettings?.posi}
+        hidesnackbar={alertSettings?.hide}
       />
     </SalesOrderContext.Provider>
   );

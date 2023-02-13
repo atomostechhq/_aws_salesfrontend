@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   AlertContainer,
   CloseButton,
@@ -24,8 +24,15 @@ const Alert = ({
   position,
   alertOpen,
   setAlertOpen,
+  hidesnackbar,
   ...restProps
 }) => {
+  useEffect(() => {
+    setTimeout(() => {
+      setAlertOpen(false);
+    }, hidesnackbar);
+  }, [hidesnackbar]);
+
   return (
     <>
       {alertOpen ? (
