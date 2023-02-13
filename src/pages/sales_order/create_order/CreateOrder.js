@@ -549,17 +549,16 @@ const CreateOrder = () => {
     axios
       .put(`${SALES_BASE_URL}/sales/update/salesorders/${id}`, salesorder)
       .then((res) => {
-        // navigate(`/sales-order/overview/${id}`);
-        // if (window.location.pathname === `/edit/${id}/update-salesorder`) {
         setAlertSettings({
           open: true,
           setalert: handlealert,
           color: "alternative",
           msg: `Salesorder ${id} updated Successfully`,
           posi: "bottomLeft",
-          hide: 3000,
+          hide: 5000,
         });
-        // }
+        navigate(`/sales-order/overview/${id}`);
+
         console.log(res);
       })
       .catch((err) => console.log(err));
