@@ -100,13 +100,14 @@ const CreateOrder = () => {
 
   const handlefileuploadClick = (e) => {
     e.preventDefault();
-    if (window.location.pathname === `/edit/${id}/create-order`) {
+    if (window.location.pathname === `/edit/${id}/update-salesorder`) {
       setAlertSettings({
         open: true,
         setalert: handlealert,
         color: "alternative",
         msg: "Zipcode File Updated",
         posi: "bottomLeft",
+        hide: 3000,
       });
     } else {
       setAlertSettings({
@@ -115,6 +116,7 @@ const CreateOrder = () => {
         color: "alternative",
         msg: "Zipcode Upload Successfully",
         posi: "bottomLeft",
+        hide: 3000,
       });
     }
     zipCodefileInput?.map((data) => {
@@ -133,28 +135,8 @@ const CreateOrder = () => {
 
   const handleScreenerclick = (e) => {
     e.preventDefault();
-    if (window.location.pathname === `/edit/${id}/update-salesorder`) {
-      setAlertSettings({
-        open: true,
-        setalert: handlealert,
-        color: "alternative",
-        msg: "Screener File Updated",
-        posi: "bottomLeft",
-        hide: 3000,
-      });
-    } else {
-      setAlertSettings({
-        open: true,
-        setalert: handlealert,
-        color: "alternative",
-        msg: "Screener Upload Successfully",
-        posi: "bottomLeft",
-        hide: 3000,
-      });
-    }
 
     screenerFileInput?.forEach((files) => {
-      // console.log(files);
       axios
         .post(
           `${FILE_UPLOAD_URL}/api/file/upload`,
@@ -171,19 +153,32 @@ const CreateOrder = () => {
         )
         .then((res) => {
           console.log(res);
-          // setImageData((prev) => [...prev, { zipcode: res?.data }]);
+          if (window.location.pathname === `/edit/${id}/update-salesorder`) {
+            setAlertSettings({
+              open: true,
+              setalert: handlealert,
+              color: "alternative",
+              msg: "Screener File Updated",
+              posi: "bottomLeft",
+              hide: 3000,
+            });
+          } else {
+            setAlertSettings({
+              open: true,
+              setalert: handlealert,
+              color: "alternative",
+              msg: "Screener Upload Successfully",
+              posi: "bottomLeft",
+              hide: 3000,
+            });
+          }
           setSalesorder((prev) => ({
             ...prev,
             screener: res?.data,
-
-            // screenerFileName: res?.data.substring(
-            //   res?.data.lastIndexOf("/") + 1
-            // ),
           }));
         })
         .catch((err) => {
           console.log(err);
-          // console.log(`you are having error in${fileInput?.name}`);
         });
     });
   };
@@ -551,26 +546,20 @@ const CreateOrder = () => {
   // update order
   const handleUpdateOrder = (e) => {
     e.preventDefault();
-    if (window.location.pathname === `/edit/${id}/update-salesorder`) {
-      setAlertSettings({
-        open: true,
-        setalert: handlealert,
-        color: "alternative",
-        msg: `Salesorder ${id} updated Successfully`,
-        posi: "bottomLeft",
-      });
-    }
-    // axios
-    //   .put(
-    //     `${SALES_BASE_URL}/sales/salesorderdevices/update/getSalesOrderDevices/${id}`,
-    //     salesorder
-    //   )
-    //   .then((res) => console.log(res))
-    //   .catch((err) => console.log(err));
     axios
       .put(`${SALES_BASE_URL}/sales/update/salesorders/${id}`, salesorder)
       .then((res) => {
-        navigate(`/sales-order/overview/${id}`);
+        // navigate(`/sales-order/overview/${id}`);
+        // if (window.location.pathname === `/edit/${id}/update-salesorder`) {
+        setAlertSettings({
+          open: true,
+          setalert: handlealert,
+          color: "alternative",
+          msg: `Salesorder ${id} updated Successfully`,
+          posi: "bottomLeft",
+          hide: 3000,
+        });
+        // }
         console.log(res);
       })
       .catch((err) => console.log(err));

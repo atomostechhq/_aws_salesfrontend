@@ -138,41 +138,42 @@ const Overview = () => {
         }
     });
 
-    orderData?.forEach((country) => {
-      if (country?.status === "approved") {
-        axios
-          .put(
-            `${SALES_BASE_URL}/sales/transfertoblaze-approved-country/${id}`,
-            country?.status,
-            country?.countryId,
-            country?.salesOrderCountryGroupId
-          )
-          .then((res) => console.log(res?.data))
-          .catch((err) => console.log(err));
-      }
-    });
+    // orderData?.forEach((country) => {
+    //   console.log(country?.status);
+    //   if (country?.status === "approved") {
+    //     return axios
+    //       .put(`${SALES_BASE_URL}/sales/transfertoblaze-approved-country/`, {
+    //         status: country?.status,
+    //         countryId: country?.countryId,
+    //         salesOrderCountryGroupId: country?.salesOrderCountryGroupId,
+    //       })
+    //       .then((res) => console.log(res?.data))
+    //       .catch((err) => console.log(err));
+    //   }
+    // });
 
     // console.log(orderData);
 
-    // surveys?.forEach(async (survey) => {
-    //   console.log(survey);
-    //   axios
-    //     .post(`${BLAZE_BASE_URL}/survey/create`, survey)
-    //     .then((res) => {
-    //       console.log(res.data);
+    surveys?.forEach(async (survey) => {
+      console.log(survey);
+      axios
+        .post(`${BLAZE_BASE_URL}/survey/create`, survey)
+        .then((res) => {
+          console.log(res.data);
 
-    //       setAlertSettings({
-    //         open: true,
-    //         setalert: handlealert,
-    //         color: "success",
-    //         msg: "Transfer to Blaze",
-    //         posi: "bottomLeft",
-    //       });
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // });
+          setAlertSettings({
+            open: true,
+            setalert: handlealert,
+            color: "success",
+            msg: "Transfer to Blaze",
+            posi: "bottomLeft",
+            hide: 3000,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
     setShowModal((prev) => !prev);
 
     console.log(surveys);
