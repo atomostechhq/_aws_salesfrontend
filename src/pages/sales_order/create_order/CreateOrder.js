@@ -499,13 +499,6 @@ const CreateOrder = () => {
   const handlesubmit = async (e) => {
     e.preventDefault();
 
-    setAlertSettings({
-      open: true,
-      setalert: handlealert,
-      color: "success",
-      msg: "Salesorder Created Successfully",
-      posi: "bottomLeft",
-    });
     var startDate = new Date();
     var endDate = new Date(new Date().setDate(startDate.getDate() + 7));
     let body = salesorder;
@@ -539,7 +532,17 @@ const CreateOrder = () => {
     body["endDate"] = endDate.toLocaleDateString("en-CA");
     axios
       .post(`${SALES_BASE_URL}/sales/salesorders/create/`, salesorder)
-      .then((res) => console.log(res.data), navigate("/sales-order"))
+      .then((res) => {
+        console.log(res.data);
+        setAlertSettings({
+          open: true,
+          setalert: handlealert,
+          color: "success",
+          msg: "Salesorder Created Successfully",
+          posi: "bottomLeft",
+        });
+        navigate("/sales-order");
+      })
       .catch((err) => console.log(err));
   };
 

@@ -58,17 +58,10 @@ const Overview = () => {
   const [bidPersonModalInputData, setBidPersonModalInputData] = useState({});
   const [bidpersonCard, setBidpersonCard] = useState(false);
   const [array, setArray] = useState();
-  const [editModal, setEditModal] = useState(false);
-
-  // const handleEditClick = () => {
-  //   setEditModal((prev) => !prev);
-  // };
 
   const openAddBidPerson = () => {
     setAddBidPerson((prev) => !prev);
   };
-
-  // const [alertOpen, setAlertOpen] = useState(false);
 
   const [viewModal, setViewModal] = useState(false);
 
@@ -145,27 +138,27 @@ const Overview = () => {
         }
     });
 
-    console.log(orderData);
+    // console.log(orderData);
 
-    surveys?.forEach(async (survey) => {
-      console.log(survey);
-      axios
-        .post(`${BLAZE_BASE_URL}/survey/create`, survey)
-        .then((res) => {
-          console.log(res.data);
+    // surveys?.forEach(async (survey) => {
+    //   console.log(survey);
+    //   axios
+    //     .post(`${BLAZE_BASE_URL}/survey/create`, survey)
+    //     .then((res) => {
+    //       console.log(res.data);
 
-          setAlertSettings({
-            open: true,
-            setalert: handlealert,
-            color: "success",
-            msg: "Transfer to Blaze",
-            posi: "bottomLeft",
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    });
+    //       setAlertSettings({
+    //         open: true,
+    //         setalert: handlealert,
+    //         color: "success",
+    //         msg: "Transfer to Blaze",
+    //         posi: "bottomLeft",
+    //       });
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // });
     setShowModal((prev) => !prev);
 
     console.log(surveys);
@@ -189,8 +182,6 @@ const Overview = () => {
   const openViewModal = () => {
     setViewModal((prev) => !prev);
   };
-
-  console.log(id);
 
   useEffect(() => {
     axios
@@ -254,9 +245,6 @@ const Overview = () => {
     getData();
   }, []);
 
-  // const url = new URLSearchParams(document.location.search);
-  // const params1 = url.get("imgURl");
-  // console.log(params1);
   const handleTgActionChange = (i, j, action) => {
     let x = orderDataForModal;
     let isAllTgsHaveSameStatus = true;
@@ -274,13 +262,10 @@ const Overview = () => {
   let countrieskey = salesData?.countries
     ? Object.keys(salesData?.countries)[0]?.split("-")[1]
     : ["GRP-default"];
-  console.log(countrieskey);
-  console.log(orderDataForModal);
-  console.log(bidPersonModalInputData);
 
-  // console.log(
-  //   salesData?.zipcode?.split("/")[salesData?.zipcode?.split("/")?.length - 1]
-  // );
+  // console.log(countrieskey);
+  console.log(orderDataForModal);
+  // console.log(bidPersonModalInputData);
 
   useEffect(() => {
     const array = salesData?.zipcode?.replace(/[\[\]/["]+/g, "");
@@ -344,7 +329,7 @@ const Overview = () => {
                 </Chip>
               </div>
             ) : null}
-            {}
+
             <select
               onChange={(e) => {
                 if (e.target.value === "won") {
@@ -352,7 +337,6 @@ const Overview = () => {
                   setOrderForModal(() => {
                     let data = [];
                     Object.keys(salesData?.countries)?.forEach((key, value) => {
-                      // console.log(salesData?.countries?.UNGRP[key]);
                       data.push(...salesData?.countries[key]);
                     });
 
@@ -657,7 +641,6 @@ const Overview = () => {
               )?.map((key) => {
                 let countries = salesData?.countries[key];
                 let countryGrpId = key;
-                console.log(key);
 
                 return (
                   <React.Fragment key={uuid()}>
@@ -1255,6 +1238,8 @@ const Overview = () => {
                 </section>
               </>
             )}
+
+            {/* bidperson model */}
 
             <Modal showModal={addBidPerson} setShowModal={setAddBidPerson}>
               <ModalContent>
