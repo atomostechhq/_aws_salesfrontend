@@ -140,11 +140,12 @@ const Overview = () => {
 
     orderData?.forEach((country) => {
       axios
-        .put(`${SALES_BASE_URL}/sales/transfertoblaze-approved-country/${id}`, {
-          status: country?.status,
-          countryId: country?.countryId,
-          salesOrderCountryGroupId: country?.salesOrderCountryGroupId,
-        })
+        .put(
+          `${SALES_BASE_URL}/sales/transfertoblaze-approved-country/${id}`,
+          country?.status,
+          country?.countryId,
+          country?.salesOrderCountryGroupId
+        )
         .then((res) => console.log(res?.data))
         .catch((err) => console.log(err));
     });

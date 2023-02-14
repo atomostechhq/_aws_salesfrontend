@@ -553,10 +553,10 @@ const CreateOrder = () => {
         setAlertSettings({
           open: true,
           setalert: handlealert,
-          color: "alternative",
+          color: "success",
           msg: `Salesorder ${id} updated Successfully`,
           posi: "bottomLeft",
-          hide: 5000,
+          hide: 3000,
         });
         navigate(`/sales-order/overview/${id}`);
 
@@ -879,7 +879,8 @@ const CreateOrder = () => {
                     </div>
                     <div className={styles.fileContainer}>
                       {window.location.pathname ===
-                      `/edit/${id}/update-salesorder` ? (
+                        `/edit/${id}/update-salesorder` &&
+                      salesorder?.zipcodeFile ? (
                         <>
                           {
                             <span id="file-name" className={styles.file_box}>
@@ -947,7 +948,8 @@ const CreateOrder = () => {
                     </div>
                     <div className={styles.fileContainer}>
                       {window.location.pathname ===
-                      `/edit/${id}/update-salesorder` ? (
+                        `/edit/${id}/update-salesorder` &&
+                      salesorder?.screener ? (
                         <>
                           <span id="file-name" className={styles.file_box}>
                             <p>
