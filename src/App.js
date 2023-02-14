@@ -56,11 +56,11 @@ function App() {
           <Route
             path="/sales-order/overview/:id"
             element={
-              <SalesOrderContextProvider>
-                <HelperDataContextProvider>
+              <HelperDataContextProvider>
+                <SalesOrderContextProvider>
                   <Overview />
-                </HelperDataContextProvider>
-              </SalesOrderContextProvider>
+                </SalesOrderContextProvider>
+              </HelperDataContextProvider>
             }
           />
           <Route

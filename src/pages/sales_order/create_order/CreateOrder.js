@@ -21,7 +21,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import axios from "axios";
 import { supplierStatuses } from "../../../utils/commonData";
 import { MdOutlineDeleteOutline } from "react-icons/md";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useNavigation, useParams } from "react-router-dom";
 import { useSalesOrderContext } from "../SalesOrderContext";
 import {
   CLIENT_BASE_URL,
@@ -44,6 +44,7 @@ import SurveyFetchLoader from "../../../assets/surveyFetchLoader/SurveyFetchLoad
 
 const CreateOrder = () => {
   const navigate = useNavigate();
+
   const { id } = useParams();
   const { setAlertSettings, handlealert } = useSalesOrderContext();
   const [zipCodefileInput, setZipcodeFileInput] = useState([]);
