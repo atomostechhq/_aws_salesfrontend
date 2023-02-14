@@ -547,6 +547,15 @@ const CreateOrder = () => {
   // update order
   const handleUpdateOrder = (e) => {
     e.preventDefault();
+
+    salesorder?.SalesOrderDevices?.map((res) => {
+      return axios
+        .put(`${SALES_BASE_URL}/update/getSalesOrderDevices/${id}`, res)
+        .then((res) => {
+          console.log(res);
+        });
+    });
+
     axios
       .put(`${SALES_BASE_URL}/sales/update/salesorders/${id}`, salesorder)
       .then((res) => {
@@ -1166,7 +1175,9 @@ const CreateOrder = () => {
                             let data = res;
 
                             if (key === "UNGRP") {
-                              console.log("ungrp", data);
+                              {
+                                /* console.log("ungrp", data); */
+                              }
                               return (
                                 <React.Fragment key={data?.countryId}>
                                   <tr>

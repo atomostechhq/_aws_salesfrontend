@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import {
   DropdownContainer,
@@ -30,13 +30,24 @@ const Dropdown = ({
     setIsOpen(false);
   };
 
+  const ref = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!ref.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+  }, [ref]);
+
   useEffect(() => {
     if (typeof defaultValue === "function") setSelectedOption(defaultValue());
     // setValue(defaultValue);
   }, [defaultValue]);
 
   return (
-    <DropdownContainer {...restProps}>
+    <DropdownContainer {...restProps} ref={ref}>
       <DropdownHeaderContainer onClick={toggling}>
         <DropdownHeader>{selectedOption || dropdownText}</DropdownHeader>
         <IconWrapper>
