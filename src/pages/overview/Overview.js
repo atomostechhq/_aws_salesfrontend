@@ -205,6 +205,7 @@ const Overview = () => {
       .catch((err) => console.log(err));
   }, [id]);
   console.log(salesData);
+  console.log(helperData);
 
   const handleModal = (modalName, value) => {
     setShowModal((prev) => {
@@ -575,9 +576,6 @@ const Overview = () => {
               </section>
               {salesData?.SalesOrderDevices?.map((data) => {
                 devicesChecked.push(data?.deviceId);
-                {
-                  /* console.log(devicesChecked); */
-                }
               })}
               <section className={styles.checkbox_wrapper}>
                 <p className={styles.checkbox_container}>

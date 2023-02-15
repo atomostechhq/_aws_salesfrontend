@@ -33,7 +33,7 @@ const HelperDataContextProvider = ({ children }) => {
           salesManagers.push({
             label: emp?.workDetails?.basicInfo[0]?.name,
             value: emp?.employeeId,
-            email: emp?.email,
+            email: emp?.workDetails?.email,
           });
         });
 
