@@ -554,15 +554,16 @@ const CreateOrder = () => {
     e.preventDefault();
 
     axios
+      .get(
+        `${SALES_BASE_URL}/sales/salesorderdevices/getSalesOrderDevices/${id}`
+      )
+      .then((res) => {
+        console.log(res?.data);
+      });
+
+    axios
       .put(`${SALES_BASE_URL}/sales/update/salesorders/${id}`, salesorder)
       .then((res) => {
-        res?.SalesOrderDevices?.map(async (device) => {
-          await axios
-            .put(`${SALES_BASE_URL}/update/getSalesOrderDevices/${id}`, device)
-            .then((res) => {
-              console.log(res);
-            });
-        });
         setAlertSettings({
           open: true,
           setalert: handlealert,
