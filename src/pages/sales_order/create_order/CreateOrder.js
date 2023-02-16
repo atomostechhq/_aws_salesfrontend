@@ -101,30 +101,35 @@ const CreateOrder = () => {
 
   const handlefileuploadClick = (e) => {
     e.preventDefault();
-    if (window.location.pathname === `/edit/${id}/update-salesorder`) {
-      setAlertSettings({
-        open: true,
-        setalert: handlealert,
-        color: "alternative",
-        msg: "Zipcode File Updated",
-        posi: "bottomLeft",
-        hide: 3000,
-      });
-    } else {
-      setAlertSettings({
-        open: true,
-        setalert: handlealert,
-        color: "alternative",
-        msg: "Zipcode Upload Successfully",
-        posi: "bottomLeft",
-        hide: 3000,
-      });
-    }
+
     zipCodefileInput?.map((data) => {
-      return setSalesorder((prev) => ({
-        ...prev,
-        zipcodeFile: data?.name,
-      }));
+      if (window.location.pathname === `/edit/${id}/update-salesorder`) {
+        setSalesorder((prev) => ({
+          ...prev,
+          zipcodeFile: data?.name,
+        }));
+        setAlertSettings({
+          open: true,
+          setalert: handlealert,
+          color: "alternative",
+          msg: "Zipcode File Updated",
+          posi: "bottomLeft",
+          hide: 3000,
+        });
+      } else {
+        setSalesorder((prev) => ({
+          ...prev,
+          zipcodeFile: data?.name,
+        }));
+        setAlertSettings({
+          open: true,
+          setalert: handlealert,
+          color: "alternative",
+          msg: "Zipcode Upload Successfully",
+          posi: "bottomLeft",
+          hide: 3000,
+        });
+      }
     });
   };
 
@@ -553,10 +558,7 @@ const CreateOrder = () => {
       .then((res) => {
         res?.SalesOrderDevices?.map(async (device) => {
           await axios
-            .put(
-              `${SALES_BASE_URL}/update/getSalesOrderDevices/${id}`,
-              device?.deviceId
-            )
+            .put(`${SALES_BASE_URL}/update/getSalesOrderDevices/${id}`, device)
             .then((res) => {
               console.log(res);
             });

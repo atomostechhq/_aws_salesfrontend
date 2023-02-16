@@ -28,17 +28,13 @@ const SalesOrderContextProvider = ({ children }) => {
     hide: "",
   });
   let params = Object.fromEntries(urlSearchParams.entries());
-  const [localstorageData, setLocalstorageData] = useState();
   const [searchParams, setSearchParams] = useSearchParams(params);
-  const [alertOpen, setAlertOpen] = useState(false);
   const fetchSalesOrders = () => {
     axios
       .get(`${SALES_BASE_URL}/sales/get-salesorder${window.location.search}`)
       .then((res) => {
         console.log(res.data);
-        // setSalesorderDataCopy(res.data);
         setSalesorderData(res.data);
-        // filterSalesOrder(res.data.salesOrders);
       })
       .then((err) => console.log(err));
   };
@@ -47,6 +43,7 @@ const SalesOrderContextProvider = ({ children }) => {
     setAlertSettings(true);
   };
 
+  console.log(params);
   useMemo(() => {
     fetchSalesOrders();
   }, [searchParams]);
@@ -61,7 +58,6 @@ const SalesOrderContextProvider = ({ children }) => {
     // filterSalesOrder(salesOrderData);
   };
 
-  console.log(localstorageData);
   const value = {
     salesOrderData,
     handleFilterChange,
