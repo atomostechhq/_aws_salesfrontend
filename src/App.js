@@ -45,11 +45,11 @@ function App() {
           <Route
             path="/edit/:id/update-salesorder"
             element={
-              <HelperDataContextProvider>
-                <SalesOrderContextProvider>
+              <SalesOrderContextProvider>
+                <HelperDataContextProvider>
                   <CreateOrder />
-                </SalesOrderContextProvider>
-              </HelperDataContextProvider>
+                </HelperDataContextProvider>
+              </SalesOrderContextProvider>
             }
           />
 
