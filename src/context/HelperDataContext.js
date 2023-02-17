@@ -50,7 +50,8 @@ const HelperDataContextProvider = ({ children }) => {
         let projectManagersRes = await axios.get(
           `${PEOPLES_BASE_URL}/employee/get_projectManagers`
         );
-        projectManagersRes.data?.forEach((pm) => {
+        projectManagersRes?.data?.forEach((pm) => {
+          console.log(pm);
           projectManagers.push({
             label: pm?.workDetails?.basicInfo[0]?.name,
             value: pm?.employeeId,

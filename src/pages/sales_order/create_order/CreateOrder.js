@@ -552,7 +552,6 @@ const CreateOrder = () => {
   // update order
   const handleUpdateOrder = (e) => {
     e.preventDefault();
-
     axios
       .put(`${SALES_BASE_URL}/sales/update/salesorders/${id}`, salesorder)
       .then((res) => {

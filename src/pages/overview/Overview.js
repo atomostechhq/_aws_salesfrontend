@@ -511,7 +511,6 @@ const Overview = () => {
                       <div style={{ display: "flex", flexDirection: "column" }}>
                         <div>
                           <p className={styles.uploaded_file}>
-                            {/* zipcode -{localStorage.getItem("zipcodefile")} */}
                             zipcode - {salesData?.zipcodeFile}
                           </p>
 
