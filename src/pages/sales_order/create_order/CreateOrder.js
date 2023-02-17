@@ -46,7 +46,8 @@ const CreateOrder = () => {
   const navigate = useNavigate();
 
   const { id } = useParams();
-  const { setAlertSettings, handlealert } = useSalesOrderContext();
+  const { setAlertSettings, handlealert, fetchSalesOrders } =
+    useSalesOrderContext();
   const [zipCodefileInput, setZipcodeFileInput] = useState([]);
   const [screenerFileInput, setScreenerFileInput] = useState([]);
   const [tableData, setTableData] = useState([]);
@@ -544,6 +545,7 @@ const CreateOrder = () => {
           msg: "Salesorder Created Successfully",
           posi: "bottomLeft",
         }),
+        fetchSalesOrders(),
         navigate("/sales-order")
       )
       .catch((err) => console.log(err));

@@ -506,9 +506,9 @@ const Overview = () => {
               <div className={styles.screener_files}>
                 <span>Files</span>
                 <div className={styles.uploadFile}>
-                  {salesData?.zipcode || salesData?.screener ? (
-                    <>
-                      <div style={{ display: "flex", flexDirection: "column" }}>
+                  <>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                      {salesData?.zipcode ? (
                         <div>
                           <p className={styles.uploaded_file}>
                             zipcode - {salesData?.zipcodeFile}
@@ -522,6 +522,8 @@ const Overview = () => {
                             View
                           </Button>
                         </div>
+                      ) : null}
+                      {salesData?.screener ? (
                         <div>
                           <p className={styles.uploaded_file}>
                             screener -{" "}
@@ -548,11 +550,12 @@ const Overview = () => {
                             View
                           </Button>
                         </div>
-                      </div>
-                    </>
-                  ) : (
-                    <div>No Files uploaded!</div>
-                  )}
+                      ) : null}
+                    </div>
+                    {!salesData?.zipcode && !salesData?.screener
+                      ? "No Files uploaded!"
+                      : null}
+                  </>
                 </div>
               </div>
             </div>
