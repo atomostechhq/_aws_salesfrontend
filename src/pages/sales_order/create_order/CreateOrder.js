@@ -53,7 +53,7 @@ const CreateOrder = () => {
   const [salesorder, setSalesorder] = useState();
   const { helperData, setHelperData } = useHelperDataContext();
   const [showTgDesc, setShowTgDesc] = useState(false);
-  const [deviceData, setDeviceData] = useState([]);
+  const [deviceData, setDeviceData] = useState();
 
   useEffect(() => {
     if (window.location.pathname === `/edit/${id}/update-salesorder`) {
@@ -554,14 +554,6 @@ const CreateOrder = () => {
     e.preventDefault();
 
     axios
-      .get(
-        `${SALES_BASE_URL}/sales/salesorderdevices/getSalesOrderDevices/${id}`
-      )
-      .then((res) => {
-        console.log(res?.data);
-      });
-
-    axios
       .put(`${SALES_BASE_URL}/sales/update/salesorders/${id}`, salesorder)
       .then((res) => {
         setAlertSettings({
@@ -599,7 +591,17 @@ const CreateOrder = () => {
   // console.log(zipCodefileInput);
   // console.log(screenerFileInput);
   console.log(helperData);
-  // console.log(deviceData);
+  console.log(deviceData);
+
+  useEffect(() => {
+    axios
+      .get(
+        `${SALES_BASE_URL}/sales/salesorderdevices/getSalesOrderDevices/${id}`
+      )
+      .then((res) => {
+        setDeviceData(res?.data);
+      });
+  }, []);
 
   return (
     <>
@@ -1028,7 +1030,6 @@ const CreateOrder = () => {
                     </div>
                     {helperData?.devices?.map((res) => {
                       let array = [];
-
                       salesorder?.SalesOrderDevices?.map((device) => {
                         if (device?.deviceId === res?.value) {
                           array.push(device?.deviceId);
@@ -1042,7 +1043,6 @@ const CreateOrder = () => {
                             onChange={(e) => {
                               if (`/edit/${id}/update-salesorder`) {
                                 console.log("here");
-
                                 if (e.target.value) {
                                   setSalesorder((prev) => {
                                     // let deviceid;
@@ -1180,9 +1180,6 @@ const CreateOrder = () => {
                             let data = res;
 
                             if (key === "UNGRP") {
-                              {
-                                /* console.log("ungrp", data); */
-                              }
                               return (
                                 <React.Fragment key={data?.countryId}>
                                   <tr>
