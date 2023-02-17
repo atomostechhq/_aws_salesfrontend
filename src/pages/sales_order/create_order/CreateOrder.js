@@ -544,6 +544,7 @@ const CreateOrder = () => {
           color: "success",
           msg: "Salesorder Created Successfully",
           posi: "bottomLeft",
+          hide: 3000,
         }),
         fetchSalesOrders(),
         navigate("/sales-order")
