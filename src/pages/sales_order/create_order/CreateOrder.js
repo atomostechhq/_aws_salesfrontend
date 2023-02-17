@@ -535,17 +535,17 @@ const CreateOrder = () => {
     body["endDate"] = endDate.toLocaleDateString("en-CA");
     axios
       .post(`${SALES_BASE_URL}/sales/salesorders/create/`, salesorder)
-      .then((res) => {
-        console.log(res.data);
+      .then(
+        (res) => console.log(res),
         setAlertSettings({
           open: true,
           setalert: handlealert,
           color: "success",
           msg: "Salesorder Created Successfully",
           posi: "bottomLeft",
-        });
-        navigate("/sales-order");
-      })
+        }),
+        navigate("/sales-order")
+      )
       .catch((err) => console.log(err));
   };
 
