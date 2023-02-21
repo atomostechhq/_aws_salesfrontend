@@ -566,11 +566,26 @@ const CreateOrder = () => {
           posi: "bottomLeft",
           hide: 3000,
         });
+
         navigate(`/sales-order/overview/${id}`);
 
         console.log(res);
       })
       .catch((err) => console.log(err));
+
+    let orderDevicesRequestBody = {
+      salesOrderId: salesorder?.salesorder_id,
+      deviceIds: salesorder?.SalesOrderDevices?.map(
+        (device) => device?.deviceId
+      ),
+    };
+
+    axios
+      .put(
+        `${SALES_BASE_URL}/sales/salesorderdevices/update/${id}`,
+        orderDevicesRequestBody
+      )
+      .then((res) => console.log("device updated"));
   };
 
   let result = [];
@@ -593,17 +608,6 @@ const CreateOrder = () => {
   // console.log(zipCodefileInput);
   // console.log(screenerFileInput);
   console.log(helperData);
-  console.log(deviceData);
-
-  useEffect(() => {
-    axios
-      .get(
-        `${SALES_BASE_URL}/sales/salesorderdevices/getSalesOrderDevices/${id}`
-      )
-      .then((res) => {
-        setDeviceData(res?.data);
-      });
-  }, []);
 
   return (
     <>
