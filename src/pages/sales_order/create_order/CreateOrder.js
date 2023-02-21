@@ -553,39 +553,39 @@ const CreateOrder = () => {
   };
 
   // update order
-  const handleUpdateOrder = (e) => {
+  const handleUpdateOrder = async (e) => {
     e.preventDefault();
-    axios
-      .put(`${SALES_BASE_URL}/sales/update/salesorders/${id}`, salesorder)
-      .then((res) => {
-        setAlertSettings({
-          open: true,
-          setalert: handlealert,
-          color: "success",
-          msg: `Salesorder ${id} updated Successfully`,
-          posi: "bottomLeft",
-          hide: 3000,
-        });
+    try {
+      await axios.put(
+        `${SALES_BASE_URL}/sales/update/salesorders/${id}`,
+        salesorder
+      );
 
-        navigate(`/sales-order/overview/${id}`);
+      let orderDevicesRequestBody = {
+        salesOrderId: parseInt(id),
+        devicesIds: salesorder?.SalesOrderDevices?.map(
+          (device) => device?.deviceId
+        ),
+      };
 
-        console.log(res);
-      })
-      .catch((err) => console.log(err));
-
-    let orderDevicesRequestBody = {
-      salesOrderId: salesorder?.salesorder_id,
-      deviceIds: salesorder?.SalesOrderDevices?.map(
-        (device) => device?.deviceId
-      ),
-    };
-
-    axios
-      .put(
+      const orderDevicesRes = await axios.put(
         `${SALES_BASE_URL}/sales/salesorderdevices/update/${id}`,
         orderDevicesRequestBody
-      )
-      .then((res) => console.log("device updated"));
+      );
+
+      setAlertSettings({
+        open: true,
+        setalert: handlealert,
+        color: "success",
+        msg: `Salesorder ${id} updated Successfully`,
+        posi: "bottomLeft",
+        hide: 3000,
+      });
+
+      navigate(`/sales-order/overview/${id}`);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   let result = [];
@@ -605,8 +605,6 @@ const CreateOrder = () => {
   };
   console.log(salesorder);
   console.log(tableData);
-  // console.log(zipCodefileInput);
-  // console.log(screenerFileInput);
   console.log(helperData);
 
   return (
@@ -1051,10 +1049,6 @@ const CreateOrder = () => {
                                 console.log("here");
                                 if (e.target.value) {
                                   setSalesorder((prev) => {
-                                    // let deviceid;
-                                    // deviceData?.map((res) => {
-                                    //   return (deviceid = res?.id);
-                                    // });
                                     return {
                                       ...prev,
                                       SalesOrderDevices: [
@@ -1062,8 +1056,7 @@ const CreateOrder = () => {
                                           ? prev?.SalesOrderDevices
                                           : []),
                                         {
-                                          // id: deviceid,
-                                          salesOrderId: Number(id),
+                                          salesOrderId: parseInt(id),
                                           deviceId: res?.value,
                                         },
                                       ],

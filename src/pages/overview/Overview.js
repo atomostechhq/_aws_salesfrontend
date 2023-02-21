@@ -138,32 +138,33 @@ const Overview = () => {
         }
     });
 
-    // console.log(orderData);
+    console.log(orderData);
 
-    surveys?.forEach(async (survey) => {
-      console.log(survey);
-      axios
-        .post(`${BLAZE_BASE_URL}/survey/create`, survey)
-        .then((res) => {
-          console.log(res.data);
+    // surveys?.forEach(async (survey) => {
+    //   console.log(survey);
+    //   axios
+    //     .post(`${BLAZE_BASE_URL}/survey/create`, survey)
+    //     .then((res) => {
+    //       console.log(res.data);
 
-          setAlertSettings({
-            open: true,
-            setalert: handlealert,
-            color: "success",
-            msg: "Transfer to Blaze",
-            posi: "bottomLeft",
-            hide: 3000,
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    });
+    //       setAlertSettings({
+    //         open: true,
+    //         setalert: handlealert,
+    //         color: "success",
+    //         msg: "Transfer to Blaze",
+    //         posi: "bottomLeft",
+    //         hide: 3000,
+    //       });
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // });
     setShowModal((prev) => !prev);
 
     console.log(surveys);
   };
+  // console.log(orderDataForModal);
 
   const getChipColor = (status) => {
     switch (status) {
@@ -193,7 +194,7 @@ const Overview = () => {
       .catch((err) => console.log(err));
   }, [id]);
   console.log(salesData);
-  console.log(helperData);
+  // console.log(helperData);
 
   const handleModal = (modalName, value) => {
     setShowModal((prev) => {
@@ -264,10 +265,6 @@ const Overview = () => {
   let countrieskey = salesData?.countries
     ? Object.keys(salesData?.countries)[0]?.split("-")[1]
     : ["GRP-default"];
-
-  // console.log(countrieskey);
-  console.log(orderDataForModal);
-  // console.log(bidPersonModalInputData);
 
   useEffect(() => {
     const array = salesData?.zipcode?.replace(/[\[\]/["]+/g, "");
