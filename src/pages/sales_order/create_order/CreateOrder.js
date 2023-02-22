@@ -1394,6 +1394,7 @@ const CreateOrder = () => {
                                   </tr>
                                   <>
                                     {data?.tgs?.map((target) => {
+                                      console.log(target.id);
                                       return (
                                         <tr
                                           className={styles.tgrow}
@@ -1422,6 +1423,7 @@ const CreateOrder = () => {
                                                 }}
                                               />{" "}
                                               {/* target description */}
+                                              {}
                                               <button
                                                 onClick={(e) =>
                                                   openTgDescModal(
