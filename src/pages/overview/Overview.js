@@ -138,6 +138,25 @@ const Overview = () => {
         }
     });
 
+    orderDataForModal?.map((data) => {
+      if (data?.status == "approved") {
+        console.log("in ajewy");
+        axios
+          .put(
+            `http://192.168.1.41:8000/api/v1/sales/statusupdate/${data?.salesOrderCountryGroupId}`,
+            data
+          )
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
+
+    // axios.put(`http://192.168.1.41:8000/api/v1/sales/statusupdate/${}`)
+
     console.log(orderData);
 
     // surveys?.forEach(async (survey) => {
@@ -164,7 +183,7 @@ const Overview = () => {
 
     console.log(surveys);
   };
-  // console.log(orderDataForModal);
+  console.log(orderDataForModal);
 
   const getChipColor = (status) => {
     switch (status) {
@@ -231,6 +250,14 @@ const Overview = () => {
         bidPersonModalInputData
       )
       .then((res) => {
+        setAlertSettings({
+          open: true,
+          setalert: handlealert,
+          color: "success",
+          msg: "Bidperson added successfully!",
+          posi: "bottomLeft",
+          hide: 3000,
+        });
         getData();
       });
 
