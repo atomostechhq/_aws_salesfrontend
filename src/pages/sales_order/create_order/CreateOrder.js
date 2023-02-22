@@ -1398,7 +1398,7 @@ const CreateOrder = () => {
                                       return (
                                         <tr
                                           className={styles.tgrow}
-                                          key={target?.tgId}
+                                          key={target?.id}
                                         >
                                           <td></td>
 
@@ -1418,7 +1418,7 @@ const CreateOrder = () => {
                                                     "tgTargetAudience",
                                                     e.target.value,
                                                     data?.countryUid,
-                                                    target?.tgId
+                                                    target?.id
                                                   );
                                                 }}
                                               />{" "}
@@ -1426,16 +1426,13 @@ const CreateOrder = () => {
                                               {}
                                               <button
                                                 onClick={(e) =>
-                                                  openTgDescModal(
-                                                    e,
-                                                    target?.tgId
-                                                  )
+                                                  openTgDescModal(e, target?.id)
                                                 }
                                                 className={styles.decBtn}
                                               >
                                                 <MdOutlineAdd size={20} />
                                               </button>
-                                              {showTgDesc == target?.tgId ? (
+                                              {showTgDesc == target?.id ? (
                                                 <>
                                                   <div
                                                     className={
@@ -1464,11 +1461,12 @@ const CreateOrder = () => {
                                                         target?.tgDescription
                                                       }
                                                       onChange={(e) => {
+                                                        e.preventDefault();
                                                         handleTgRowChange(
                                                           "tgDescription",
                                                           e.target.value,
                                                           data?.countryUid,
-                                                          target?.tgId
+                                                          target?.id
                                                         );
                                                       }}
                                                       cols="30"
@@ -1508,7 +1506,7 @@ const CreateOrder = () => {
                                                     "loi",
                                                     parseFloat(e.target.value),
                                                     data?.countryUid,
-                                                    target?.tgId
+                                                    target?.id
                                                   );
                                                 }}
                                               />{" "}
@@ -1527,7 +1525,7 @@ const CreateOrder = () => {
                                                     "ir",
                                                     parseFloat(e.target.value),
                                                     data?.countryUid,
-                                                    target?.tgId
+                                                    target?.id
                                                   );
                                                 }}
                                               />{" "}
@@ -1547,7 +1545,7 @@ const CreateOrder = () => {
                                                     "requiredSample",
                                                     parseFloat(e.target.value),
                                                     data?.countryUid,
-                                                    target?.tgId
+                                                    target?.id
                                                   );
                                                 }}
                                               />{" "}
@@ -1566,7 +1564,7 @@ const CreateOrder = () => {
                                                     "feasibility",
                                                     parseFloat(e.target.value),
                                                     data?.countryUid,
-                                                    target?.tgId
+                                                    target?.id
                                                   );
                                                 }}
                                               />{" "}
@@ -1585,7 +1583,7 @@ const CreateOrder = () => {
                                                     "cpi",
                                                     parseFloat(e.target.value),
                                                     data?.countryUid,
-                                                    target?.tgId
+                                                    target?.id
                                                   );
                                                 }}
                                               />{" "}
@@ -1603,7 +1601,7 @@ const CreateOrder = () => {
                                                     "timeline",
                                                     parseFloat(e.target.value),
                                                     data?.countryUid,
-                                                    target?.tgId
+                                                    target?.id
                                                   );
                                                 }}
                                               />{" "}
@@ -1873,7 +1871,7 @@ const CreateOrder = () => {
                                       return (
                                         <tr
                                           className={styles.tgrow}
-                                          key={target?.tgId}
+                                          key={target?.id}
                                         >
                                           <td></td>
 
@@ -1893,23 +1891,20 @@ const CreateOrder = () => {
                                                     "tgTargetAudience",
                                                     e.target.value,
                                                     data?.countryUid,
-                                                    target?.tgId
+                                                    target?.id
                                                   );
                                                 }}
                                               />{" "}
                                               {/* target description */}
                                               <button
                                                 onClick={(e) =>
-                                                  openTgDescModal(
-                                                    e,
-                                                    target?.tgId
-                                                  )
+                                                  openTgDescModal(e, target?.id)
                                                 }
                                                 className={styles.decBtn}
                                               >
                                                 <MdOutlineAdd size={20} />
                                               </button>
-                                              {showTgDesc == target?.tgId ? (
+                                              {showTgDesc == target?.id ? (
                                                 <>
                                                   <div
                                                     className={
@@ -1942,7 +1937,7 @@ const CreateOrder = () => {
                                                           "tgDescription",
                                                           e.target.value,
                                                           data?.countryUid,
-                                                          target?.tgId
+                                                          target?.id
                                                         );
                                                       }}
                                                       cols="30"
@@ -1982,7 +1977,7 @@ const CreateOrder = () => {
                                                     "loi",
                                                     parseFloat(e.target.value),
                                                     data?.countryUid,
-                                                    target?.tgId
+                                                    target?.id
                                                   );
                                                 }}
                                               />{" "}
@@ -2001,7 +1996,7 @@ const CreateOrder = () => {
                                                     "ir",
                                                     parseFloat(e.target.value),
                                                     data?.countryUid,
-                                                    target?.tgId
+                                                    target?.id
                                                   );
                                                 }}
                                               />{" "}
@@ -2021,7 +2016,7 @@ const CreateOrder = () => {
                                                     "requiredSample",
                                                     parseFloat(e.target.value),
                                                     data?.countryUid,
-                                                    target?.tgId
+                                                    target?.id
                                                   );
                                                 }}
                                               />{" "}
@@ -2040,7 +2035,7 @@ const CreateOrder = () => {
                                                     "feasibility",
                                                     parseFloat(e.target.value),
                                                     data?.countryUid,
-                                                    target?.tgId
+                                                    target?.id
                                                   );
                                                 }}
                                               />{" "}
@@ -2059,7 +2054,7 @@ const CreateOrder = () => {
                                                     "cpi",
                                                     parseFloat(e.target.value),
                                                     data?.countryUid,
-                                                    target?.tgId
+                                                    target?.id
                                                   );
                                                 }}
                                               />{" "}
@@ -2077,7 +2072,7 @@ const CreateOrder = () => {
                                                     "timeline",
                                                     parseFloat(e.target.value),
                                                     data?.countryUid,
-                                                    target?.tgId
+                                                    target?.id
                                                   );
                                                 }}
                                               />{" "}
