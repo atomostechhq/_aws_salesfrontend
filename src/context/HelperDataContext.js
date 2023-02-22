@@ -51,7 +51,6 @@ const HelperDataContextProvider = ({ children }) => {
           `${PEOPLES_BASE_URL}/employee/get_projectManagers`
         );
         projectManagersRes?.data?.forEach((pm) => {
-          console.log(pm);
           projectManagers.push({
             label: pm?.workDetails?.basicInfo[0]?.name,
             value: pm?.employeeId,

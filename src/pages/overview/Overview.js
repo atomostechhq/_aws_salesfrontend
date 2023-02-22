@@ -139,12 +139,16 @@ const Overview = () => {
     });
 
     orderDataForModal?.map((data) => {
-      if (data?.status == "approved") {
-        console.log("in ajewy");
+      let countryData = {
+        status: data?.status,
+        countryId: data?.countryId,
+      };
+      if (data?.status == "approved" || data?.status == "rejected") {
+        // console.log("in ajewy");
         axios
           .put(
-            `http://192.168.1.41:8000/api/v1/sales/statusupdate/${data?.salesOrderCountryGroupId}`,
-            data
+            `${SALES_BASE_URL}/sales/statusupdate/${data?.salesOrderCountryGroupId}`,
+            countryData
           )
           .then((res) => {
             console.log(res);
@@ -154,8 +158,6 @@ const Overview = () => {
           });
       }
     });
-
-    // axios.put(`http://192.168.1.41:8000/api/v1/sales/statusupdate/${}`)
 
     console.log(orderData);
 
