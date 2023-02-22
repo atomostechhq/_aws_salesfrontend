@@ -143,7 +143,7 @@ const Overview = () => {
         status: data?.status,
         countryId: data?.countryId,
       };
-      if (data?.status == "approved" || data?.status == "rejected") {
+      if (data?.status == "approved") {
         // console.log("in ajewy");
         axios
           .put(
@@ -161,26 +161,26 @@ const Overview = () => {
 
     console.log(orderData);
 
-    // surveys?.forEach(async (survey) => {
-    //   console.log(survey);
-    //   axios
-    //     .post(`${BLAZE_BASE_URL}/survey/create`, survey)
-    //     .then((res) => {
-    //       console.log(res.data);
+    surveys?.forEach(async (survey) => {
+      console.log(survey);
+      axios
+        .post(`${BLAZE_BASE_URL}/survey/create`, survey)
+        .then((res) => {
+          console.log(res.data);
 
-    //       setAlertSettings({
-    //         open: true,
-    //         setalert: handlealert,
-    //         color: "success",
-    //         msg: "Transfer to Blaze",
-    //         posi: "bottomLeft",
-    //         hide: 3000,
-    //       });
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // });
+          setAlertSettings({
+            open: true,
+            setalert: handlealert,
+            color: "success",
+            msg: "Transfer to Blaze",
+            posi: "bottomLeft",
+            hide: 3000,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
     setShowModal((prev) => !prev);
 
     console.log(surveys);
@@ -214,8 +214,23 @@ const Overview = () => {
       })
       .catch((err) => console.log(err));
   }, [id]);
-  console.log(salesData);
-  // console.log(helperData);
+
+  const [countryStatus, setCountryStatus] = useState();
+  useEffect(() => {
+    Object.keys(salesData?.countries ? salesData?.countries : {})?.forEach(
+      (key, value) => {
+        salesData?.countries[key]?.map((country) => {
+          axios
+            .get(
+              `${SALES_BASE_URL}/sales/salescountry-get/${country?.salesOrderCountryGroupId}`
+            )
+            .then((res) => {
+              setCountryStatus(res?.data);
+            });
+        });
+      }
+    );
+  }, [salesData?.countries]);
 
   const handleModal = (modalName, value) => {
     setShowModal((prev) => {
@@ -299,6 +314,9 @@ const Overview = () => {
     const array = salesData?.zipcode?.replace(/[\[\]/["]+/g, "");
     setArray(array);
   }, [salesData?.zipcode]);
+  console.log(salesData);
+  console.log(countryStatus);
+  // console.log(helperData);
 
   return (
     <>
@@ -358,29 +376,37 @@ const Overview = () => {
               </div>
             ) : null}
 
-            <select
-              onChange={(e) => {
-                if (e.target.value === "won") {
-                  handleModal("approveModal", true);
-                  setOrderForModal(() => {
-                    let data = [];
-                    Object.keys(salesData?.countries)?.forEach((key, value) => {
-                      data.push(...salesData?.countries[key]);
-                    });
+            {countryStatus?.map((res) => {
+              return res.status === "approved" ? (
+                <Button variant="filled">Approved</Button>
+              ) : (
+                <select
+                  onChange={(e) => {
+                    if (e.target.value === "won") {
+                      handleModal("approveModal", true);
+                      setOrderForModal(() => {
+                        let data = [];
+                        Object.keys(salesData?.countries)?.forEach(
+                          (key, value) => {
+                            data.push(...salesData?.countries[key]);
+                          }
+                        );
 
-                    return data;
-                  });
-                }
-              }}
-              className={styles.statusBtn}
-            >
-              <option value="in-progress">In-Progress</option>
-              <option value="won">Won</option>
-              <option value="lost">Lost</option>
-              <option value="live">Live</option>
-              <option value="closed">Closed</option>
-              <option value="archived">Archived</option>
-            </select>
+                        return data;
+                      });
+                    }
+                  }}
+                  className={styles.statusBtn}
+                >
+                  <option value="in-progress">In-Progress</option>
+                  <option value="won">Won</option>
+                  <option value="lost">Lost</option>
+                  <option value="live">Live</option>
+                  <option value="closed">Closed</option>
+                  <option value="archived">Archived</option>
+                </select>
+              );
+            })}
 
             <Link to={`/quotation/${id}`}>
               <Button variant="filled">View Quotation</Button>
