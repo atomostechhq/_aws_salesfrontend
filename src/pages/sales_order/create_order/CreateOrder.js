@@ -392,6 +392,26 @@ const CreateOrder = () => {
     });
   };
 
+  const editcountrychange = (name, value, countryId) => {
+    setTableData((prev) => {
+      console.log(prev);
+      return prev?.map((country) => {
+        if (country?.countryId === countryId) {
+          return {
+            ...country,
+            [name]: value,
+            totalBudgetSum:
+              (name === "avgCpi" ? Number(value) : Number(country?.avgCpi)) *
+              (name === "feasibilitySum"
+                ? Number(value)
+                : Number(country?.feasibilitySum)),
+          };
+        }
+        return country;
+      });
+    });
+  };
+
   const handleTgRowChange = (name, value, countryUid, tgId) => {
     setTableData((prev) => {
       return prev?.map((country) => {
@@ -491,6 +511,12 @@ const CreateOrder = () => {
       ...prev,
       [name]: value,
     }));
+
+    helperData?.salesManagers?.forEach((res) => {
+      if (res?.value === value) {
+        setSalesorder((prev) => ({ ...prev, salesManagername: res?.label }));
+      }
+    });
   };
 
   // handlestatuschange
@@ -536,7 +562,7 @@ const CreateOrder = () => {
     body["salesOrderCountryGroups"] = tableData;
     body["startDate"] = startDate.toLocaleDateString("en-CA");
     body["endDate"] = endDate.toLocaleDateString("en-CA");
-    axios
+    body["salesManagername"] = salesorder?.axios
       .post(`${SALES_BASE_URL}/sales/salesorders/create/`, salesorder)
       .then(
         (res) => console.log(res),
@@ -1212,10 +1238,10 @@ const CreateOrder = () => {
                                     <td className={styles.currency}>
                                       <select
                                         onChange={(e) =>
-                                          handleCountryRowChange(
+                                          editcountrychange(
                                             "currencyId",
-                                            parseInt(e.target.value),
-                                            data?.countryId
+                                            parseInt(e.target.value)
+                                            // data?.countryId
                                           )
                                         }
                                         value={data?.currency?.currencyId}
