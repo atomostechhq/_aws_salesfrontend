@@ -214,7 +214,6 @@ const CreateOrder = () => {
 
   const addCountry = (e) => {
     e.preventDefault();
-    //ajay
 
     setTableData((prev) => {
       return [
@@ -392,26 +391,6 @@ const CreateOrder = () => {
     });
   };
 
-  const editcountrychange = (name, value, countryId) => {
-    setTableData((prev) => {
-      console.log(prev);
-      return prev?.map((country) => {
-        if (country?.countryId === countryId) {
-          return {
-            ...country,
-            [name]: value,
-            totalBudgetSum:
-              (name === "avgCpi" ? Number(value) : Number(country?.avgCpi)) *
-              (name === "feasibilitySum"
-                ? Number(value)
-                : Number(country?.feasibilitySum)),
-          };
-        }
-        return country;
-      });
-    });
-  };
-
   const handleTgRowChange = (name, value, countryUid, tgId) => {
     setTableData((prev) => {
       return prev?.map((country) => {
@@ -562,7 +541,7 @@ const CreateOrder = () => {
     body["salesOrderCountryGroups"] = tableData;
     body["startDate"] = startDate.toLocaleDateString("en-CA");
     body["endDate"] = endDate.toLocaleDateString("en-CA");
-    body["salesManagername"] = salesorder?.axios
+    axios
       .post(`${SALES_BASE_URL}/sales/salesorders/create/`, salesorder)
       .then(
         (res) => console.log(res),
@@ -1208,7 +1187,7 @@ const CreateOrder = () => {
 
                             if (key === "UNGRP") {
                               return (
-                                <React.Fragment key={data?.countryId}>
+                                <React.Fragment key={data?.countryUid}>
                                   <tr>
                                     <td>
                                       <Select
@@ -1221,7 +1200,7 @@ const CreateOrder = () => {
                                           handleCountryRowChange(
                                             "salesOrderCountries",
                                             body,
-                                            data?.countryId
+                                            data?.countryUid
                                           );
                                         }}
                                         value={helperData?.countries?.map(
@@ -1238,13 +1217,17 @@ const CreateOrder = () => {
                                     <td className={styles.currency}>
                                       <select
                                         onChange={(e) =>
-                                          editcountrychange(
+                                          handleCountryRowChange(
                                             "currencyId",
                                             parseInt(e.target.value)
                                             // data?.countryId
                                           )
                                         }
-                                        value={data?.currency?.currencyId}
+                                        value={
+                                          salesorder?.currencyId
+                                            ? salesorder?.currencyId
+                                            : data?.currency?.currencyId
+                                        }
                                       >
                                         <option disabled selected>
                                           select currency
@@ -1267,13 +1250,17 @@ const CreateOrder = () => {
                                           type="number"
                                           name="avgLoi"
                                           required
-                                          value={data?.avgLoi}
+                                          value={
+                                            salesorder?.avgLoi
+                                              ? salesorder?.avgLoi
+                                              : data?.avgLoi
+                                          }
                                           disabled={data?.disabledCountry}
                                           onChange={(e) => {
                                             handleCountryRowChange(
                                               "avgLoi",
-                                              parseFloat(e.target.value),
-                                              data?.countryUid
+                                              parseFloat(e.target.value)
+                                              // data?.countryUid
                                             );
                                           }}
                                         />{" "}
@@ -1286,13 +1273,17 @@ const CreateOrder = () => {
                                           type="number"
                                           name="avgIr"
                                           required
-                                          value={data?.avgIr}
+                                          value={
+                                            salesorder?.avgIr
+                                              ? salesorder?.avgIr
+                                              : data?.avgIr
+                                          }
                                           disabled={data?.disabledCountry}
                                           onChange={(e) => {
                                             handleCountryRowChange(
                                               "avgIr",
-                                              parseFloat(e.target.value),
-                                              data?.countryUid
+                                              parseFloat(e.target.value)
+                                              // data?.countryUid
                                             );
                                           }}
                                         />{" "}
@@ -1306,13 +1297,17 @@ const CreateOrder = () => {
                                           type="number"
                                           name="sampleRequiredSum"
                                           required
-                                          value={data?.sampleRequiredSum}
+                                          value={
+                                            salesorder?.sampleRequiredSum
+                                              ? salesorder?.sampleRequiredSum
+                                              : data?.sampleRequiredSum
+                                          }
                                           disabled={data?.disabledCountry}
                                           onChange={(e) => {
                                             handleCountryRowChange(
                                               "sampleRequiredSum",
-                                              parseFloat(e.target.value),
-                                              data?.countryUid
+                                              parseFloat(e.target.value)
+                                              // data?.countryUid
                                             );
                                           }}
                                         />{" "}
@@ -1325,13 +1320,17 @@ const CreateOrder = () => {
                                           type="number"
                                           name="feasibilitySum"
                                           required
-                                          value={data?.feasibilitySum}
+                                          value={
+                                            !salesorder?.feasibilitySum
+                                              ? data?.feasibilitySum
+                                              : salesorder?.feasibilitySum
+                                          }
                                           disabled={data?.disabledCountry}
                                           onChange={(e) => {
                                             handleCountryRowChange(
                                               "feasibilitySum",
-                                              parseFloat(e.target.value),
-                                              data?.countryUid
+                                              parseFloat(e.target.value)
+                                              // data?.countryUid
                                             );
                                           }}
                                         />{" "}
@@ -1344,13 +1343,17 @@ const CreateOrder = () => {
                                           type="number"
                                           name="avgCpi"
                                           required
-                                          value={data?.avgCpi}
+                                          value={
+                                            !salesorder?.avgCpi
+                                              ? data?.avgCpi
+                                              : salesorder?.avgCpi
+                                          }
                                           disabled={data?.disabledCountry}
                                           onChange={(e) => {
                                             handleCountryRowChange(
                                               "avgCpi",
-                                              parseFloat(e.target.value),
-                                              data?.countryUid
+                                              parseFloat(e.target.value)
+                                              // data?.countryUid
                                             );
                                           }}
                                         />{" "}
@@ -1362,13 +1365,17 @@ const CreateOrder = () => {
                                           type="number"
                                           name="maxTimelinePerTg"
                                           required
-                                          value={data?.maxTimelinePerTg}
+                                          value={
+                                            !salesorder?.maxTimelinePerTg
+                                              ? data?.maxTimelinePerTg
+                                              : salesorder?.maxTimelinePerTg
+                                          }
                                           disabled={data?.disabledCountry}
                                           onChange={(e) => {
                                             handleCountryRowChange(
                                               "maxTimelinePerTg",
-                                              parseFloat(e.target.value),
-                                              data?.countryUid
+                                              parseFloat(e.target.value)
+                                              // data?.countryUid
                                             );
                                           }}
                                         />{" "}
@@ -1378,12 +1385,14 @@ const CreateOrder = () => {
                                     <td>
                                       {" "}
                                       <span>
-                                        {data?.totalBudgetSum}
+                                        {!salesorder?.totalBudgetSum
+                                          ? data?.totalBudgetSum
+                                          : salesorder?.totalBudgetSum}
                                         {helperData?.currencies?.map(
                                           (currency) => {
                                             if (
                                               currency?.value ===
-                                              data?.currencyId
+                                              salesorder?.currencyId
                                             ) {
                                               return (
                                                 <span>
@@ -1422,7 +1431,6 @@ const CreateOrder = () => {
                                   </tr>
                                   <>
                                     {data?.tgs?.map((target) => {
-                                      console.log(target.id);
                                       return (
                                         <tr
                                           className={styles.tgrow}
@@ -1445,8 +1453,8 @@ const CreateOrder = () => {
                                                   handleTgRowChange(
                                                     "tgTargetAudience",
                                                     e.target.value,
-                                                    data?.countryUid,
-                                                    target?.id
+                                                    data?.countryId
+                                                    // target?.id
                                                   );
                                                 }}
                                               />{" "}

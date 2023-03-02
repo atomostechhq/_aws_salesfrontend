@@ -377,36 +377,35 @@ const Overview = () => {
             ) : null}
 
             {countryStatus?.map((res) => {
-              return res.status === "approved" ? (
-                <Button variant="filled">Approved</Button>
-              ) : (
-                <select
-                  onChange={(e) => {
-                    if (e.target.value === "won") {
-                      handleModal("approveModal", true);
-                      setOrderForModal(() => {
-                        let data = [];
-                        Object.keys(salesData?.countries)?.forEach(
-                          (key, value) => {
-                            data.push(...salesData?.countries[key]);
-                          }
-                        );
-
-                        return data;
-                      });
-                    }
-                  }}
-                  className={styles.statusBtn}
-                >
-                  <option value="in-progress">In-Progress</option>
-                  <option value="won">Won</option>
-                  <option value="lost">Lost</option>
-                  <option value="live">Live</option>
-                  <option value="closed">Closed</option>
-                  <option value="archived">Archived</option>
-                </select>
+              return (
+                res.status === "approved" && (
+                  <Button variant="filled">Approved</Button>
+                )
               );
             })}
+            <select
+              onChange={(e) => {
+                if (e.target.value === "won") {
+                  handleModal("approveModal", true);
+                  setOrderForModal(() => {
+                    let data = [];
+                    Object.keys(salesData?.countries)?.forEach((key, value) => {
+                      data.push(...salesData?.countries[key]);
+                    });
+
+                    return data;
+                  });
+                }
+              }}
+              className={styles.statusBtn}
+            >
+              <option value="in-progress">In-Progress</option>
+              <option value="won">Won</option>
+              <option value="lost">Lost</option>
+              <option value="live">Live</option>
+              <option value="closed">Closed</option>
+              <option value="archived">Archived</option>
+            </select>
 
             <Link to={`/quotation/${id}`}>
               <Button variant="filled">View Quotation</Button>
