@@ -82,7 +82,7 @@ const CreateOrder = () => {
     event.preventDefault();
 
     Object?.entries(event.target.files)?.map(([key, value]) => {
-      setZipcodeFileInput((prev) => [...prev, value]);
+      setZipcodeFileInput((res) => [...res, value]);
     });
   };
 
@@ -92,8 +92,8 @@ const CreateOrder = () => {
       const text = e.target.result;
       const splitText = text.split("\n");
 
-      setSalesorder((prev) => ({
-        ...prev,
+      setSalesorder((res) => ({
+        ...res,
         zipcode: JSON.stringify(splitText),
       }));
     };
@@ -105,8 +105,8 @@ const CreateOrder = () => {
 
     zipCodefileInput?.map((data) => {
       if (window.location.pathname === `/edit/${id}/update-salesorder`) {
-        setSalesorder((prev) => ({
-          ...prev,
+        setSalesorder((res) => ({
+          ...res,
           zipcodeFile: data?.name,
         }));
         setAlertSettings({
@@ -118,8 +118,8 @@ const CreateOrder = () => {
           hide: 3000,
         });
       } else {
-        setSalesorder((prev) => ({
-          ...prev,
+        setSalesorder((res) => ({
+          ...res,
           zipcodeFile: data?.name,
         }));
         setAlertSettings({
@@ -136,7 +136,7 @@ const CreateOrder = () => {
 
   const handleScreenerFileChange = (e) => {
     Object?.entries(e.target.files)?.map(([key, value]) => {
-      setScreenerFileInput((prev) => [...prev, value]);
+      setScreenerFileInput((res) => [...res, value]);
     });
   };
 
@@ -179,8 +179,8 @@ const CreateOrder = () => {
               hide: 3000,
             });
           }
-          setSalesorder((prev) => ({
-            ...prev,
+          setSalesorder((res) => ({
+            ...res,
             screener: res?.data,
           }));
         })
@@ -193,7 +193,7 @@ const CreateOrder = () => {
   // handleFileDeletes
   const handleZipcodedelete = (e, data, index) => {
     e.preventDefault();
-    setZipcodeFileInput((prev) =>
+    setZipcodeFileInput((res) =>
       [...zipCodefileInput]?.filter((d, i) => i !== index)
     );
 
@@ -202,7 +202,7 @@ const CreateOrder = () => {
 
   const handleScreenerdelete = (e, data, index) => {
     e.preventDefault();
-    setScreenerFileInput((prev) =>
+    setScreenerFileInput((res) =>
       [...screenerFileInput]?.filter((d, i) => i !== index)
     );
     console.log("deleted screener.....", index);
@@ -215,9 +215,9 @@ const CreateOrder = () => {
   const addCountry = (e) => {
     e.preventDefault();
 
-    setTableData((prev) => {
+    setTableData((res) => {
       return [
-        ...prev,
+        ...res,
         {
           countryUid: uuid(),
           avgLoi: 0,
@@ -234,8 +234,8 @@ const CreateOrder = () => {
   };
 
   const addTg = (countryUid) => {
-    setTableData((prevData) => {
-      return prevData?.map((country) => {
+    setTableData((res) => {
+      return res?.map((country) => {
         if (country?.countryUid === countryUid) {
           return {
             ...country,
@@ -277,8 +277,8 @@ const CreateOrder = () => {
   };
 
   const handleDuplicateTg = (countryUid, target) => {
-    setTableData((prevData) => {
-      return prevData?.map((country) => {
+    setTableData((res) => {
+      return res?.map((country) => {
         if (country?.countryUid === countryUid) {
           return {
             ...country,
@@ -309,9 +309,9 @@ const CreateOrder = () => {
 
   const handleAddCountryWithTarget = (e) => {
     e.preventDefault();
-    setTableData((prev) => {
+    setTableData((res) => {
       return [
-        ...prev,
+        ...res,
         {
           countryUid: uuid(),
           disabledCountry: true,
@@ -333,8 +333,8 @@ const CreateOrder = () => {
   };
 
   const handleDeleteCountry = (countryUid) => {
-    setTableData((prev) => {
-      return prev.filter((country) => {
+    setTableData((res) => {
+      return res.filter((country) => {
         return country?.countryUid !== countryUid;
       });
     });
@@ -342,8 +342,8 @@ const CreateOrder = () => {
 
   const handleDeleteTg = (countryUid, target) => {
     // console.log(tableData);
-    setTableData((prev) => {
-      return prev.map((country) => {
+    setTableData((res) => {
+      return res.map((country) => {
         if (country?.countryUid === countryUid) {
           let x = country;
           x.avgCpi = Number(
@@ -373,8 +373,8 @@ const CreateOrder = () => {
   };
 
   const handleCountryRowChange = (name, value, countryUid) => {
-    setTableData((prev) => {
-      return prev?.map((country) => {
+    setTableData((res) => {
+      return res?.map((country) => {
         if (country?.countryUid === countryUid) {
           return {
             ...country,
@@ -392,8 +392,8 @@ const CreateOrder = () => {
   };
 
   const handleTgRowChange = (name, value, countryUid, tgId) => {
-    setTableData((prev) => {
-      return prev?.map((country) => {
+    setTableData((res) => {
+      return res?.map((country) => {
         if (country?.countryUid === countryUid) {
           let x = country;
           x.tgs = x?.tgs?.map((tgs, i) => {
@@ -481,27 +481,33 @@ const CreateOrder = () => {
     if (name === "targetAudienceId") {
       helperData?.targetAudiences?.forEach((target) => {
         if (target?.value === value) {
-          setHelperData((prev) => ({ ...prev, secTgs: target?.secTgs }));
+          setHelperData((res) => ({
+            ...res,
+            secTgs: target?.secTgs,
+          }));
         }
       });
     }
 
-    setSalesorder((prev) => ({
-      ...prev,
+    setSalesorder((res) => ({
+      ...res,
       [name]: value,
     }));
 
     helperData?.salesManagers?.forEach((res) => {
       if (res?.value === value) {
-        setSalesorder((prev) => ({ ...prev, salesManagername: res?.label }));
+        setSalesorder((res) => ({
+          ...res,
+          salesManagername: res?.label,
+        }));
       }
     });
   };
 
   // handlestatuschange
   const handleStatuschange = (e, name) => {
-    setSalesorder((prev) => ({
-      ...prev,
+    setSalesorder((res) => ({
+      ...res,
       [name]: e.value,
     }));
   };
@@ -610,6 +616,57 @@ const CreateOrder = () => {
     // return writeFile(data, "Tests.xlsx");
     FileSaver.saveAs(data, "Tests.xlsx");
   };
+
+  const [editTableData, setEditTableData] = useState();
+  let countries;
+  let currency;
+  helperData?.countries?.map((res) => {
+    countries = res;
+  });
+  helperData?.currencies?.map((res) => {
+    currency = res;
+  });
+  const editcountryrowchange = (name, value) => {
+    Object.keys(salesorder?.countries ? salesorder?.countries : {})?.map(
+      (key) => {
+        return salesorder?.countries[key]?.map((res) => {
+          if (key === "UNGRP") {
+            setEditTableData(() => {
+              if (res.hasOwnProperty(name)) {
+                if (name === "countryId") {
+                  return {
+                    ...res,
+                    [name]: value,
+                    countryName: countries[value] || "",
+                  };
+                }
+
+                if (name === "currencyId") {
+                  const { currencyName, currencySymbol } =
+                    currency[value] || {};
+                  return {
+                    ...res,
+                    [name]: value,
+                    currency: {
+                      ...res?.currency,
+                      currencyName: currencyName || "",
+                      currencySymbol: currencySymbol || "",
+                    },
+                  };
+                }
+
+                return {
+                  ...res,
+                  [name]: value,
+                };
+              }
+            });
+          }
+        });
+      }
+    );
+  };
+  console.log(editTableData);
   console.log(salesorder);
   console.log(tableData);
   console.log(helperData);
@@ -1055,12 +1112,12 @@ const CreateOrder = () => {
                               if (`/edit/${id}/update-salesorder`) {
                                 console.log("here");
                                 if (e.target.value) {
-                                  setSalesorder((prev) => {
+                                  setSalesorder((res) => {
                                     return {
-                                      ...prev,
+                                      ...res,
                                       SalesOrderDevices: [
-                                        ...(prev?.SalesOrderDevices
-                                          ? prev?.SalesOrderDevices
+                                        ...(res?.SalesOrderDevices
+                                          ? res?.SalesOrderDevices
                                           : []),
                                         {
                                           salesOrderId: parseInt(id),
@@ -1070,8 +1127,8 @@ const CreateOrder = () => {
                                     };
                                   });
                                 } else {
-                                  setSalesorder((prev) => {
-                                    let newData = prev;
+                                  setSalesorder((res) => {
+                                    let newData = res;
                                     newData.SalesOrderDevices =
                                       newData.SalesOrderDevices?.filter(
                                         (d) => d?.deviceId !== array[0]
@@ -1083,20 +1140,20 @@ const CreateOrder = () => {
                               } else {
                                 if (e.target.value) {
                                   // console.log("chked");
-                                  setSalesorder((prev) => {
+                                  setSalesorder((res) => {
                                     return {
-                                      ...prev,
+                                      ...res,
                                       SalesOrderDevices: [
-                                        ...(prev?.SalesOrderDevices
-                                          ? prev?.SalesOrderDevices
+                                        ...(res?.SalesOrderDevices
+                                          ? res?.SalesOrderDevices
                                           : []),
                                         { deviceId: res?.value },
                                       ],
                                     };
                                   });
                                 } else {
-                                  setSalesorder((prev) => {
-                                    let newData = prev;
+                                  setSalesorder((res) => {
+                                    let newData = res;
                                     newData.SalesOrderDevices =
                                       newData.SalesOrderDevices?.filter(
                                         (d) => d?.deviceId !== array[0]
@@ -1187,45 +1244,48 @@ const CreateOrder = () => {
 
                             if (key === "UNGRP") {
                               return (
-                                <React.Fragment key={data?.countryUid}>
+                                <React.Fragment key={data?.countryId}>
                                   <tr>
                                     <td>
                                       <Select
                                         options={helperData?.countries}
                                         isMulti
                                         onChange={(e) => {
-                                          let body = e?.map((country) => ({
-                                            countryId: country?.value,
-                                          }));
-                                          handleCountryRowChange(
-                                            "salesOrderCountries",
-                                            body,
-                                            data?.countryUid
-                                          );
+                                          e?.map((country) => {
+                                            let value = country?.value;
+                                            editcountryrowchange(
+                                              "countryId",
+                                              value
+                                            );
+                                          });
                                         }}
-                                        value={helperData?.countries?.map(
-                                          (res) => {
-                                            if (
-                                              res?.value === data?.countryId
-                                            ) {
-                                              return data?.countryId;
-                                            }
-                                          }
-                                        )}
+                                        value={
+                                          editTableData?.countryId
+                                            ? editTableData?.countryId
+                                            : helperData?.countries?.filter(
+                                                (res) => {
+                                                  if (
+                                                    res?.value ===
+                                                    data?.countryId
+                                                  ) {
+                                                    return data?.countryId;
+                                                  }
+                                                }
+                                              )
+                                        }
                                       />
                                     </td>
                                     <td className={styles.currency}>
                                       <select
                                         onChange={(e) =>
-                                          handleCountryRowChange(
+                                          editcountryrowchange(
                                             "currencyId",
                                             parseInt(e.target.value)
-                                            // data?.countryId
                                           )
                                         }
                                         value={
-                                          salesorder?.currencyId
-                                            ? salesorder?.currencyId
+                                          editTableData?.currencyId
+                                            ? editTableData?.currencyId
                                             : data?.currency?.currencyId
                                         }
                                       >
@@ -1250,17 +1310,12 @@ const CreateOrder = () => {
                                           type="number"
                                           name="avgLoi"
                                           required
-                                          value={
-                                            salesorder?.avgLoi
-                                              ? salesorder?.avgLoi
-                                              : data?.avgLoi
-                                          }
+                                          value={data?.avgLoi}
                                           disabled={data?.disabledCountry}
                                           onChange={(e) => {
-                                            handleCountryRowChange(
+                                            editcountryrowchange(
                                               "avgLoi",
                                               parseFloat(e.target.value)
-                                              // data?.countryUid
                                             );
                                           }}
                                         />{" "}
@@ -1273,17 +1328,12 @@ const CreateOrder = () => {
                                           type="number"
                                           name="avgIr"
                                           required
-                                          value={
-                                            salesorder?.avgIr
-                                              ? salesorder?.avgIr
-                                              : data?.avgIr
-                                          }
+                                          value={data?.avgIr}
                                           disabled={data?.disabledCountry}
                                           onChange={(e) => {
                                             handleCountryRowChange(
                                               "avgIr",
                                               parseFloat(e.target.value)
-                                              // data?.countryUid
                                             );
                                           }}
                                         />{" "}
@@ -1297,17 +1347,12 @@ const CreateOrder = () => {
                                           type="number"
                                           name="sampleRequiredSum"
                                           required
-                                          value={
-                                            salesorder?.sampleRequiredSum
-                                              ? salesorder?.sampleRequiredSum
-                                              : data?.sampleRequiredSum
-                                          }
+                                          value={data?.sampleRequiredSum}
                                           disabled={data?.disabledCountry}
                                           onChange={(e) => {
                                             handleCountryRowChange(
                                               "sampleRequiredSum",
                                               parseFloat(e.target.value)
-                                              // data?.countryUid
                                             );
                                           }}
                                         />{" "}
@@ -1320,17 +1365,12 @@ const CreateOrder = () => {
                                           type="number"
                                           name="feasibilitySum"
                                           required
-                                          value={
-                                            !salesorder?.feasibilitySum
-                                              ? data?.feasibilitySum
-                                              : salesorder?.feasibilitySum
-                                          }
+                                          value={data?.feasibilitySum}
                                           disabled={data?.disabledCountry}
                                           onChange={(e) => {
                                             handleCountryRowChange(
                                               "feasibilitySum",
                                               parseFloat(e.target.value)
-                                              // data?.countryUid
                                             );
                                           }}
                                         />{" "}
@@ -1343,17 +1383,12 @@ const CreateOrder = () => {
                                           type="number"
                                           name="avgCpi"
                                           required
-                                          value={
-                                            !salesorder?.avgCpi
-                                              ? data?.avgCpi
-                                              : salesorder?.avgCpi
-                                          }
+                                          value={data?.avgCpi}
                                           disabled={data?.disabledCountry}
                                           onChange={(e) => {
                                             handleCountryRowChange(
                                               "avgCpi",
                                               parseFloat(e.target.value)
-                                              // data?.countryUid
                                             );
                                           }}
                                         />{" "}
@@ -1365,17 +1400,12 @@ const CreateOrder = () => {
                                           type="number"
                                           name="maxTimelinePerTg"
                                           required
-                                          value={
-                                            !salesorder?.maxTimelinePerTg
-                                              ? data?.maxTimelinePerTg
-                                              : salesorder?.maxTimelinePerTg
-                                          }
+                                          value={data?.maxTimelinePerTg}
                                           disabled={data?.disabledCountry}
                                           onChange={(e) => {
                                             handleCountryRowChange(
                                               "maxTimelinePerTg",
                                               parseFloat(e.target.value)
-                                              // data?.countryUid
                                             );
                                           }}
                                         />{" "}
@@ -1385,14 +1415,12 @@ const CreateOrder = () => {
                                     <td>
                                       {" "}
                                       <span>
-                                        {!salesorder?.totalBudgetSum
-                                          ? data?.totalBudgetSum
-                                          : salesorder?.totalBudgetSum}
+                                        {data?.totalBudgetSum}
                                         {helperData?.currencies?.map(
                                           (currency) => {
                                             if (
                                               currency?.value ===
-                                              salesorder?.currencyId
+                                              data?.currencyId
                                             ) {
                                               return (
                                                 <span>
@@ -1408,7 +1436,10 @@ const CreateOrder = () => {
                                     <td>
                                       <button
                                         className={styles.add_target}
-                                        onClick={(e) => addTg(data?.countryId)}
+                                        onClick={(e) => {
+                                          e.preventDefault();
+                                          addTg(data?.countryId);
+                                        }}
                                       >
                                         <BsPlus /> Add Target
                                       </button>
@@ -1479,7 +1510,7 @@ const CreateOrder = () => {
                                                       <button
                                                         onClick={() =>
                                                           setShowTgDesc(
-                                                            (prev) => !prev
+                                                            (res) => !res
                                                           )
                                                         }
                                                         className={
@@ -1516,7 +1547,7 @@ const CreateOrder = () => {
                                                       <button
                                                         onClick={() =>
                                                           setShowTgDesc(
-                                                            (prev) => !prev
+                                                            (res) => !res
                                                           )
                                                         }
                                                         className={styles.save}
@@ -1704,7 +1735,7 @@ const CreateOrder = () => {
                                             data?.countryId
                                           );
                                         }}
-                                        value={helperData?.countries?.map(
+                                        value={helperData?.countries?.filter(
                                           (res) => {
                                             if (
                                               res?.value === data?.countryId
@@ -1951,7 +1982,7 @@ const CreateOrder = () => {
                                                       <button
                                                         onClick={() =>
                                                           setShowTgDesc(
-                                                            (prev) => !prev
+                                                            (res) => !res
                                                           )
                                                         }
                                                         className={
@@ -1987,7 +2018,7 @@ const CreateOrder = () => {
                                                       <button
                                                         onClick={() =>
                                                           setShowTgDesc(
-                                                            (prev) => !prev
+                                                            (res) => !res
                                                           )
                                                         }
                                                         className={styles.save}
@@ -2408,7 +2439,7 @@ const CreateOrder = () => {
                                                   <button
                                                     onClick={() =>
                                                       setShowTgDesc(
-                                                        (prev) => !prev
+                                                        (res) => !res
                                                       )
                                                     }
                                                     className={styles.closeBtn}
@@ -2440,7 +2471,7 @@ const CreateOrder = () => {
                                                   <button
                                                     onClick={() =>
                                                       setShowTgDesc(
-                                                        (prev) => !prev
+                                                        (res) => !res
                                                       )
                                                     }
                                                     className={styles.save}
