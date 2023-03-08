@@ -617,54 +617,89 @@ const CreateOrder = () => {
     FileSaver.saveAs(data, "Tests.xlsx");
   };
 
-  const [editTableData, setEditTableData] = useState();
-  let countries;
-  let currency;
-  helperData?.countries?.map((res) => {
-    countries = res;
-  });
-  helperData?.currencies?.map((res) => {
-    currency = res;
-  });
+  const [editTableData, setEditTableData] = useState(salesorder);
+
   const editcountryrowchange = (name, value) => {
-    Object.keys(salesorder?.countries ? salesorder?.countries : {})?.map(
-      (key) => {
-        return salesorder?.countries[key]?.map((res) => {
-          if (key === "UNGRP") {
-            setEditTableData(() => {
-              if (res.hasOwnProperty(name)) {
-                if (name === "countryId") {
-                  return {
-                    ...res,
-                    [name]: value,
-                    countryName: countries[value] || "",
-                  };
-                }
+    // Object.keys(salesorder?.countries ? salesorder?.countries : {})?.map(
 
-                if (name === "currencyId") {
-                  const { currencyName, currencySymbol } =
-                    currency[value] || {};
-                  return {
-                    ...res,
-                    [name]: value,
-                    currency: {
-                      ...res?.currency,
-                      currencyName: currencyName || "",
-                      currencySymbol: currencySymbol || "",
-                    },
-                  };
-                }
+    //   (key) => {
+    //     return salesorder?.countries[key]?.map((res) => {
+    //       if (key === "UNGRP") {
+    //         setEditTableData(() => {
+    //           if (res.hasOwnProperty(name)) {
+    //             if (name === "countryId") {
+    //               helperData?.countries?.filter((country) => {
+    //                 if (value === country?.value) {
+    //                   return {
+    //                     ...res,
+    //                     [name]: value,
+    //                     countryName: country?.label || "",
+    //                     countryCode: country?.countryCode || "",
+    //                     countryFlag: country?.countryFlag || "",
+    //                   };
+    //                 }
+    //               });
+    //             }
 
-                return {
-                  ...res,
-                  [name]: value,
-                };
-              }
-            });
-          }
-        });
-      }
-    );
+    //             if (name === "currencyId") {
+    //               helperData?.currencies?.filter((currency) => {
+    //                 if (value === currency?.value) {
+    //                   return {
+    //                     ...res,
+    //                     [name]: value,
+    //                     currency: {
+    //                       ...res?.currency,
+    //                       currencyName: currency?.label || "",
+    //                       currencySymbol: currency?.symbol || "",
+    //                     },
+    //                   };
+    //                 }
+    //               });
+    //             }
+
+    //             return {
+    //               ...res,
+    //               [name]: value,
+    //             };
+    //           }
+    //         });
+    //       }
+    //     });
+    //   }
+    // );
+    if (name === "countryId") {
+      helperData?.countries?.filter((country) => {
+        if (value === country?.value) {
+          setEditTableData((prevData) => ({
+            ...prevData,
+
+            countryId: country?.value,
+            countryName: country?.label,
+            countryCode: country?.countryCode,
+            countryFlag: country?.countryFlag,
+          }));
+        }
+      });
+    } else if (name === "currencyId") {
+      helperData?.currencies?.filter((currency) => {
+        if (value === currency?.value) {
+          setEditTableData((prevData) => ({
+            ...prevData,
+            currency: {
+              ...prevData?.currency,
+              currencyId: currency?.value,
+              currencyName: currency?.label,
+              currencySymbol: currency?.symbol,
+            },
+          }));
+        }
+      });
+    } else {
+      setEditTableData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
   console.log(editTableData);
   console.log(salesorder);
@@ -1284,8 +1319,9 @@ const CreateOrder = () => {
                                           )
                                         }
                                         value={
-                                          editTableData?.currencyId
-                                            ? editTableData?.currencyId
+                                          editTableData?.currency?.currencyId
+                                            ? editTableData?.currency
+                                                ?.currencyId
                                             : data?.currency?.currencyId
                                         }
                                       >
@@ -1310,7 +1346,11 @@ const CreateOrder = () => {
                                           type="number"
                                           name="avgLoi"
                                           required
-                                          value={data?.avgLoi}
+                                          value={
+                                            editTableData?.avgLoi
+                                              ? editTableData?.avgLoi
+                                              : data?.avgLoi
+                                          }
                                           disabled={data?.disabledCountry}
                                           onChange={(e) => {
                                             editcountryrowchange(
@@ -1328,10 +1368,14 @@ const CreateOrder = () => {
                                           type="number"
                                           name="avgIr"
                                           required
-                                          value={data?.avgIr}
+                                          value={
+                                            editTableData?.avgIr
+                                              ? editTableData?.avgIr
+                                              : data?.avgIr
+                                          }
                                           disabled={data?.disabledCountry}
                                           onChange={(e) => {
-                                            handleCountryRowChange(
+                                            editcountryrowchange(
                                               "avgIr",
                                               parseFloat(e.target.value)
                                             );
@@ -1347,10 +1391,14 @@ const CreateOrder = () => {
                                           type="number"
                                           name="sampleRequiredSum"
                                           required
-                                          value={data?.sampleRequiredSum}
+                                          value={
+                                            editTableData?.sampleRequiredSum
+                                              ? editTableData?.sampleRequiredSum
+                                              : data?.sampleRequiredSum
+                                          }
                                           disabled={data?.disabledCountry}
                                           onChange={(e) => {
-                                            handleCountryRowChange(
+                                            editcountryrowchange(
                                               "sampleRequiredSum",
                                               parseFloat(e.target.value)
                                             );
